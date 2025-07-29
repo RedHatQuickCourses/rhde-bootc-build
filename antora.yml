@@ -1,5 +1,5 @@
-name: REPLACEREPONAME
-title: FIXME Course Title
+name: rhde-bootc-build
+title: Building Red Hat Device Edge system images with image mode for RHEL
 version: 1
 nav:
 - modules/ROOT/nav.adoc

@@ -1,27 +1,91 @@
-= An Example Quick Course
+= Building Red Hat Device Edge system images with image mode for RHEL
 :navtitle: Home
 
-== Introduction
+== Goal
 
-Course Title: Course title FIXME
+This course teaches how to create Red Hat Device Edge system images, which are suitable to provision edge devices and kiosk computers, using image mode for RHEL, and how to publish those images on an OCI container registry.
 
-Description:
-Course description FIXME
+It is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge, which will consist of three courses:
 
-Duration: FIXME hours
+. Building Red Hat Device Edge system images with image mode for RHEL (this course)
+
+. Provisioning Red Hat Device Edge devices using image mode for RHEL (not created yet)
+
+. Updating and Repurposing Red Hat Device Edge devices using image mode for RHEL (not created yet)
+
+IMPORTANT: Red Hat employees must enroll using its LMS entry [ADD LINK], and Red Hat Partners must enroll using its Partner Portal entry [ADD LINK].
 
 == Objectives
 
 On completing this course, you should be able to:
 
-* Observable, measurable objective...
-* Observable, measurable objective...
-* Observable, measurable objective...
+* Understand the usage of image mode for RHEL on Red Hat Device Edge devices.
+* Build RHEL for edge device images using image mode for RHEL.
+* Test and Validate RHEL for edge device images using local VMs.
+* Publish RHEL for edge device images in an OCI container registry.
+
+== Audience
+
+Operations-focused customer roles, who design and implement device edge images, but are not usually in-person at edge sites:
+
+* System Administrators (IT - Information Technology, and OT - Operations Technology)
+* Site Reliability Engineers (SREs)
+* Platform Engineers
+* DevOps Engineers
+
+Red Hat and Partner roles that perform demonstrations, PoC and PoV of Red Hat Device Edge as part of a sales motion, such as Solutions Architects
+
+Red Hat and Partner roles that support Red Hat Device Edge on customers, such as Services Consultants and Customer Support Engineers.
 
 == Prerequisites
 
 This course assumes that you have the following prior experience:
 
-* Course or experience...
-* Course or experience...
-* Course or experience...
+* Familiarity with RHEL system administration, to the level of RHCA (Red Hat Certified System Administrator) or equivalent knowledge.
+* Familiarity with Linux container tools, such as Podman, and technologies compatible with Open Container Initiative (OCI) specifications, such as container registries.
+* Familiarity with web server administration, such as Apache Web Server or NGinx, is useful but not required. [ if we use web servers as sample apps inside bootc containers ]
+* Familiarity with database server administration, such as MariaDB or PostgreSQL, is useful but not required. [ if we use database servers as sample apps inside bootc containers ]
+
+== Classroom Environment
+
+You can perform all activities in this course using the virtual classroom lab from *HOL019: Image mode with Red Hat Device Edge Quick Course Series*, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required by future related courses.
+
+Use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):
+
+* HOL019 for Red Hat employees [ADD LINK].
+* HOL019 for Red Hat partners and customers [ADD LINK] with a *Red Hat Learning Subscription*.
+
+After you enter HOL019 on ROLE, follow the instructions there to create a new course classroom lab and access its virtual machines.
+If you already created a HOL019 classroom for another Red Hat Device Edge quick course, you can continue using the same classroom lab.
+
+Beware that ROLE classrooms have timers after which classroom labs are stopped and deleted, to conserve compute resources.
+If you plan to use the same classroom lab for multiple Red Hat Device Edge quick courses, do not wait too long to continue.
+
+You do not need to use the same classroom for multiple courses: each course provides step-by-step instructions to start from either a new classroom lab or to continue from an existing classroom lab.
+
+You will follow this quick course by alternating between two browser windows: one to navigate quick course materials, such as this page; and another to access the virtual classroom lab, to perform hands-on activities.
+
+If you can provision your own RHEL servers or VMs, it should be possible to configure all that is required for the hands-on activities by using a https://developers.redhat.com/products/rhel/download[free subscription^] from the https://developers.redhat.com/about[Red Hat Developer Program^], which gives access to RHEL installation media and RHEL package repositories.
+
+== About Red Hat Online Learning (ROLE) and Red Hat Learning Subscription
+
+The Red Hat Online Learning (ROLE) web site provides https://www.redhat.com/en/services/training-and-certification[Red Hat Training and Certification^] course materials and their virtual classrooms labs.
+You must be enrolled in a Red Hat Training course or subscription to have access to ROLE.
+
+NOTE: The image mode with Red Hat Device Edge quick courses use ROLE for its virtual classroom labs only, and hosts courses materials outside of ROLE, as GitHub pages.
+
+A basic https://www.redhat.com/en/services/training/learning-subscription[Red Hat Learning Subscription^] offers access to a number Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.
+
+== Other Sources of Information About Red Hat Device Edge and Image Mode for RHEL
+
+For documentation about RHEL image mode, see either the https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html-single/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/index[RHEL 10 product documentation^] or the https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/index[RHEL 9 product documentation^].
+
+For documentation about Red Hat Device Edge, check its https://docs.redhat.com/en/documentation/red_hat_device_edge/4/html/overview/index[overview document^].
+
+== Author
+
+*Fernando Lozano* +
+Training Content Architect +
+Red Hat - Product Portfolio Marketing & Learning
+
+Special thanks to [LIST CONTRIBUTORS AND SUPPORTERS]
