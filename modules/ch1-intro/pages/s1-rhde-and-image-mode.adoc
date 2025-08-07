@@ -1,0 +1,27 @@
+:time_estimate: 5
+
+= Edge Devices with Red Hat Technologies
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Introduction to edge devices, Red Hat Device Edge, and image mode for RHEL
+
+WARNING: Work in progress
+
+== PROVISORY OUTLINE
+
+* Product and use case intro
+* Mention image mode and bootc as opposed to the previous incarnation of RHEL for edge based on OSTree
+* Emphasize that RHEL for edge and image mode for RHEL are features of RHEL. All RHEL skills, tools, and procedures still apply.
+* Show the overall workflow, be clear this course exercises just the beginning and parts of it are detailed in follow-up courses.
+* Tooling intro: bootc, bootc image builder, podman, and container registries.
+
+== What is Red Hat Device Edge
+
+Lorem ipsum
+
+
+== What's Next
+
+The first activity verifies that you have all necessary prerequisites to build and deploy bootc container images in a disconnected environment. It should provide enough information for you to replicate the activities in your own environment, if you prefer, or try a simpler deployment, not air-gaped.

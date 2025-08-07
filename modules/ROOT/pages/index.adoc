@@ -1,5 +1,7 @@
-= Building Red Hat Device Edge system images with image mode for RHEL
+= Building System Images for Red Hat Device Edge With Image Mode for RHEL
 :navtitle: Home
+
+WARNING: Work in progress
 
 == Goal
 

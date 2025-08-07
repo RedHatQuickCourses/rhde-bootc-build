@@ -1,0 +1,40 @@
+:time_estimate: 5
+
+= Lab: Prepare to Build and Deploy Bootc Container Images
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.
+
+WARNING: Work in progress
+
+== PROVISORY OUTLINE
+
+* Check availability of container tools
+* Check availability of base OS images in a private registry
+* Check availability of local RPM package repositories
+* Check availability of sign keys for packages and container images?
+* Explore the characteristics and settings of the virtual labs environment containing RHEL servers/workstations and a Quay registry.
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories. That machine must have plenty of disk space to store multiple OSTree commits and also to use as scratch space for downloading RPM packages and bootable installation images.
+
+These instructions were tested on RHEL 9.5 but should work with minimal or no change on and newer and older RHEL 9.x releases.
+
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student` and grant that same user access to the Image Builder service. If not, please adapt the instructions to your test environment.
+
+== Instructions
+
+1. Install the packages for the Image Builder service and its clients on your development machine.
+
+.. Install the RPM packages for the Image Builder service and its CLI.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo dnf install osbuild-composer composer-cli*
+...
+Complete!
+--
+
