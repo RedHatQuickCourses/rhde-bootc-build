@@ -9,32 +9,192 @@ Prepare for air-gapped building of bootc container images and disconnected deplo
 
 WARNING: Work in progress
 
-== PROVISORY OUTLINE
-
-* Check availability of container tools
-* Check availability of base OS images in a private registry
-* Check availability of local RPM package repositories
-* Check availability of sign keys for packages and container images?
-* Explore the characteristics and settings of the virtual labs environment containing RHEL servers/workstations and a Quay registry.
-
 == Before you Begin
 
-You need a _development machine_ running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories. That machine must have plenty of disk space to store multiple OSTree commits and also to use as scratch space for downloading RPM packages and bootable installation images.
+You need a _development machine_ running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories.
+That machine must have plenty of disk space to store multiple container images and multiple Virtual Machine (VM) images.
 
-These instructions were tested on RHEL 9.5 but should work with minimal or no change on and newer and older RHEL 9.x releases.
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student` and grant that same user access to the Image Builder service. If not, please adapt the instructions to your test environment.
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
 
 == Instructions
 
-1. Install the packages for the Image Builder service and its clients on your development machine.
+1. Verify that your _development machine_ has access to the RHEL package repositories from a DNF mirror.
 
-.. Install the RPM packages for the Image Builder service and its CLI.
+.. List the configured package repositories, they should match the standard RHEL package repositories.
 +
 [source,subs="verbatim,quotes"]
 --
-$ *sudo dnf install osbuild-composer composer-cli*
+$ *dnf repolist*
+rhel-10.0-for-x86_64-appstream-rpms                                                                       Red Hat Enterprise Linux 10.0 AppStream (dvd)
+rhel-10.0-for-x86_64-baseos-rpms                                                                          Red Hat Enterprise Linux 10.0 BaseOS (dvd)
+--
+
+.. Verify that your RHEL package repositories do NOT point to the Red Hat customer portal, instead they point to a machine inside your virtual labs environment.
++
+[source,subs="verbatim,quotes"]
+--
+$ *dnf repoinfo rhel-10.0-for-x86_64-baseos-rpms | grep baseurl*
+Last metadata expiration check: 0:01:12 ago on Thu Aug  7 12:48:44 2025.
+Repo-baseurl       : http://content.example.com/rhel10.0/x86_64/dvd/BaseOS
+--
+
+.. Verify that the `bootc` package is available, but do NOT install it.
++
+[source,subs="verbatim,quotes"]
+--
+$ *dnf info bootc*
+Last metadata expiration check: 0:44:11 ago on Thu Aug  7 12:48:44 2025.
+Available Packages
+Name         : bootc
+Version      : 1.1.6
+Release      : 2.el10_0
+Architecture : x86_64
+Size         : 2.7 M
+Source       : bootc-1.1.6-2.el10_0.src.rpm
+Repository   : rhel-10.0-for-x86_64-appstream-rpms
+Summary      : Bootable container system
+URL          : https://github.com/containers/bootc
+License      : Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
+Description  : Bootable container system
+--
+
+2. Install the container tools on your _development machine_.
++
+You already have Podman installed, but during this course you will use additional conveniente tools, such as Skopeo.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo dnf install skopeo buildah*
 ...
 Complete!
 --
 
+3. Verify that your _development machine_ has access to bootc base images from a private registry.
+
+.. The private registry requires authentication, even for images that would be public on the Red Hat registries.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+...
+Complete!
+--
+
+.. List all images available on the privage registry.
+The list should include some application container images and some bootc container images, for different release of RHEL.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman search registry.lab.example.com:5000/*
+NAME                                                                  DESCRIPTION
+registry.lab.example.com:5000/openshift4/microshift-bootc-rhel9       
+registry.lab.example.com:5000/rhel10/bootc-image-builder              
+registry.lab.example.com:5000/rhel10/rhel-bootc                       
+registry.lab.example.com:5000/rhel9-eus/rhel-9.6-bootc                
+registry.lab.example.com:5000/rhel9-eus/rhel-9.6-bootc-image-builder  
+registry.lab.example.com:5000/ubi10/ubi                               
+registry.lab.example.com:5000/ubi9/ubi 
+--
+IMPORTANT: The `podman search` command, and its similar commands form other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
+Container registry servers do NOT have to return the results in any strict order, can truncate the results as they wish, and do NOT have to return any indication that the results were truncated.
+It works here only because there is a very small number of container images stored in the private registry.
+
+.. Inspect the RHEL 10 base bootc image to verify it is indeed a bootc container image.
+Look for the `containers.bootc` key.
++
+Instead of displaying all information about a container, which could spawn multiple pages of your terminal, use the `--format` option to list only the labels, 
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ .Labels }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc*
+map[architecture:x86_64 build-date:2025-07-31T04:03:30 com.redhat.component:rhel-bootc-component containers.bootc:1 description:RHEL bootc container distribution-scope:public io.buildah.version:1.40.1 io.k8s.description:RHEL bootc container name:rhel10/rhel-bootc org.opencontainers.image.source:https://gitlab.com/redhat/rhel/bifrost/rhel-bootc.git ostree.bootable:1 ostree.commit:8f3b22bd5d278d525440baa3ae7709fa89d575d7f6799f82913c805f2d7b8b1e ostree.final-diffid:sha256:12787d84fa137cd5649a9005efe98ec9d05ea46245fdc50aecb7dd007f2035b1 redhat.compose-id: redhat.id:rhel redhat.version-id:10.0 release:10.0 url:https://www.redhat.com vcs-ref:2ff3f1d1ffe1b320f7a54ef32c4fd19551736eba vcs-type:git vendor:Red Hat, Inc. version:10.0]
+--
+
+.. You can output the information in JSON format and format it for legibility, which makes it easier to visually find a specific key.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ json .Labels }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc | jq*
+{
+  "architecture": "x86_64",
+  "build-date": "2025-07-31T04:03:30",
+  "com.redhat.component": "rhel-bootc-component",
+  "containers.bootc": "1",<1>
+  "description": "RHEL bootc container",
+  "distribution-scope": "public",
+  "io.buildah.version": "1.40.1",
+  "io.k8s.description": "RHEL bootc container",
+  "name": "rhel10/rhel-bootc",
+  "org.opencontainers.image.source": "https://gitlab.com/redhat/rhel/bifrost/rhel-bootc.git",
+  "ostree.bootable": "1",
+  "ostree.commit": "8f3b22bd5d278d525440baa3ae7709fa89d575d7f6799f82913c805f2d7b8b1e",
+  "ostree.final-diffid": "sha256:12787d84fa137cd5649a9005efe98ec9d05ea46245fdc50aecb7dd007f2035b1",
+  "redhat.compose-id": "",
+  "redhat.id": "rhel",
+  "redhat.version-id": "10.0",
+  "release": "10.0",
+  "url": "https://www.redhat.com",
+  "vcs-ref": "2ff3f1d1ffe1b320f7a54ef32c4fd19551736eba",
+  "vcs-type": "git",
+  "vendor": "Red Hat, Inc.",
+  "version": "10.0"
+}
+--
+<1> The label could take any value, but by convention it should be set to "1" or empty.
+
+.. Alternatively, you can check for the `containers.bootc` key directly, without using JSON nor the `jq` command.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ index .Labels "containers.bootc" }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc*
+1
+--
+
+.. Verify that an application container image, for example a UBI base image, does NOT have a `containers.bootc` label.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ index .Labels "containers.bootc" }}' docker://registry.lab.example.com:5000/ubi10/ubi*
+
+$
+--
++
+NOTE: Because the output of the last command is empty, you may want to retrieve and format all labels, just to be sure.
+
+
+4. Explore the contents of a bootc container image and an application container image and notice important packages that are present or not.
+
+.. Bootc container images include the bootable container system.
++
+[source,subs="verbatim,quotes"]
+--
+$ podman run -it --rm --name bootc docker://registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q bootc"
+...
+bootc-1.1.6-2.el10_0.x86_64
+$ podman run --rm -it --name ubi docker://registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q bootc"
+..
+package bootc is not installed
+--
++
+NOTE: Be patient, bootc container images are considerably larger than regular application containers, so they take longer to download.
+
+.. Bootc container images include a Linux kernel.
++
+[source,subs="verbatim,quotes"]
+--
+$ podman run -it --rm --name bootc docker://registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q kernel"
+...
+kernel-6.12.0-55.24.1.el10_0.x86_64
+$ podman run --rm -it --name ubi docker://registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q kernel"
+..
+package kernel is not installed
+--
+
+// 5. Install the RHEL virtualization tools -- may not need in this course
+
+== What's next
+
+The next chapter demonstrates how to craft a containerfile and use it to build a bootc container image.

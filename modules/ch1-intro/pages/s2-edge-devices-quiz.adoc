@@ -11,7 +11,8 @@ WARNING: Work in progress
 
 NOTE: Make your notes of what you believe are the right answers for each question. This is a static web page so the check boxes are not clickable.
 
-//TODO experiment with converting that to a 
+//TODO experiment with converting that to a Gemini Canvas app, for more interactivity.
+
 == Questions
 
 For each of the following scenarios, which favor of RHEL would be most adequate? There could be more than one right answer.
@@ -124,3 +125,7 @@ _Incorrect: explain_
 _Incorrect: explain_
 
 ////
+
+== What's Next
+
+The first activity verifies that you have all necessary prerequisites to build and deploy bootc container images in a disconnected environment.
