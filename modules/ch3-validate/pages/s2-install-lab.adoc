@@ -29,7 +29,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
-.. Create a local clone of the sample code repository of this course, and make it your working directory.
+.. If needed, create a local clone of the sample code repository of this course, and make it your working directory.
 +
 [source,subs="verbatim,quotes"]
 --
