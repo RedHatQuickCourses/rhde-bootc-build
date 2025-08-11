@@ -1,0 +1,31 @@
+:time_estimate: 5
+
+= Test Bootc Containers With Bootc Install
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Introduce the bootc utility and its usage to test bootc container images.
+
+WARNING: Not Started
+
+== PROVISORY OUTLINE
+
+* Bootc is inside bootc containers and involved at deployment, updates, and other moments
+* Using bootc install to a disk or filesystem
+* Introduction to libvirt and macadm
+* Mention Podman Machine/Podman Desktop tools for Windows and Mac developers
+
+
+== The Bootc Utility
+
+Lorem ipsum
+
+== Unnatended VM Creation With Libvirt
+
+Lorem ipsum
+
+
+== What's Next
+
+The next activity uses the `bootc install` command, in a libvirt VM, to perform comprehensive tests of bootc container images.

@@ -1,0 +1,10 @@
+= Test Bootc Containers for Edge Devices
+
+Goal::
+Test and Validate RHEL for edge device images using local VMs
+
+WARNING: Work in progress
+
+== Introduction
+
+This chapter explains how to install a bootc container image in an actual system, so you can test behaviors and settings that are not possible with Podman.

@@ -6,5 +6,5 @@ nav:
 - modules/LABENV/nav.adoc
 - modules/ch1-intro/nav.adoc
 - modules/ch2-build/nav.adoc
-- modules/chapter3/nav.adoc
+- modules/ch3-validate/nav.adoc
 - modules/appendix/nav.adoc

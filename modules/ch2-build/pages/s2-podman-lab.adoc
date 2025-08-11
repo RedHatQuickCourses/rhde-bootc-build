@@ -230,4 +230,4 @@ webapp
 
 == What's next
 
-The next chapter demonstrates how to craft a containerfile and use it to build a bootc container image.
+The next section presents some strategies for configuring systems from a bootc container image.
