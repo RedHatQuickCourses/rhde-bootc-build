@@ -1,0 +1,27 @@
+:time_estimate: 5
+
+= Build Bootc Containers With Podman
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Build system images for edge devices using Podman
+
+WARNING: Not Started
+
+== PROVISORY OUTLINE
+
+* Bootc container images are NOT bootable and are NOT intended to be executed in a container.
+* Bootc base images vs bootc derived images.
+* Filesystem layout with composefs. Unlike rpm-ostree, you can install packages and binaries in /opt and /usr/local, as long as you don’t write data on these folders (write on /var or create symlinks to /var)
+* Containerfiles for bootc images vs Containerfiles for application images
+* Reproducible builds?
+
+== Bootc Containers Versus Application Containers
+
+Lorem ipsum
+
+
+== What's Next
+
+The next activity builds a simple bootc container image and performs early testing of those images using Linux containers, to demonstrate the need for system testing in addition to container testing of bootc container images.

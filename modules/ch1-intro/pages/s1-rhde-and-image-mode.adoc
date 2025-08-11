@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Introduction to edge devices, Red Hat Device Edge, and image mode for RHEL
 
-WARNING: Work in progress
+WARNING: Not Started
 
 == PROVISORY OUTLINE
 

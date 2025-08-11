@@ -1,13 +1,20 @@
 :time_estimate: 5
 
-= Lab: Prepare to Build and Deploy Bootc Container Images
+= Lab: System Configuration From Containers
 
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.
+Create containerfiles which include system configurations and demonstrate that they cannot be effectively tested using Podman.
 
-WARNING: Work in progress
+WARNING: Not Started
+
+== PROVISORY OUTLINE
+
+* If I cannot get a good and not too complex example of a Containerfile with “advanced” features, skip this lab and have a shorter presentation.
+* Maybe a multistage build using ansible system roles to preconfigure a system?
+* Ideally, one example that “works” on podman, and another that doesn’t, to reinforce the need to test by provisioning actual systems or VMs.
+* Leave “from scratch” images for a follow-up course, as an advanced topic that learners should try only after they master more of image mode, including the two following courses.
 
 == Before you Begin
 
@@ -79,6 +86,8 @@ Complete!
 --
 $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
+...
+Complete!
 --
 
 .. List all images available on the privage registry.

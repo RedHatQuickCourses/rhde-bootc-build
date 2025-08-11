@@ -1,0 +1,10 @@
+= Build Bootc Containers for Edge Devices
+
+Goal::
+Build system images for edge device images using image mode for RHEL
+
+WARNING: Work in progress
+
+== Introduction
+
+This chapter explains how to build bootc container images using the container tools packages from Red Hat Enterprise Linux (RHEL), focusing on Podman, and presents common coding idioms for Containerfiles designed to produce bootc container images.

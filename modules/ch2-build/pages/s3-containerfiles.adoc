@@ -1,0 +1,37 @@
+:time_estimate: 5
+
+= Strategies for Building Bootc Container Images
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Present common issues, recomendations, and coding idioms for building bootc container images.
+
+WARNING: Not Started
+
+== PROVISORY OUTLINE
+
+* Discussion: what to include in a Containerfile, in config.toml (for bib), in kickstart/cloud-init, or to inject at day-1/2 using Ansible, FDO, RHEM, etc?
+* Discussion: embedding applications in a system image or consume applications as external/independent container images?
+* Introduce conventions which should make bootc containers easier to maintain and update, such as using Systemd units and drop files.
+* Example Containerfiles which illustrate some common requirements, such as:
+** Setting kernel arguments and other boot time stuff in bootc containers.
+** Changing the initrd?
+** SCAP and bootc lint at build time?
+* Mention multistage builds. They apply to bootc for the same reasons as application container images
+* Use  --squash during build?
+* Mention Rechunk?
+* Mention layering?
+
+== Day-0 and Day-1 System Configuration
+
+Lorem ipsum
+
+== System Configuration on Containerfiles
+
+Lorem ipsum
+
+
+== What's Next
+
+The next activity builds a simple bootc container image and performs early testing of those images using Linux containers, to demonstrate the need for system testing in addition to container testing of bootc container images.
