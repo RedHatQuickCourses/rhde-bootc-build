@@ -27,7 +27,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
-1. Prepare to start this activity by cloning the sample code repository and loggin in the private registry.
+1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
 .. Create a local clone of the sample code repository of this course, and make it your working directory.
 +
@@ -47,7 +47,35 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. Inspect the Containerfile for a single-page web applicaiton, which uses the Apache Web Server to host your HTML and JavaScript code.
+.. Verify that you have bootc container images named AAA and BBB.
+If you do not, please perform the xref:ch2-build:s2-podman-lab.adoc[previous labs].
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman image list*
+GRAB OUTPUT
+--
+
+2. Create a local virtual machine (VM), using the libvirt tools, that you can use to install your bootc container images..
+
+.. Try a command that installs RHEL unattended, from a kickstart file.
++
+[source,subs="verbatim,quotes"]
+--
+### SCRATCHPAD FOR TESTING COMMANDS
+$ cd # run from $HOME
+$ mkdir temp-bootc
+$ skopeo copy containers-storage:localhost/http-bootc oci:temp-bootc:http-bootc
+$ virt-install
+--
+
+.. Alternativelly, try a RHEL cloud image (which I would have to add to the HOL019 classroom).
++
+[source,subs="verbatim,quotes"]
+--
+### SCRATCHPAD FOR TESTING COMMANDS
+$ *virt-istall*
+--
 
 == What's Next
 

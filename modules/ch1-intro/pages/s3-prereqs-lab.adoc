@@ -191,7 +191,31 @@ $ podman run --rm -it --name ubi docker://registry.lab.example.com:5000/ubi10/ub
 package kernel is not installed
 --
 
-// 5. Install the RHEL virtualization tools -- may not need in this course
+5. Install the RHEL virtualization tools
+
+.. Install the Libvirt tools and enable the Libvirt socket.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo dnf install qemu-kvm libvirt virt-install virt-viewer*
+...
+Complete!
+$ *sudo systemctl enable virtqemud.socket --now*
+Created symlink /etc/systemd/system/multi-user.target.wants/virtqemud.socket → /usr/lib/systemd/system/virtqemud.socket.
+--
+
+.. Check that your unprivileged user can connect to Libvirt's session interface.
++
+[source,subs="verbatim,quotes"]
+--
+$ *virsh uri*
+qemu:///session
+$ *virsh nodeinfo*
+CPU model:           x86_64
+...
+--
+
+// No need for additional steps because we can now use session VMs with passt
 
 == What's next
 
