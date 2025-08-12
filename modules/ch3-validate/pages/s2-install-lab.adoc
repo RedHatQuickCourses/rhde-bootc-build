@@ -1,6 +1,6 @@
 :time_estimate: 5
 
-= Test Bootc Containers With Bootc Install
+= Lab: Test Bootc Containers With Anaconda
 
 _Estimated reading time: *{time_estimate} minutes*._
 
@@ -8,14 +8,6 @@ Objective::
 Deploy a local bootc container image in a local VM.
 
 WARNING: Work in progress
-
-== PROVISORY OUTLINE
-
-* Use a preexisting VM (or create a new one using package mode) and use bootc install and/or system-reinstall-bootc to replace the OS on that VM with a bootc container image.
-* Optional: use Podman Desktop (or just macadam) as a simpler way of testing bootc container images with local VMs, for the benefit of non-Linux developers
-* Try to do it without a remote container registry. If it's too cumbersome, reorder topics so this lab and its presentation come the last in the course
-* This lab is NOT trying to emulate provisioning physical devices using local VMs, but to boot a VM from a bootc container image the quickest/simplest way possible, for inner loop testing of new images.
-
 
 == Before you Begin
 
@@ -171,7 +163,7 @@ Deployment starting: /mnt/host-var-srv/oci:httpd-bootc
 ...
 --
 
-.. If all goes well, you will see a message that states you VM (_domain_ or _guest_ in libvirt's jargon) was created, but may not see its RHEL login screen.
+.. If all goes well, you will see a message which states that your VM (_domain_ or _guest_ in libvirt's jargon) was created, but you may not see its RHEL login screen.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -217,7 +209,7 @@ The password of the `core` user (for `sudo`) is `redhat123`.
 $ *sudo bootc status*
 ● Booted image: oci:/mnt/host-var-srv/oci:httpd-bootc
         Digest: sha256:5ba977e2a75507b722535b21ae40f794176b61c63754e916a0531a6f9f76b894
-       Version: 10.0 (2025-08-11 20:34:32.003406539 UTC)
+        Version: 10.0 (2025-08-11 20:34:32.003406539 UTC)
 --
 
 .. Verify that your test VM has an active Apache Web Server.
@@ -262,7 +254,8 @@ systemd─┬─NetworkManager───3*[{NetworkManager}]
         ├─systemd-journal
         ├─systemd-logind
         ├─systemd-udevd
-        └─systemd-userdbd───3*[systemd-userwor]--
+        └─systemd-userdbd───3*[systemd-userwor]
+--
 +
 Notice the much higher number of running processes, compared to the previous lab, where you run the same bootc container image from Podman. Also notice processes such as terminal login managers, a Cron daemon, and additional System daemon services you did not see running from Podman.
 
@@ -297,101 +290,8 @@ Domain 'bootc-test' has been undefined
 Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
 --
 +
-NOTE: You could reuse the same test VM, and use the `bootc` command to switch it to another container image from a remote container registry, but for now let's ensure that we get a brand new test VM, without any state left over from previous tests.
-
-6. Create another test VM, this time from the `webapp-bootc` container image.
-
-.. Return to your home directory and copy a second local container image to your OCI directory.
-+
-[source,subs="verbatim,quotes"]
---
-$ *cd*
-$ *skopeo copy containers-storage:localhost/webapp-bootc oci:temp-bootc/oci:webapp-bootc*
---
-
-.. Change the kickstart script on your temporary directory to refer to the second bootc container image.
-+
-[source,subs="verbatim,quotes"]
---
-$ *cd temp-test-vm*
-$ *sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks*
-GRAB OUTPUT
---
-
-.. Create a new test VM, using the kickstart script you just changed.
-+
-Make sure it reports using the `webapp-bootc` container iamge as its installation source.
-+
-[source,subs="verbatim,quotes"]
---
-$ *bash virt-install.sh*
-...
-Installing the software
-Deployment starting: /mnt/host-var-srv/oci:webapp-bootc
-...
---
-
-.. When your new test VM finish starting, detach from its VM console by pressing kbd:[Ctrl+\]], and start a SSH session to your new test VM.
-+
-[source,subs="verbatim,quotes"]
---
-$ *ssh -i edge-key -p 8022 core@127.0.0.1*
-[core@bootc-test ~]$
---
-
-7. Verify that your new VM is NOT working as expect, and troubleshoot it.
-+
-[ It worked :-( despite the SELinux labels being wrong AND it being on eforcing mode ]
-
-.. TBD
-+
-[source,subs="verbatim,quotes"]
---
-$ **
---
-
-99. Delete your temporary directories, especially the large OCI directory which now contains multiple GB bootc container images.
-
-.. TBD
-
-99. DELETE THIS AFTER TESTING ALL STEPS ABOVE
-+
-[source,subs="verbatim,quotes"]
---
-### SCRATCHPAD FOR TESTING COMMANDS
-$ cd # run from $HOME
-$ mkdir temp-bootc
-$ skopeo copy containers-storage:localhost/httpd-bootc oci:temp-bootc/oci:httpd-bootc
-...
-Writing manifest to image destination
-## this copy is slow :-(
-$ cp rhde-bootc-samples/bootc-install/inst.ks temp-bootc
-$ cp rhde-bootc-samples/bootc-install/inst.ks .
-## which of the previous two?
-$ cp rhde-bootc-samples/bootc-install/virt-install-bootc.sh .
-$ bash virt-install-bootc.sh
-...
-Domain creation completed.
-Restarting guest.
-Running text console command: virsh --connect qemu:///session console bootc-test
-Connected to domain 'bootc-test'
-Escape character is ^] (Ctrl + ])
-## leave the installer, after reboot and seeing a login prompt
-$ ssh -i edge-key -p 8022 127.0.0.1
-## see password on the kickstart, and the misleading hostname -- find the %post that sets a hostname!
-## can I download the RHEL DVD from classroom to workstation?
-## Something is not working with the text console and text login.
-## Can I use a relative path for --filesystem  ?
---
-
-.. Alternativelly, try a RHEL cloud image (which I would have to add to the HOL019 classroom).
-+
-[source,subs="verbatim,quotes"]
---
-### SCRATCHPAD FOR TESTING COMMANDS
-$ *virt-istall*
---
+NOTE: You could reuse the same test VM, and use the `bootc` command to switch it to another container image from a remote container registry, but for now let's ensure that we get a brand new test VM every time, without any state left over from previous tests.
 
 == What's Next
 
-The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, or virtual machines on the data center.
+The next activity walks through trobleshooting a bootc container image which fails to run correctly in a VM and fix the issue by updating its Containerfile and building a new bootc image.

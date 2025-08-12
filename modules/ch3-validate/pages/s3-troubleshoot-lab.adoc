@@ -1,0 +1,272 @@
+:time_estimate: 5
+
+= Lab: Troubleshoot Bootc Containers and Their Containerfiles
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Troubleshoot and fix a bootc container image which works with Podman but fails in a local VM.
+
+WARNING: Work in progress
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
+
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
+
+== Instructions
+
+1. Prepare to start this activity by checking that you have the outcomes from previous activities.
+
+.. If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
+Stay on your home directory to start this lab.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd*
+$ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
+Cloning into 'rhde-bootc-samples'...
+...
+--
++
+////
+// Not needed for this lab
+.. If needed, login to your private registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+////
+
+.. Verify that you have a bootc container image named `localhost/webapp-bootc` in your local container storage.
+If you do not, please perform a xref:ch2-build:s2-podman-lab.adoc[previous lab] which builds that image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman image list | grep webapp-bootc*
+localhost/webapp-bootc                            latest      3e89e69fc894  18 hours ago  1.56 GB
+--
+
+.. Verify that you have access to libvirt though its session interface.
+If you do not, please perform the preparation tasks from the xref:ch1-intro:s3-prereqs-lab.adoc[first lab].
++
+[source,subs="verbatim,quotes"]
+--
+$ *virsh list --all*
+ Id   Name   State
+--------------------
+
+--
++
+NOTE: It is fine if you have some local VMs on your system, as long as there isn't a VM named `bootc-test`.
+
+.. Verify that you have, on your home directory, a temporary directory with scripts for creating test VMs and another temporary directory with an OCI container image directory.
+If you do not, please review the xref:ch3-validate:s2-install-bootc[previous lab] which explains those scripts.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ls temp-test-vm*
+edge-key  edge-key.pub  inst.ks  virt-install.sh
+$ *ls temp-bootc*
+oci
+$ *ls temp-bootc/oci*
+blobs  index.json  oci-layout
+--
+
+2. Create a test VM from the `webapp-bootc` container image.
+
+.. Copy a the bootc container image to to your OCI directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy containers-storage:localhost/webapp-bootc oci:temp-bootc/oci:webapp-bootc*
+--
+
+.. Change the kickstart script on your scripts directory to refer to that bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd temp-test-vm*
+$ *sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks*
+GRAB OUTPUT
+--
+
+.. Create a test VM, using the kickstart script you just changed.
++
+Make sure it reports using the `webapp-bootc` container iamge as its installation source.
++
+[source,subs="verbatim,quotes"]
+--
+$ *bash virt-install.sh*
+...
+Installing the software
+Deployment starting: /mnt/host-var-srv/oci:webapp-bootc
+...
+Domain creation completed.
+Restarting guest.
+Running text console command: virsh --connect qemu:///session console test-bootc
+Connected to domain 'test-bootc'
+Escape character is ^] (Ctrl + ])
+--
+
+.. When your test VM finish installing, detach from its VM console by pressing kbd:[Ctrl+\]].
+
+3. Verify that your test VM is NOT working as expect, and troubleshoot it.
+
+.. Try to access your single-page web applicaiton.
+Instead of the expected mock message, you should get the standard welcome page from RHEL.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+        <head>
+                <title>Test Page for the HTTP Server on Red Hat Enterprise Linux</title>--
+...
+--
++
+Remember that this container image did work fine when run from Podman, in a xref:ch2-build-podman-lab.adoc[previous lab].
+Let's find what is wrong.
+
+.. Start a SSH session to your test VM.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh -i edge-key -p 8022 core@127.0.0.1*
+[core@bootc-test ~]$
+--
+
+.. Verify the access logs and error logs of the Apache Web Server.
+It claims that search permissions are missing in the path to the `index.html` file of the single-page web application.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo tail /var/log/httpd/access_log*
+172.25.250.254 - - [12/Aug/2025:19:28:09 +0000] "GET / HTTP/1.1" 403 5909 "-" "curl/8.9.1"
+$ *sudo tail /var/log/httpd/error_log*
+[Tue Aug 12 19:25:34.493767 2025] [suexec:notice] [pid 993:tid 993] AH01232: suEXEC mechanism enabled (wrapper: /usr/sbin/suexec)
+[Tue Aug 12 19:25:34.564560 2025] [lbmethod_heartbeat:notice] [pid 993:tid 993] AH02282: No slotmem from mod_heartmonitor
+[Tue Aug 12 19:25:34.566752 2025] [systemd:notice] [pid 993:tid 993] SELinux policy enabled; httpd running as context system_u:system_r:httpd_t:s0
+[Tue Aug 12 19:25:34.584879 2025] [mpm_event:notice] [pid 993:tid 993] AH00489: Apache/2.4.63 (Red Hat Enterprise Linux) configured -- resuming normal operations
+[Tue Aug 12 19:25:34.585013 2025] [core:notice] [pid 993:tid 993] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+[Tue Aug 12 19:28:09.247438 2025] [core:error] [pid 1060:tid 1103] (13)Permission denied: [client 172.25.250.254:35038] AH00035: access to /index.html denied (filesystem path '/webapp/html/index.html') because search permissions are missing on a component of the path
+--
+
+.. Verify that these files have the necessary read and execute (search) permissions.
++
+[source,subs="verbatim,quotes"]
+--
+[core@bootc-test ~]$ ls -la /webapp
+total 12
+drwxr-xr-x.  3 root root   43 Jan  1  1970 .
+drwxr-xr-x. 16 root root 4096 Jan  1  1970 ..
+drwxr-xr-x.  2 root root   49 Jan  1  1970 html
+[core@bootc-test ~]$ ls -l /webapp/html
+total 4
+-rw-r--r--. 1 root root 88 Jan  1  1970 index.html
+--
+
+.. What else can deny permission to access files and directories?
+Maybe it is SELinux.
++
+[source,subs="verbatim,quotes"]
+--
+[core@bootc-test ~]$ *sudo journalctl | grep avc:*
+...
+Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc:  denied  { getattr } for  pid=1058 comm="httpd" path="/webapp/html/index.html" dev="overlay" ino=11826 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:default_t:s0 tclass=file permissive=0
+...
+--
+
+.. And indeed, the single-page web application files have a `default_` context label, instead of the `httpd_t` label required by the SELinux policy in RHEL.
++
+[source,subs="verbatim,quotes"]
+--
+[core@bootc-test ~]$ *ls -laZ /webapp/html/*
+total 12
+drwxr-xr-x. 2 root root system_u:object_r:default_t:s0 49 Jan  1  1970 .
+drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
+-rw-r--r--. 1 root root system_u:object_r:default_t:s0 88 Jan  1  1970 index.html
+--
+
+.. Exit and delete your test VM.
++
+[source,subs="verbatim,quotes"]
+--
+[core@bootc-test ~]$ *exit*
+logout
+Connection to 127.0.0.1 closed.
+$ *virsh destroy bootc-test*
+Domain 'bootc-test' destroyed
+$ *virsh undefine bootc-test --remove-all-storage*
+Domain 'bootc-test' has been undefined
+Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
+--
+
+4. Build a new bootc container image with the required fixes
+
+.. The sample code repository already provides a containerfile with the required fixes.
++
+For your reference, the fixes are these:
++
+[source,subs="verbatim,quotes"]
+--
+TBD
+--
+
+.. Build the bootc container image with fixes.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd ../rhde-bootc-samples*
+$ *cd webapp-fixed*
+$ *podman build -t webapp-fixed .*
+GRAB OUTPUT
+--
+
+.. If you wish, test the new bootc container image with podman, but the instructions here proceed straight to installing it in a new test VM.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd ..*
+$ *skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed*
+GRAB OUTPUT
+$ *cd temp-test-vm*
+$ *bash virt-install.sh*
+...
+Installing the software
+Deployment starting: /mnt/host-var-srv/oci:webapp-fixed
+...
+Domain creation completed.
+Restarting guest.
+Running text console command: virsh --connect qemu:///session console test-bootc
+Connected to domain 'test-bootc'
+Escape character is ^] (Ctrl + ])
+--
+
+.. When your new test VM finish installing, detach from its VM console by pressing kbd:[Ctrl+\]].
+
+5. Verify that access your improved single-page web application now works.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+--
+
+99. Apply the fix from the virtio device, instead of recreating the VM?
+
+99. Delete your temporary directories, especially the large OCI directory which now contains multiple GB bootc container images.
+
+.. TBD
+
+== What's Next
+
+The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, or virtual machines on the data center.

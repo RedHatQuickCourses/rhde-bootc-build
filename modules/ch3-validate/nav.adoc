@@ -1,3 +1,4 @@
 * xref:index.adoc[]
 ** xref:s1-bootc.adoc[]
 ** xref:s2-install-lab.adoc[]
+** xref:s3-troubleshoot-lab.adoc[]
