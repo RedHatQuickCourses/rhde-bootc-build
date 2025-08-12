@@ -235,8 +235,36 @@ active
 [source,subs="verbatim,quotes"]
 --
 $ *cat /var/www/html/index.html*
-This would be the HTML and Javascrit code of you single-page web application.
+This would be the HTML and Javascrit code of your single-page web application.
 --
+
+.. Inspect the processes running inside your test VM.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ps ax | wc -l*
+205
+[core@bootc-httpd ~]$ pstree
+systemd─┬─NetworkManager───3*[{NetworkManager}]
+        ├─agetty
+        ├─chronyd
+        ├─dbus-broker-lau───dbus-broker
+        ├─gssproxy───5*[{gssproxy}]
+        ├─httpd─┬─httpd
+        │       ├─httpd───68*[{httpd}]
+        │       └─2*[httpd───52*[{httpd}]]
+        ├─irqbalance───{irqbalance}
+        ├─rhsmcertd───{rhsmcertd}
+        ├─rpcbind
+        ├─sshd───sshd-session───sshd-session───bash───pstree
+        ├─systemd───(sd-pam)
+        ├─systemd-hostnam
+        ├─systemd-journal
+        ├─systemd-logind
+        ├─systemd-udevd
+        └─systemd-userdbd───3*[systemd-userwor]--
++
+Notice the much higher number of running processes, compared to the previous lab, where you run the same bootc container image from Podman. Also notice processes such as terminal login managers, a Cron daemon, and additional System daemon services you did not see running from Podman.
 
 .. Exit your SSH session and return to your _development machine_ shell.
 +
@@ -254,7 +282,7 @@ Connection to 127.0.0.1 closed.
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of you single-page web application.
+This would be the HTML and Javascrit code of your single-page web application.
 --
 
 .. If all went well, stop and destroy your test VM to conserve resources.

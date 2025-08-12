@@ -98,7 +98,7 @@ $ *podman run -d -p 8080:80 --name httpd httpd-bootc*
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of you single-page web application.
+This would be the HTML and Javascrit code of your single-page web application.
 --
 
 .. Verify that your bootc contrainer image inherits the `containers.bootc` label key from the bootc base image.
@@ -108,6 +108,33 @@ This would be the HTML and Javascrit code of you single-page web application.
 $ *skopeo inspect --format '{{ index .Labels "containers.bootc" }}' containers-storage:localhost/httpd-bootc*
 1
 --
+
+.. Inspect the processes running inside your bootc container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+bash-5.2# *ps ax | wc -l*
+25
+bash-5.2# *pstree*
+systemd-+-NetworkManager---3*[{NetworkManager}]
+        |-dbus-broker-lau---dbus-broker
+        |-gssproxy---5*[{gssproxy}]
+        |-httpd-+-httpd
+        |       |-httpd---68*[{httpd}]
+        |       `-2*[httpd---52*[{httpd}]]
+        |-rhsmcertd---{rhsmcertd}
+        |-rpcbind
+        |-sshd
+        |-systemd-journal
+        |-systemd-logind
+        |-systemd-userdbd---4*[systemd-userwor]
+        `-udisksd---6*[{udisksd}]
+bash-5.2# *exit*
+exit
+--
++
+You can see many processes that are NOT common in application containers, such as NetworkManager, DBus, and the SSH daemon.
 
 .. Stop and delete your bootc container.
 +
@@ -160,8 +187,29 @@ Successfully tagged localhost/httpd-ubi:latest
 $ *podman run -d -p 8080:80 --name httpd httpd-ubi*
 ...
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of you single-page web application.
+This would be the HTML and Javascrit code of your single-page web application.
 --
+
+.. Inspect the processes running inside your application container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+[root@965ed65344f0 /]# *ps ax | wc -l*
+bash: ps: command not found
+0
+[root@965ed65344f0 /]# *pstree*
+systemd─┬─httpd─┬─httpd
+        │       ├─httpd───68*[{httpd}]
+        │       └─2*[httpd───52*[{httpd}]]
+        ├─systemd-journal
+        └─systemd-userdbd───3*[systemd-userwor]
+[root@965ed65344f0 /]# *exit*
+exit
+--
++
+See that the `ps` command is not available, but from the `pstree` command you can see that only the System daemon and Apache Web server are running.
+Remember, that most application containers do NOT include common troubleshooting commands and system services, so their container iamges are leaner.
 
 .. Delete your application container.
 +
@@ -215,7 +263,7 @@ $ *podman run -d -p 8080:80 --name webapp webapp-bootc*
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of you single-page web application.
+This would be the HTML and Javascrit code of your IMPROVED single-page web application.
 --
 
 .. Delete your test container.
