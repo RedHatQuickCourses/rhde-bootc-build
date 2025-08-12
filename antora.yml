@@ -1,6 +1,9 @@
 name: rhde-bootc-build
 title: Building System Images for Red Hat Device Edge With Image Mode for RHEL
 version: 1
+asciidoc:
+  attributes:
+    experimental: true
 nav:
 - modules/ROOT/nav.adoc
 - modules/LABENV/nav.adoc

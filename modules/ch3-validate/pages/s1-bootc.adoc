@@ -28,4 +28,4 @@ Lorem ipsum
 
 == What's Next
 
-The next activity uses the `bootc install` command, in a libvirt VM, to perform comprehensive tests of bootc container images.
+The next activity uses the `bootc install` command, in a libvirt VM, to perform comprehensive tests of bootc container images, before you publish it for use in production systems.
