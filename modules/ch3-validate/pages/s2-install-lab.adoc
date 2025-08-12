@@ -266,7 +266,7 @@ systemd─┬─NetworkManager───3*[{NetworkManager}]
 +
 Notice the much higher number of running processes, compared to the previous lab, where you run the same bootc container image from Podman. Also notice processes such as terminal login managers, a Cron daemon, and additional System daemon services you did not see running from Podman.
 
-.. Exit your SSH session and return to your _development machine_ shell.
+.. Exit your SSH session and return to your _development machine_.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -299,9 +299,9 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 +
 NOTE: You could reuse the same test VM, and use the `bootc` command to switch it to another container image from a remote container registry, but for now let's ensure that we get a brand new test VM, without any state left over from previous tests.
 
-6. Create another test VM, this time from the `webapp-bootc` container image [ Expect it to fail because of SELinux labels ]
+6. Create another test VM, this time from the `webapp-bootc` container image.
 
-.. Return to your home directory copy a second local container image to your OCI directory.
+.. Return to your home directory and copy a second local container image to your OCI directory.
 +
 [source,subs="verbatim,quotes"]
 --

@@ -208,8 +208,8 @@ systemd─┬─httpd─┬─httpd
 exit
 --
 +
-See that the `ps` command is not available, but from the `pstree` command you can see that only the System daemon and Apache Web server are running.
-Remember, that most application containers do NOT include common troubleshooting commands and system services, so their container iamges are leaner.
+Notice that the `ps` command is not available, but you can see from the `pstree` command that only the System daemon and Apache Web server are running.
+Remember that most application containers do NOT include common troubleshooting commands and system services, so their container imges are leaner.
 
 .. Delete your application container.
 +
@@ -221,7 +221,7 @@ $ *podman rm httpd*
 httpd
 --
 
-5. Because the HTML and JavaScript code of a singe-page web app is NOT supposed to be managed as data, improve your Containerfile to host the code in `/usr` instead of `/var`.
+5. Because the HTML and JavaScript code of a singe-page web app is NOT supposed to be managed as data, improve your Containerfile to serve the application code from `/webapp` instead of from `/var/www`.
 
 .. Change to the `webapp-bootc` directory.
 +
@@ -231,7 +231,7 @@ $ *cd ../webapp-bootc*
 --
 
 .. Review its Cointainerfile.
-It changes the Apache Web Server configuration to serve files from `/usr/webapp` instead of `/var/www`
+It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`.
 
 +
 [source,subs="verbatim"]
@@ -240,7 +240,7 @@ include::1@samples:webapp-bootc:example$Containerfile[]
 --
 WARNING: That improved bootc container image has a serious issue, that you will NOT be able to see by simple testing using Podman.
 If you can spot what the issue is, do NOT fix it yet.
-We will see, later in this course, how to test the bootc image in a way that surfaces that kind of issue.
+We will see, later in this course, how to test the bootc image in a way that makes evident that kind of issue.
 
 .. Build your improved bootc container image.
 +
