@@ -95,7 +95,6 @@ $ *skopeo copy containers-storage:localhost/webapp-bootc oci:temp-bootc/oci:weba
 --
 $ *cd temp-test-vm*
 $ *sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks*
-GRAB OUTPUT
 --
 
 .. Create a test VM, using the kickstart script you just changed.
@@ -186,7 +185,7 @@ Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc
 ...
 --
 
-.. And indeed, the single-page web application files have a `default_` context label, instead of the `httpd_t` label required by the SELinux policy in RHEL.
+.. And indeed, the single-page web application files have a `default_t` context label, instead of the `httpd_sys_content_t` label required by the SELinux policy in RHEL.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -215,11 +214,11 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 
 .. The sample code repository already provides a containerfile with the required fixes.
 +
-For your reference, the fixes are these:
+For your reference, the fix is just adding a `semanage` command:
 +
 [source,subs="verbatim,quotes"]
 --
-TBD
+include::1@samples:webapp-fixed:example$Containerfile[]
 --
 
 .. Build the bootc container image with fixes.
@@ -229,7 +228,8 @@ TBD
 $ *cd ../rhde-bootc-samples*
 $ *cd webapp-fixed*
 $ *podman build -t webapp-fixed .*
-GRAB OUTPUT
+...
+Successfully tagged localhost/webapp-fixed:latest
 --
 
 .. If you wish, test the new bootc container image with podman, but the instructions here proceed straight to installing it in a new test VM.
@@ -238,8 +238,10 @@ GRAB OUTPUT
 --
 $ *cd ..*
 $ *skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed*
-GRAB OUTPUT
+...
+Writing manifest to image destination
 $ *cd temp-test-vm*
+$ *sed -i '1,$ s/webapp-bootc/webapp-fixed/g' inst.ks*
 $ *bash virt-install.sh*
 ...
 Installing the software
@@ -259,13 +261,102 @@ Escape character is ^] (Ctrl + ])
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
+This would be the HTML and Javascrit code of your IMPROVED single-page web application.
 --
 
-99. Apply the fix from the virtio device, instead of recreating the VM?
+6. *Optional:* you do not need to build a new test VM every time you build a new bootc container image.
+You can upgrade an existing VM, taking advantage of the virtio device configured by the `virt-install` command.
 
-99. Delete your temporary directories, especially the large OCI directory which now contains multiple GB bootc container images.
+.. Enter your `webapp-fixed` directory, change the mock file for its single-page web application, and rebuild your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd ../rhde-bootc-samples/webapp-fixed*
+$ *echo "New version of the single-page web application." > html/index.html*
+$ *podman build -t webapp-fixed .*
+...
+Successfully tagged localhost/webapp-fixed:latest
+--
 
-.. TBD
+.. Copy the modified image to your temporary OCI directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd*
+$ *skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed*
+...
+Writing manifest to image destination
+--
+
+.. Open a SSH session to your running test VM, stage your updated bootc container image, and reboot your test VM.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh -i edge-key -p 8022 core@127.0.0.1*
+[core@bootc-test ~]$ *sudo bootc status*
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+       Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+[core@bootc-test ~]$ *sudo bootc upgrade*
+...
+Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-fixed
+...
+[core@bootc-test ~]$ *sudo bootc status*
+  Staged image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
+       Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
+
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+       Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+[core@bootc-test ~]$ *sudo systemctl reboot*
+...
+Connection to 127.0.0.1 closed.
+--
+
+.. Wait a few moments and check that your webapp already responds with the updated mock message.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+New version of the single-page web application.
+--
+
+.. Start a new SSH session to your test VM and verify that the new image is now the booted image, and the old image is now the rollback image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh -i edge-key -p 8022 core@127.0.0.1*
+[core@bootc-test ~] *sudo bootc status*
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
+       Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
+
+  Rollback image: oci:/mnt/host-var-srv/oci:webapp-fixed
+          Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+         Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+$ *exit*
+logout
+Connection to 127.0.0.1 closed.
+--
+
+.. Instead of the `bootc upgrade` command, which stages a new version of the same container image, you could use the `bootc switch` to stage a different container image, and keep reusing the same test VM to test different system images, instead of newer builds of the same system image.
++
+WARNING: Beware that these operations to NOT reset the state of the `/etc` and `/var` directories, which might intefere with your testing of different bootc container images.
+
+6. If you wish, you can now delete your test VM and temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
++
+[source,subs="verbatim,quotes"]
+--
+$ *virsh destroy bootc-test*
+Domain 'bootc-test' destroyed
+$ *virsh undefine bootc-test --remove-all-storage*
+Domain 'bootc-test' has been undefined
+Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
+$ *cd*
+$ *rm -rf temp-bootc*
+$ *rm -rf temp-test-vm*
+--
 
 == What's Next
 

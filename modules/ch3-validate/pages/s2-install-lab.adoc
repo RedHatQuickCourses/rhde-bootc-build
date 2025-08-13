@@ -209,7 +209,7 @@ The password of the `core` user (for `sudo`) is `redhat123`.
 $ *sudo bootc status*
 ● Booted image: oci:/mnt/host-var-srv/oci:httpd-bootc
         Digest: sha256:5ba977e2a75507b722535b21ae40f794176b61c63754e916a0531a6f9f76b894
-        Version: 10.0 (2025-08-11 20:34:32.003406539 UTC)
+       Version: 10.0 (2025-08-11 20:34:32.003406539 UTC)
 --
 
 .. Verify that your test VM has an active Apache Web Server.
