@@ -133,7 +133,7 @@ $ *curl 127.0.0.1:8080*
 ...
 --
 +
-Remember that this container image did work fine when run from Podman, in a xref:ch2-build-podman-lab.adoc[previous lab].
+Remember that this container image did work fine when run from Podman, in a xref:ch2-build:s2-podman-lab.adoc[previous lab].
 Let's find what is wrong.
 
 .. Start a SSH session to your test VM.
@@ -344,7 +344,7 @@ Connection to 127.0.0.1 closed.
 +
 WARNING: Beware that these operations to NOT reset the state of the `/etc` and `/var` directories, which might intefere with your testing of different bootc container images.
 
-6. If you wish, you can now delete your test VM and temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
+7. If you wish, you can now delete your test VM and temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
 +
 [source,subs="verbatim,quotes"]
 --

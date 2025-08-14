@@ -5,19 +5,9 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Create containerfiles and build bootc container images for RHEL for edge systems
+Create containerfiles and build bootc container images suitable to RHEL for edge systems
 
 WARNING: Work in progress
-
-== PROVISORY OUTLINE
-
-* Mention the possibility of using Buildah and any other tool capable of producing OCI containers.
-* If we stick to “trivial” bootc containers, it’ll be hard for learners to internalize how they’re different from regular container images. Because trivial bootc container images “just work” with podman, including most privileged containers, as they are on a similar or same RHEL kernel, it’s hard to see that this is NOT the general case.
-* Build a bootc container image and run it with podman, to show that the kernel and other things inside the image are inactive because it is not intended to be run that way.
-* Find something obvious and simple that behaves differently between running from podman and from booting a VM, but that looks “working” at a first glance.
-** Use a RHEL9 bootc container on a RHEL10 host to make it clear that the kernel on the bootc container is not active?
-** Use a FIPS-enabled container, in a non-FIPS host, to show that it’s not FIPS when run from podman?
-** SELinux labels? Put web content on /var/something, set the apache documentroot to there, and forget to relabel /var/something. It works from podman but not after bootc install, right. Example.
 
 == Before you Begin
 
@@ -30,6 +20,8 @@ If you are using the course classroom, you will log in on the `workstation` VM a
 Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
 
 == Instructions
+
+You will build a containerfile to produce a bootc container image which includes a single-page web application, and test that container image as a regular application container. You will also compare the bootc container image for your application with a regular application image for the same application.
 
 1. Prepare to start this activity by cloning the sample code repository and loggin in the private registry.
 
@@ -61,14 +53,14 @@ $ *cd httpd-bootc*
 --
 
 .. Review the Cointainerfile.
-It installs the `httpd` package and enables the `httpd` service, them adds the files of our singe-page web application.
+It installs the `httpd` package and enables the `httpd` service, them adds the files that mock a singe-page web application.
 +
 [source,subs="verbatim"]
 --
 include::1@samples:httpd-bootc:example$Containerfile[]
 --
 +
-NOTE: The container file does NOT define any of the usual container image metadata, such as `ENV`, `USER`, or `VOLUME`.
+Notice that the container file does NOT define any of the usual container image metadata, such as `ENV`, `USER`, or `VOLUME`.
 It also does not define neither an `ENTRYPOINT` nor a `CMD`.
 
 3. Build and test the bootc container image for your single-page web application.
@@ -86,14 +78,14 @@ WARNING: The last argument of the `podman build` command above is a dot, for the
 
 .. Run the bootc container image as a rootless application container.
 +
-Because regular users cannot access the standard HTTP port (80), configure port-forwarding from a higher port number.
+Because unprivileged processes cannot access the standard HTTP port (80), configure port-forwarding from a higher port number.
 +
 [source,subs="verbatim,quotes"]
 --
 $ *podman run -d -p 8080:80 --name httpd httpd-bootc*
 --
 
-.. Use either a web browser or the Curl utility to view the mock of our single-page web application.
+.. Use either a web browser or the Curl utility to access the mock of our single-page web application.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -134,7 +126,7 @@ bash-5.2# *exit*
 exit
 --
 +
-You can see many processes that are NOT common in application containers, such as NetworkManager, DBus, and the SSH daemon.
+There are many processes that are NOT common in application containers, such as NetworkManager, DBus, and the SSH daemon.
 
 .. Stop and delete your bootc container.
 +
@@ -146,7 +138,7 @@ $ *podman rm httpd*
 httpd
 --
 
-4. If you feel that our first bootc container could work exactly the same way as a simple application container, you are right.
+4. If you feel that our first bootc container could work basically the same way as a simple application container, you are right.
 Let's compare our bootc container with a regular application container for the same application.
 
 .. Change to the `httpd-ubi` directory
@@ -163,17 +155,18 @@ $ *cd ../httpd-ubi*
 include::1@samples:httpd-ubi:example$Containerfile[]
 --
 
-.. This Containerfile is NOT a good example of a static web application.
-It violates many recommendations for application containers, among them:
+.. This Containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
 +
-... It runs more processes than it requires.
-It should start the Apache Web Server as its `ENTRYPOINT`
+It violates a few recommendations for application containers, among them:
 +
-... It does NOT send logs to the standard output and error.
+... It runs more processes than the application really requires.
+It should start the Apache Web Server as its `ENTRYPOINT`, instead of the System daemon.
 +
-... It runs as `root`m because it does not set a `USER`.
+... It does NOT send logs to the standard output, so those logs are NOT visible with `podman logs` and would also NOT be visible if run from a Kubernetes cluster.
 +
-... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration.
+... It runs as `root`, because it does not set a `USER`.
++
+... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration. It should listen to an unprivileged port, to not requile elevated privileges when run in a Kubernetes cluster.
 +
 NOTE: Providing a good example of a Containerfile for a web application is outside the scope of this course.
 
@@ -208,8 +201,10 @@ systemd─┬─httpd─┬─httpd
 exit
 --
 +
-Notice that the `ps` command is not available, but you can see from the `pstree` command that only the System daemon and Apache Web server are running.
-Remember that most application containers do NOT include common troubleshooting commands and system services, so their container imges are leaner.
+Notice that the `ps` command is not available. Most most application containers do NOT include common troubleshooting commands and system services, so their container images are leaner.
++
+Also notice, from the `pstree` output, that only the System daemon and Apache Web server are running.
+It also runs fewer Systemd services, because it does not inherit Systemd configurations from the bootc base container image.
 
 .. Delete your application container.
 +
@@ -221,7 +216,7 @@ $ *podman rm httpd*
 httpd
 --
 
-5. Because the HTML and JavaScript code of a singe-page web app is NOT supposed to be managed as data, improve your Containerfile to serve the application code from `/webapp` instead of from `/var/www`.
+5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your Containerfile to serve the application code from `/webapp` instead of from `/var/www`.
 
 .. Change to the `webapp-bootc` directory.
 +
@@ -231,16 +226,16 @@ $ *cd ../webapp-bootc*
 --
 
 .. Review its Cointainerfile.
-It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`.
-
++
+It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`, in the Apache Web Server main configuration file.
 +
 [source,subs="verbatim"]
 --
 include::1@samples:webapp-bootc:example$Containerfile[]
 --
 WARNING: That improved bootc container image has a serious issue, that you will NOT be able to see by simple testing using Podman.
-If you can spot what the issue is, do NOT fix it yet.
-We will see, later in this course, how to test the bootc image in a way that makes evident that kind of issue.
+If you can spot what the issue is, *do NOT fix* it yet.
+We will see, later in this course, how to test the bootc container image in a way that makes evident that kind of issue.
 
 .. Build your improved bootc container image.
 +
@@ -278,4 +273,4 @@ webapp
 
 == What's next
 
-The next section presents some strategies for configuring systems from a bootc container image.
+The next section presents some strategies for configuring Linux systems from a bootc container image.

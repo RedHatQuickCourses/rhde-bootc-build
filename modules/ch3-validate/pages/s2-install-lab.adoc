@@ -82,8 +82,8 @@ $ *skopeo copy containers-storage:localhost/httpd-bootc oci:temp-bootc/oci:httpd
 [source,subs="verbatim,quotes"]
 --
 $ *mkdir temp-test-vm*
-$ *cp rhde-bootc-samples/bootc-install/inst.ks temp-test-vm* 
-$ *cp rhde-bootc-samples/bootc-install/virt-install.sh temp-test-vm*
+$ *cp rhde-bootc-samples/ks/inst.ks temp-test-vm* 
+$ *cp rhde-bootc-samples/ks/virt-install.sh temp-test-vm*
 $ *cd temp-test-vm*
 --
 
@@ -100,7 +100,7 @@ It is a sandard RHEL Anaconda configuration for unatenneded installation, which 
 +
 [source,subs="verbatim,quotes"]
 --
-include::1@samples:bootc-install:example$inst.ks[]
+include::1@samples:ks:example$inst.ks[]
 --
 
 .. Create an SSH key for use with your test VM and embed it in the kickstart file.
@@ -125,7 +125,7 @@ It is designed to be console-friendly, so you do not need to switch to a graphic
 +
 [source,subs="verbatim,quotes"]
 --
-include::1@samples:bootc-install:example$virt-install.sh[]
+include::1@samples:ks:example$virt-install.sh[]
 --
 
 3. Create a local virtual machine (VM) from your bootc container images, using the provided scripts.
