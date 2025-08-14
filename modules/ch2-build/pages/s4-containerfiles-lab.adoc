@@ -107,6 +107,7 @@ Successfully tagged localhost/httpd-system:latest
 [source,subs="verbatim,quotes"]
 --
 $ *podman run -d -p 8080:80 --name httpd httpd-system*
+...
 --
 
 .. Use either a web browser or the Curl utility to access its HTTP server and confirm that you are running the right image.
@@ -124,10 +125,10 @@ Misc tests of bootc images and firewalld
 [source,subs="verbatim,quotes"]
 --
 $ *podman exec -it httpd bash*
-bash-5.2# *cat /usr/lib/sysctl.d/90-\**
+bash-5.2# **cat /usr/lib/sysctl.d/90-* **
 net.ipv4.ip_forward = 0
 kernel.sysrq = 0
-bash-5.2# *cat /usr/lib/bootc/kargs.d/\**
+bash-5.2# **cat /usr/lib/bootc/kargs.d/* **
 kargs = ["mitigations=nosmt"]
 bash-5.2# *ls -l /etc/systemd/system/multi-user.target.wants/httpd.service*
 lrwxrwxrwx. 1 root root 37 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/httpd.service -> /usr/lib/systemd/system/httpd.service
@@ -152,7 +153,7 @@ Notice that they do NOT match the configurations set by your bootc container ima
 +
 [source,subs="verbatim,quotes"]
 --
-bash-5.2# cat /proc/cmdline
+bash-5.2# *cat /proc/cmdline*
 BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
 bash-5.2# *sysctl kernel.sysrq*
 kernel.sysrq = 16
@@ -164,15 +165,17 @@ FirewallD is not running
 +
 [source,subs="verbatim,quotes"]
 --
-bash-5.2# systemctl is-active httpd
+bash-5.2# *systemctl is-active httpd*
 active
 bash-5.2# *systemctl is-active firewalld*
 inactive
 --
 
-.. Exit the shell  and verify that all values obtained during the previous step actually match your _development machine_.
+.. Exit the shell and verify that all values obtained during the previous step actually match your _development machine_.
 +
-This is expected, because a container does not run the kernel from its container image, nor applies the system configurations inside the image.
+This is expected, because an application container does NOT run the kernel from its container image, and does NOT apply the system configurations inside its image.
++
+WARNING: While it is possible to run a rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container this way could potentially damage the configurations of its host, in the case your _development machine_.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -189,7 +192,6 @@ active
 $ *firewall-cmd --list-services*
 cockpit dhcpv6-client pulseaudio ssh
 --
-
 
 ////
 
