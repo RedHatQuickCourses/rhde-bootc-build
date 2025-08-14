@@ -28,6 +28,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
+You will build a containerfile which configures different aspects of a RHEL system. You will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testings of your bootc container images.
+
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
 .. If needed, create a local clone of the sample code repository of this course, and make it your working directory.
@@ -48,8 +50,194 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. 
+2. Inspect the Containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that booc container image.
+
+.. Enter the `httpd-system` directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd httpd-system*
+--
+
+.. Review its containerfile.
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$Containerfile[]
+--
+
+.. Review its sysctl configuration files.
++
+`sysctl.d/90-ipv4-forward.conf`
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$sysctl.d/90-ipv4-forward.conf[]
+--
++
+`sysctl.d/90-sysrq.conf`
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$sysctl.d/90-sysrq.conf[]
+--
+
+.. Review its bootc kernel argument configuration files.
++
+`kargs.d/00-mitigations.toml`
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$kargs.d/00-mitigations.toml[]
+--
+
+3. Build and test the bootc container image.
+
+.. Build your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman build -t httpd-system .*
+...
+Successfully tagged localhost/httpd-system:latest
+--
+
+.. Run the bootc container image as a rootless application container, but do NOT stop and delete it yet.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman run -d -p 8080:80 --name httpd httpd-system*
+--
+
+.. Use either a web browser or the Curl utility to access its HTTP server and confirm that you are running the right image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+Misc tests of bootc images and firewalld
+--
+
+4. Verify that your bootc container image does include system configurations, but they were NOT applied to the application container.
+
+.. Start a shell inside your test container and verify that the configuration files exist and that they have the expected content.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+bash-5.2# *cat /usr/lib/sysctl.d/90-\**
+net.ipv4.ip_forward = 0
+kernel.sysrq = 0
+bash-5.2# *cat /usr/lib/bootc/kargs.d/\**
+kargs = ["mitigations=nosmt"]
+bash-5.2# *ls -l /etc/systemd/system/multi-user.target.wants/httpd.service*
+lrwxrwxrwx. 1 root root 37 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/httpd.service -> /usr/lib/systemd/system/httpd.service
+bash-5.2# *ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service*
+lrwxrwxrwx. 1 root root 41 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
+bash-5.2# *cat /etc/firewalld/zones/public.xml*
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Public</short>
+  <description>For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.</description>
+  <service name="ssh"/>
+  <service name="dhcpv6-client"/>
+  <service name="cockpit"/>
+  <service name="http"/>
+  <forward/>
+</zone>
+--
+
+.. Verify the active kernel and firewall settings inside the application container.
++
+Notice that they do NOT match the configurations set by your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# cat /proc/cmdline
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+bash-5.2# *sysctl kernel.sysrq*
+kernel.sysrq = 16
+bash-5.2# *firewall-cmd --list-services*
+FirewallD is not running
+--
+
+.. Verify that Systemd services which requires access to the kernel (such as Firewalld) were not started, but services which do not (such as the Apache Web Server) are fine.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# systemctl is-active httpd
+active
+bash-5.2# *systemctl is-active firewalld*
+inactive
+--
+
+.. Exit the shell  and verify that all values obtained during the previous step actually match your _development machine_.
++
+This is expected, because a container does not run the kernel from its container image, nor applies the system configurations inside the image.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# *exit*
+exit
+$ *cat /proc/cmdline*
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+$ *sysctl net.ipv4.ip_forward*
+net.ipv4.ip_forward = 1
+$ *sysctl kernel.sysrq*
+kernel.sysrq = 16
+$ *systemctl is-active firewalld*
+active
+$ *firewall-cmd --list-services*
+cockpit dhcpv6-client pulseaudio ssh
+--
+
+
+////
+
+Running as a VM:
+
+- cmdline OK
+
+[core@httpd-fips ~]$ sudo cat /proc/cmdline
+BOOT_IMAGE=(hd0,gpt2)/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64 ostree=/ostree/boot.0/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0 mitigations=nosmt crashkernel=2G-64G:256M,64G-:512M root=UUID=1b010da3-0860-46ea-ae04-5a11d8f46020 rw
+
+- ip_forward and sysrq OK
+
+[core@httpd-test ~]$ sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 0
+[core@httpd-test ~]$ sysctl kernel.sysrq
+kernel.sysrq = 0
+
+$ sudo ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service 
+lrwxrwxrwx. 1 root root 41 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
+
+- Systemd OK
+[core@httpd-fips ~]$ systemctl is-active httpd
+active
+[core@httpd-fips ~]$ systemctl is-active firewalld
+active
+[core@httpd-fips ~]$ sudo ls -l /etc/systemd/system/multi-user.target.wants/httpd.service 
+lrwxrwxrwx. 1 root root 37 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/httpd.service -> /usr/lib/systemd/system/httpd.service
+$ sudo ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service 
+lrwxrwxrwx. 1 root root 41 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
+
+- Firewalld OK
+
+[core@httpd-test ~]$ sudo firewall-cmd --list-services
+cockpit dhcpv6-client http ssh
+[core@httpd-fips ~]$ sudo cat /etc/firewalld/zones/public.xml
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Public</short>
+  <description>For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.</description>
+  <service name="ssh"/>
+  <service name="dhcpv6-client"/>
+  <service name="cockpit"/>
+  <service name="http"/>
+  <forward/>
+</zone>
+////
+
 
 == What's next
 
-The next chapter demonstrates how to test your bootc container images from a local VM, so you can validate settings that you cannot with Podman.
+The next chapter demonstrates how to test your bootc container images from a local VM, so you can perform system testing of your containers and validate settings that you cannot validate with Podman.
