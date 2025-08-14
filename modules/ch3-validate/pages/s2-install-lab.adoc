@@ -33,9 +33,7 @@ $ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
 Cloning into 'rhde-bootc-samples'...
 ...
 --
-+
-////
-// Not needed for this lab
+
 .. If needed, login to your private registry.
 +
 [source,subs="verbatim,quotes"]
@@ -43,7 +41,6 @@ Cloning into 'rhde-bootc-samples'...
 $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
-////
 
 .. Verify that you have a bootc container image named `localhost/httpd-bootc` in your local container storage.
 If you do not, please perform the xref:ch2-build:s2-podman-lab.adoc[previous lab] which builds that image.

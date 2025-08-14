@@ -1,0 +1,247 @@
+:time_estimate: 5
+
+= Lab: Publish a Bootc Container Image in a Private Container Registry
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Publish a system image in an OCI container registry and use it to perform system testing of edge devices.
+
+WARNING: Work in progress
+
+== PROVISORY OUTLINE
+
+* Push a container and test the remote image with a local VM
+* Tag a remote image to illustrate a promotion workflow.
+* Use the remote image on a local VM (if it was possible to test images in VMs without first push to a remote container registry)
+* Registry authentication at build time and at run/install time.
+
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
+
+You also need a _test machine_ running RHEL, to which you have unrestricted root access.
+
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
+
+== Instructions
+
+You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reprovision an existing system from that container image, simulating one of the ways you could deploy bootc containers on actual edge devices.
+
+1. Prepare to start this activity by checking that you have the outcomes from previous activities.
+
+.. If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
+Stay on your home directory to start this lab.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd*
+$ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
+Cloning into 'rhde-bootc-samples'...
+...
+--
++
+.. If needed, login to your private registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+.. Verify that you have a bootc container image named `localhost/httpd-system` in your local container storage.
+If you do not, please perform the xref:ch2-build:s2-podman-lab.adoc[previous lab] which builds that image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman image list | grep httpd-system*
+localhost/httpd-system                            latest      8b0253366051  18 hours ago  1.56 GB
+--
+
+2. Publish the bootc container image in a private registry.
+
+.. Copy your bootc container image to the registry and set a non-floating (or fixed) tag which includes a build number, so it remains unique as you perform more builds of the same image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234*
+...
+Writing manifest to image destination
+--
+
+.. Copy a SSH public key to your _test machine_, so you can use it to access it after reboot. [ MAY NOT BE NEEDED ]
++
+[source,subs="verbatim,quotes"]
+--
+$ *scp edge-key.pub servera:~*
+edge-key.pub
+--
+
+3. Install the bootc utitily on your _test machine_, which in the classroom environment is the _servera_ machine.
+
+.. Open an SSH session to your _test machine_. If you are using the classroom environment for this course, it uses the same `student` user as your _development machine_.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh servera*
+--
++
+NOTE: The classroom environment also enables you to open a web terminal direclty on the `servera` machine.
+
+.. Install the bootc utility.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo dnf install bootc*
+...
+Complete!
+--
+
+.. Verify that your _test machine_ was created in the traditional way, using package mode for RHEL.
++
+[source,subs="verbatim,quotes"]
+--
+$ *bootc status*
+System is not deployed via bootc.
+--
+
+4. Re-install your _test machine_ from a bootc container image.
+
+.. WHERE IS THE CA CERTIFICATE IN AN ALREADY BUILT CLASSROOM?
+
+.. Install the public CA certificate of your private container registry, so you do NOT need to disable TLS validation when acessing its container images.
++
+[source,subs="verbatim,quotes"]
+--
+$ *scp utility:/opt/registry/certs/domain.crt .*
+domain.crt 
+$ *sudo cp domain.crt /etc/pki/ca-trust/source/anchors/*
+$ *sudo update-ca-trust extract*
+--
+
+.. Log in on your private registry.
+Remember that the prevuous login was on your _developer machine_.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+.. Verify that your _test machine_ has access to your private registry and can access the desired bootc container iamge
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman search registry.lab.example.com:5000/httpd-system*
+NAME                                                  DESCRIPTION
+registry.lab.example.com:5000/localhost/httpd-system
+--
++
+WARNING: The `podman search` and similar commands are NOT reliable ways to determine if a container image actually exists in a container registry.
+Here it is used just as a convenience, but with most production private and public registries you must know the name and tag of a container image in advance, and use either `skopeo inspect` or `podman pull` to check for the existence of an image.
+
+.. Log in again to your private container registry, to store registry credentials for the root user.
++
+[source,subs="verbatim,quotes"]
+--
+$ sudo podman login -u student -p redhat registry.lab.example.com:5000
+Login Succeeded!
+--
+
+.. Install the bootc container image, overriding the existem RHEL installation on the _test machine_.
++
+Be sure you select both of the existing SSH keys, so you do not lose access to your _test machine_ after reboot.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo system-reinstall-bootc registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234*
+Select which user's SSH authorized keys you want to
+import into the root user of the new bootc system:
+[*x*] root
+[*x*] student
+import into the root user of the new bootc system: root, student
+
+Going to run command "podman" "run" "--privileged" "--pid=host" "--user=root:root" "-v" "/var/lib/containers:/var/lib/containers" "-v" "/dev:/dev" "--security-opt" "label=type:unconfined_t" "-v" "/:/target" "-v" "/tmp/.tmp04V3xX:/bootc_authorized_ssh_keys/root" "registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234" "bootc" "install" "to-existing-root" "--acknowledge-destructive" "--root-ssh-authorized-keys" "/bootc_authorized_ssh_keys/root"
+
+THIS WILL REINSTALL YOUR SYSTEM! Are you sure you want to continue? [y/N]*y*
+Trying to pull registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234...
+...
+ERROR Installing to filesystem: Verifying fetch: Creating importer: failed to invoke method OpenImage: failed to invoke method OpenImage: pinging container registry registry.lab.example.com:5000: Get "https://registry.lab.example.com:5000/v2/": tls: failed to verify certificate: x509: certificate signed by unknown authority
+--
+
+.. Previous command failed on TLS certificate validation... it's NOT mounting /etc/pki from the host into the privileged container. :-(
+
+.. Being brave and using bootc install directly
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo bootc install to-existing-root registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234*
+ERROR Installing to filesystem: Verifying fetch: Creating importer: failed to invoke method OpenImage: failed to invoke method OpenImage: reading manifest v1.0-1234 in registry.lab.example.com:5000/localhost/httpd-system: authentication required
+--
+
+.. MUST FIND WHY THE TWO ATTEMPTS ABOVE FAILED
+
+5. Verify that the _test machine_ booted using the bootc container image.
+
+.. TBD
+
+6. Promote you bootc container image for use by actual edge devices.
+
+.. Set a floating tag for the major.minor version number of your image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/localhost/httpd-system:v1.0*
+...
+Copying blob 210b201289a0 skipped: already exists  
+Copying blob ad312c5c40cc skipped: already exists  
+---
+Copying config 8f58cf789c done   | 
+Writing manifest to image destination
+--
++
+Notice that the `skopeo copy` command above did NOT actually copied any layers, because all of them they already exist on the container registry, from the previous copy operation.
+
+.. Also tag the same image as `latest` in the container registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy docker://registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234 docker://registry.lab.example.com:5000/localhost/httpd-system:latest*
+...
+Copying blob 4b7b4242bfaa skipped: already exists  
+Copying blob c7b030c219e8 skipped: already exists  
+...
+Copying config 8f58cf789c done   | 
+Writing manifest to image destination
+--
++
+IMPORTANT: A CI/CD system would probaly use that style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
+This activity uses both styles to demonstrate that it makes no different on the final result.
+
+.. Verify that the three tags (one fixed, two floating) are listed in your bootc container image repository, and that the three tags possess the same digest, so they actually are alternate tags for exactly the same image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ json .RepoTags }}' docker://registry.lab.example.com:5000/localhost/httpd-system | jq*
+[
+  "latest",
+  "v1.0",
+  "v1.0-1234"
+]
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/localhost/httpd-system:v1.0-1234*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/localhost/httpd-system:v1.0*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/localhost/httpd-system:latest*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+--
+
+
+== What's Next
+
+This was the final lab in this course, but the next course of this learning approach shows how to use the bootc image builder utility to create customized installation medias for edge devices and how to create customized boot disk images for clouds and hypervisors.

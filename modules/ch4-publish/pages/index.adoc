@@ -1,0 +1,11 @@
+= Publish Bootc Containers for Edge Devices
+
+Goal::
+Publish system images for RHEL for edge des in an OCI container registry
+
+WARNING: Work in progress
+
+== Introduction
+
+This chapter explains how to publish bootc container images in remote container registries and tagging strategies to support their deployment on actual edge devices or as part of a CI/CD workflow.
+It also demonstrates how to perform system testing using container registries and the `bootc` utility.

@@ -1,6 +1,6 @@
 :time_estimate: 5
 
-= Test Bootc Containers With Anaconda
+= Strategies for Publishing and Distributing Bootc Container Images
 
 _Estimated reading time: *{time_estimate} minutes*._
 
@@ -11,17 +11,16 @@ WARNING: Not Started
 
 == PROVISORY OUTLINE
 
-* Bootc is inside bootc containers and involved at deployment, updates, and other moments
-* Using bootc install to a disk or filesystem
-* Introduction to libvirt and macadm
-* Mention Podman Machine/Podman Desktop tools for Windows and Mac developers
+* Essential image name/ID/tag concepts and strategies for floating tags.
+* Image labels that identify bootc containers (cannot podman search on them, but useful on Quay searches? Or only on the Red Hat Container Catalog?)
+* Variations of the bootc install command
 
 
-== The Bootc Utility
+== Installing, Updating, and Switching Bootc Container Images
 
 Lorem ipsum
 
-== Unnatended VM Creation With Libvirt
+== Floating and Non-Floating Tags.
 
 Lorem ipsum
 

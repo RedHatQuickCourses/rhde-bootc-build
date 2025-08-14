@@ -1,0 +1,32 @@
+:time_estimate: 5
+
+= Test Bootc Containers With Anaconda
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Introduce the bootc utility and how the RHEL installer (Anaconda) can use a bootc container image as its installation source.
+
+WARNING: Not Started
+
+== PROVISORY OUTLINE
+
+* Bootc is inside bootc containers and involved at deployment, updates, and other moments
+* Using bootc install to a disk or filesystem
+* Introduction to libvirt and macadm
+* Mention Podman Machine/Podman Desktop tools for Windows and Mac developers
+
+
+== The Bootc Utility
+
+Lorem ipsum
+
+== Unnatended VM Creation With Libvirt
+
+Lorem ipsum
+
+
+== What's Next
+
+The next activity uses the standard RHEL installation media to create a libvirt VM which boots from the contents of a bootc container image.
+This is one way you can perform comprehensive tests of bootc container images, before you publish it for use in production systems.
