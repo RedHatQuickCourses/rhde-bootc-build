@@ -206,7 +206,7 @@ Notice that the `ps` command is not available. Most most application containers 
 Also notice, from the `pstree` output, that only the System daemon and Apache Web server are running.
 It also runs fewer Systemd services, because it does not inherit Systemd configurations from the bootc base container image.
 
-.. Delete your application container.
+.. Stop and delete your application container.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -261,7 +261,7 @@ $ *curl 127.0.0.1:8080*
 This would be the HTML and Javascrit code of your IMPROVED single-page web application.
 --
 
-.. Delete your test container.
+.. Stop and delete your test container.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -273,4 +273,4 @@ webapp
 
 == What's next
 
-The next section presents some strategies for configuring Linux systems from a bootc container image.
+The next section presents some approaches for configuring Linux systems from a bootc container image.

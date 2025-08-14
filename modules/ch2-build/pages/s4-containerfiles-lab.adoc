@@ -18,12 +18,13 @@ WARNING: Not Started
 
 == Before you Begin
 
-You need a _development machine_ running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories.
-That machine must have plenty of disk space to store multiple container images and multiple Virtual Machine (VM) images.
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
 
 These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
 
 If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
 
 == Instructions
 
@@ -46,6 +47,8 @@ $ *cd rhde-bootc-samples*
 $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
+
+2. 
 
 == What's next
 
