@@ -7,14 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Create containerfiles which include system configurations and demonstrate that they cannot be effectively tested using Podman.
 
-WARNING: Not Started
-
-== PROVISORY OUTLINE
-
-* If I cannot get a good and not too complex example of a Containerfile with “advanced” features, skip this lab and have a shorter presentation.
-* Maybe a multistage build using ansible system roles to preconfigure a system?
-* Ideally, one example that “works” on podman, and another that doesn’t, to reinforce the need to test by provisioning actual systems or VMs.
-* Leave “from scratch” images for a follow-up course, as an advanced topic that learners should try only after they master more of image mode, including the two following courses.
+WARNING: Work In Progress
 
 == Before you Begin
 
