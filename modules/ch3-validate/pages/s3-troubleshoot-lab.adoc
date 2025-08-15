@@ -34,8 +34,6 @@ Cloning into 'rhde-bootc-samples'...
 ...
 --
 +
-////
-// Not needed for this lab
 .. If needed, login to your private registry.
 +
 [source,subs="verbatim,quotes"]
@@ -43,7 +41,6 @@ Cloning into 'rhde-bootc-samples'...
 $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
-////
 
 .. Verify that you have a bootc container image named `localhost/webapp-bootc` in your local container storage.
 If you do not, please perform a xref:ch2-build:s2-podman-lab.adoc[previous lab] which builds that image.
@@ -236,7 +233,7 @@ Successfully tagged localhost/webapp-fixed:latest
 +
 [source,subs="verbatim,quotes"]
 --
-$ *cd ..*
+$ *cd*
 $ *skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed*
 ...
 Writing manifest to image destination
@@ -264,8 +261,8 @@ $ *curl 127.0.0.1:8080*
 This would be the HTML and Javascrit code of your IMPROVED single-page web application.
 --
 
-6. *Optional:* you do not need to build a new test VM every time you build a new bootc container image.
-You can upgrade an existing VM, taking advantage of the virtio device configured by the `virt-install` command.
+6. *Optional:* you do not need to create a brand new test VM every time you build a new bootc container image.
+You can upgrade an existing VM, taking advantage of the virtio device that was configured by the `virt-install` command.
 
 .. Enter your `webapp-fixed` directory, change the mock file for its single-page web application, and rebuild your bootc container image.
 +
@@ -288,7 +285,7 @@ $ *skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:weba
 Writing manifest to image destination
 --
 
-.. Open a SSH session to your running test VM, stage your updated bootc container image, and reboot your test VM.
+.. Open an SSH session to your running test VM to stage your updated bootc container image, then reboot your test VM.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -344,7 +341,9 @@ Connection to 127.0.0.1 closed.
 +
 WARNING: Beware that these operations to NOT reset the state of the `/etc` and `/var` directories, which might intefere with your testing of different bootc container images.
 
-7. If you wish, you can now delete your test VM and temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
+7. Clean your test environment before moving to the final chapter.
+
+.. Delete your test VM.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -353,6 +352,12 @@ Domain 'bootc-test' destroyed
 $ *virsh undefine bootc-test --remove-all-storage*
 Domain 'bootc-test' has been undefined
 Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
+--
+
+.. If you wish, you can also remove your temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
++
+[source,subs="verbatim,quotes"]
+--
 $ *cd*
 $ *rm -rf temp-bootc*
 $ *rm -rf temp-test-vm*
@@ -360,4 +365,4 @@ $ *rm -rf temp-test-vm*
 
 == What's Next
 
-The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, or virtual machines on the data center.
+The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and virtual machines on the data center.

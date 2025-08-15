@@ -68,13 +68,17 @@ NOTE: It is fine if you have some local VMs on your system, as long as there isn
 
 .. Copy your bootc container image to a local directory, in a format that Anaconda can use as its installation source.
 +
+NOTE: Make sure you create your temporary work directories on your home directory instead of inside the clone of the samples repository.
++
 [source,subs="verbatim,quotes"]
 --
+$ *cd*
 $ *mkdir temp-bootc*
 $ *skopeo copy containers-storage:localhost/httpd-bootc oci:temp-bootc/oci:httpd-bootc*
 --
 
 .. Create a working directory and copy the sample files to it.
+Then make the temporary working directory your current directory.
 +
 [source,subs="verbatim,quotes"]
 --
