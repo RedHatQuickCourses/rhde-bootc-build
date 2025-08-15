@@ -165,14 +165,14 @@ NOTE: Because the output of the last command is empty, you may want to retrieve 
 
 4. Explore the contents of a bootc container image and an application container image and notice important packages that are present or not.
 
-.. Bootc container images include the bootable container system.
+.. Bootc container images include the bootable container system (the `bootc` package and command with the same name).
 +
 [source,subs="verbatim,quotes"]
 --
-$ podman run -it --rm --name bootc docker://registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q bootc"
+$ *podman run --rm --name bootc registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q bootc"*
 ...
 bootc-1.1.6-2.el10_0.x86_64
-$ podman run --rm -it --name ubi docker://registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q bootc"
+$ *podman run --rm --name ubi registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q bootc"*
 ..
 package bootc is not installed
 --
@@ -183,10 +183,10 @@ NOTE: Be patient, bootc container images are considerably larger than regular ap
 +
 [source,subs="verbatim,quotes"]
 --
-$ podman run -it --rm --name bootc docker://registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q kernel"
+$ *podman run --rm --name bootc registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q kernel"*
 ...
 kernel-6.12.0-55.24.1.el10_0.x86_64
-$ podman run --rm -it --name ubi docker://registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q kernel"
+$ *podman run --rm --name ubi registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q kernel"*
 ..
 package kernel is not installed
 --

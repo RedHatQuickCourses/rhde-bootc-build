@@ -29,6 +29,7 @@ You will build a containerfile which configures different aspects of a RHEL syst
 +
 [source,subs="verbatim,quotes"]
 --
+$ *cd*
 $ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
 Cloning into 'rhde-bootc-samples'...
 ...
@@ -185,6 +186,17 @@ active
 $ *firewall-cmd --list-services*
 cockpit dhcpv6-client pulseaudio ssh
 --
+
+5. Stop and remove your test container, so it does not keep port 8080 busy on your _development machine_.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman stop httpd*
+httpd
+$ *podman rm httpd*
+httpd
+--
+
 
 ////
 
