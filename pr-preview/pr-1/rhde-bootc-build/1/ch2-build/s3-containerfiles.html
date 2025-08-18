@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Strategies for Building Bootc Container Images :: Building System Images for Red Hat Device Edge With Image Mode for RHEL</title>
+    <link rel="prev" href="s2-podman-lab.html">
+    <link rel="next" href="s4-containerfiles-lab.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building System Images for Red Hat Device Edge With Image Mode for RHEL</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/rhde-bootc-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rhde-bootc-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building System Images for Red Hat Device Edge With Image Mode for RHEL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL.</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s1-rhde-and-image-mode.html">Edge Devices with Red Hat Technologies</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Build Bootc Containers for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s1-podman.html">Build Bootc Containers With Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s2-podman-lab.html">Lab: Build and Test Bootc Containers</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch3-validate/index.html">Test Bootc Containers for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s1-bootc-anaconda.html">Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch4-publish/index.html">Publish Bootc Containers for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s2-bootc-install-lab.html">Lab: Publish a Bootc Container Image in a Private Container Registry</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building System Images for Red Hat Device Edge With Image Mode for RHEL</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building System Images for Red Hat Device Edge With Image Mode for RHEL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../samples/1/index.html">samples</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../samples/1/index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building System Images for Red Hat Device Edge With Image Mode for RHEL</a></li>
+    <li><a href="index.html">Build Bootc Containers for Edge Devices</a></li>
+    <li><a href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Strategies for Building Bootc Container Images</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Objective</dt>
+<dd>
+<p>Present common issues, recomendations, and coding idioms for building bootc container images.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Not Started
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_provisory_outline"><a class="anchor" href="#_provisory_outline"></a>PROVISORY OUTLINE</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Discussion: what to include in a Containerfile, in config.toml (for bib), in kickstart/cloud-init, or to inject at day-1/2 using Ansible, FDO, RHEM, etc?</p>
+</li>
+<li>
+<p>Discussion: embedding applications in a system image or consume applications as external/independent container images?</p>
+</li>
+<li>
+<p>Introduce conventions which should make bootc containers easier to maintain and update, such as using Systemd units and drop files.</p>
+</li>
+<li>
+<p>Example Containerfiles which illustrate some common requirements, such as:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Setting kernel arguments and other boot time stuff in bootc containers.</p>
+</li>
+<li>
+<p>Changing the initrd?</p>
+</li>
+<li>
+<p>SCAP and bootc lint at build time?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Mention multistage builds. They apply to bootc for the same reasons as application container images</p>
+</li>
+<li>
+<p>Use  --squash during build?</p>
+</li>
+<li>
+<p>Mention Rechunk?</p>
+</li>
+<li>
+<p>Mention layering?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_day_0_and_day_1_system_configuration"><a class="anchor" href="#_day_0_and_day_1_system_configuration"></a>Day-0 and Day-1 System Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lorem ipsum</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_system_configuration_on_containerfiles"><a class="anchor" href="#_system_configuration_on_containerfiles"></a>System Configuration on Containerfiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lorem ipsum</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s Next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The next activity builds a simple bootc container image and performs early testing of those images using Linux containers, to demonstrate the need for system testing in addition to container testing of bootc container images.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="s2-podman-lab.html">Lab: Build and Test Bootc Containers</a></span>
+  <span class="next"><a href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
