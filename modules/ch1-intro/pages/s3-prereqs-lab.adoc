@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.
 
-WARNING: Work in progress
+WARNING: Pending review
 
 == Before you Begin
 
@@ -16,9 +16,14 @@ That machine must have plenty of disk space to store multiple container images a
 
 These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If not, please adapt the instructions to your test environment.
 
 == Instructions
+
+You will verify that you have access to mirrors of Red Hat Enterprise Linux (RHEL) package repositories and bootc container images from RHEL. 
+You will also configure your _development machine_ with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.
+As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.
 
 1. Verify that your _development machine_ has access to the RHEL package repositories from a DNF mirror.
 

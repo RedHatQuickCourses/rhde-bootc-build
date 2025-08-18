@@ -9,7 +9,7 @@ This course teaches how to create Red Hat Device Edge system images, which are s
 
 It is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge, which will consist of three courses:
 
-. Building Red Hat Device Edge system images with image mode for RHEL (this course)
+. *Building Red Hat Device Edge system images with image mode for RHEL* (this course)
 
 . Provisioning Red Hat Device Edge devices using image mode for RHEL (not created yet)
 
@@ -45,8 +45,8 @@ This course assumes that you have the following prior experience:
 
 * Familiarity with RHEL system administration, to the level of RHCA (Red Hat Certified System Administrator) or equivalent knowledge.
 * Familiarity with Linux container tools, such as Podman, and technologies compatible with Open Container Initiative (OCI) specifications, such as container registries.
-* Familiarity with web server administration, such as Apache Web Server or NGinx, is useful but not required. [ if we use web servers as sample apps inside bootc containers ]
-* Familiarity with database server administration, such as MariaDB or PostgreSQL, is useful but not required. [ if we use database servers as sample apps inside bootc containers ]
+* Familiarity with web server administration, such as Apache Web Server or NGinx, is useful but not required.
+* Familiarity with database server administration, such as MariaDB or PostgreSQL, is useful but not required.
 
 == Classroom Environment
 
@@ -55,7 +55,10 @@ You can perform all activities in this course using the virtual classroom lab fr
 Use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):
 
 * HOL019 for Red Hat employees [ADD LINK].
-* HOL019 for Red Hat partners and customers [ADD LINK] with a *Red Hat Learning Subscription*.
+* HOL019 for Red Hat partners [ADD LINK]
+* HOL019 for Red Hat customers [ADD LINK] with a *Red Hat Learning Subscription*.
+
+WARNING: The classroom environment will be made available at course release time.
 
 After you enter HOL019 on ROLE, follow the instructions there to create a new course classroom lab and access its virtual machines.
 If you already created a HOL019 classroom for another Red Hat Device Edge quick course, you can continue using the same classroom lab.

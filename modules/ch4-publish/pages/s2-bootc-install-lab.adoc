@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Publish a system image in an OCI container registry and use it to perform system testing of edge devices.
 
-WARNING: Work in progress
+WARNING: Pending review
 
 == Before you Begin
 

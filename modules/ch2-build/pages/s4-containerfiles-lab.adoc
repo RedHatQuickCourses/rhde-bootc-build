@@ -5,9 +5,9 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Create containerfiles which include system configurations and demonstrate that they cannot be effectively tested using Podman.
+Create containerfiles which include system configurations and demonstrate that they CANNOT be effectively tested using Podman.
 
-WARNING: Work In Progress
+WARNING: Pending review
 
 == Before you Begin
 
@@ -15,17 +15,19 @@ You need a _development machine_ running RHEL, to which you have access using an
 
 These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If not, please adapt the instructions to your test environment.
 
 Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
 
 == Instructions
 
-You will build a containerfile which configures different aspects of a RHEL system. You will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testings of your bootc container images.
+You will build a containerfile which configures different aspects of a RHEL system.
+You will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
-.. If needed, create a local clone of the sample code repository of this course, and make it your working directory.
+.. If needed, create a local clone of the samples code repository of this course, and make it your working directory.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -44,7 +46,7 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. Inspect the Containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that booc container image.
+2. Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that booc container image.
 
 .. Enter the `httpd-system` directory.
 +
@@ -62,14 +64,14 @@ include::1@samples:httpd-system:example$Containerfile[]
 
 .. Review its sysctl configuration files.
 +
-`sysctl.d/90-ipv4-forward.conf`
+`sysctl.d/90-ipv4-forward.conf`::
 +
 [source,subs="verbatim,quotes"]
 --
 include::1@samples:httpd-system:example$sysctl.d/90-ipv4-forward.conf[]
 --
 +
-`sysctl.d/90-sysrq.conf`
+`sysctl.d/90-sysrq.conf`::
 +
 [source,subs="verbatim,quotes"]
 --
@@ -78,7 +80,7 @@ include::1@samples:httpd-system:example$sysctl.d/90-sysrq.conf[]
 
 .. Review its bootc kernel argument configuration files.
 +
-`kargs.d/00-mitigations.toml`
+`kargs.d/00-mitigations.toml`::
 +
 [source,subs="verbatim,quotes"]
 --
@@ -169,7 +171,7 @@ inactive
 +
 This is expected, because an application container does NOT run the kernel from its container image, and does NOT apply the system configurations inside its image.
 +
-WARNING: While it is possible to run a rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container this way could potentially damage the configurations of its host, in the case your _development machine_.
+WARNING: While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container this way could potentially damage the configurations of its host, in the case your _development machine_.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -196,54 +198,6 @@ httpd
 $ *podman rm httpd*
 httpd
 --
-
-
-////
-
-Running as a VM:
-
-- cmdline OK
-
-[core@httpd-fips ~]$ sudo cat /proc/cmdline
-BOOT_IMAGE=(hd0,gpt2)/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64 ostree=/ostree/boot.0/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0 mitigations=nosmt crashkernel=2G-64G:256M,64G-:512M root=UUID=1b010da3-0860-46ea-ae04-5a11d8f46020 rw
-
-- ip_forward and sysrq OK
-
-[core@httpd-test ~]$ sysctl net.ipv4.ip_forward
-net.ipv4.ip_forward = 0
-[core@httpd-test ~]$ sysctl kernel.sysrq
-kernel.sysrq = 0
-
-$ sudo ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service 
-lrwxrwxrwx. 1 root root 41 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
-
-- Systemd OK
-[core@httpd-fips ~]$ systemctl is-active httpd
-active
-[core@httpd-fips ~]$ systemctl is-active firewalld
-active
-[core@httpd-fips ~]$ sudo ls -l /etc/systemd/system/multi-user.target.wants/httpd.service 
-lrwxrwxrwx. 1 root root 37 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/httpd.service -> /usr/lib/systemd/system/httpd.service
-$ sudo ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service 
-lrwxrwxrwx. 1 root root 41 Aug 14 21:10 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
-
-- Firewalld OK
-
-[core@httpd-test ~]$ sudo firewall-cmd --list-services
-cockpit dhcpv6-client http ssh
-[core@httpd-fips ~]$ sudo cat /etc/firewalld/zones/public.xml
-<?xml version="1.0" encoding="utf-8"?>
-<zone>
-  <short>Public</short>
-  <description>For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.</description>
-  <service name="ssh"/>
-  <service name="dhcpv6-client"/>
-  <service name="cockpit"/>
-  <service name="http"/>
-  <forward/>
-</zone>
-////
-
 
 == What's next
 

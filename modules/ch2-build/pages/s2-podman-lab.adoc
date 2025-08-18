@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Create containerfiles and build bootc container images suitable to RHEL for edge systems
 
-WARNING: Work in progress
+WARNING: Pending review
 
 == Before you Begin
 
@@ -15,13 +15,15 @@ You need a _development machine_ running RHEL, to which you have access using an
 
 These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`. If not, please adapt the instructions to your test environment.
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If not, please adapt the instructions to your test environment.
 
 Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
 
 == Instructions
 
-You will build a containerfile to produce a bootc container image which includes a single-page web application, and test that container image as a regular application container. You will also compare the bootc container image for your application with a regular application image for the same application.
+You will build a containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
+You will also compare the bootc container image for your application with a regular application image for the same application.
 
 1. Prepare to start this activity by cloning the sample code repository and loggin in the private registry.
 
@@ -148,14 +150,14 @@ Let's compare our bootc container with a regular application container for the s
 $ *cd ../httpd-ubi*
 --
 
-.. The Cointainerfile uses the standard UBI image, so it must install the `systemd` package and start the Systemd daemon as its `ENTRYPOINT`.
+.. The containerfile uses the standard UBI image, so it must install the `systemd` package and start the Systemd daemon as its `ENTRYPOINT`.
 +
 [source,subs="verbatim"]
 --
 include::1@samples:httpd-ubi:example$Containerfile[]
 --
 
-.. This Containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
+.. This containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
 +
 It violates a few recommendations for application containers, among them:
 +
@@ -168,7 +170,7 @@ It should start the Apache Web Server as its `ENTRYPOINT`, instead of the System
 +
 ... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration. It should listen to an unprivileged port, to not requile elevated privileges when run in a Kubernetes cluster.
 +
-NOTE: Providing a good example of a Containerfile for a web application is outside the scope of this course.
+NOTE: Providing a good example of a containerfile for a web application is outside the scope of this course.
 
 .. Build and run the application container.
 +
@@ -216,7 +218,7 @@ $ *podman rm httpd*
 httpd
 --
 
-5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your Containerfile to serve the application code from `/webapp` instead of from `/var/www`.
+5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your containerfile to serve the application code from `/webapp` instead of from `/var/www`.
 
 .. Change to the `webapp-bootc` directory.
 +
@@ -225,7 +227,7 @@ httpd
 $ *cd ../webapp-bootc*
 --
 
-.. Review its Cointainerfile.
+.. Review its containerfile.
 +
 It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`, in the Apache Web Server main configuration file.
 +
@@ -235,7 +237,7 @@ include::1@samples:webapp-bootc:example$Containerfile[]
 --
 WARNING: That improved bootc container image has a serious issue, that you will NOT be able to see by simple testing using Podman.
 If you can spot what the issue is, *do NOT fix* it yet.
-We will see, later in this course, how to test the bootc container image in a way that makes evident that kind of issue.
+We will see, later in this course, how to test the bootc container image in a way that makes that issue clear.
 
 .. Build your improved bootc container image.
 +

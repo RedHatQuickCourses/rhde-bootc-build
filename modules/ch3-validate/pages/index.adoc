@@ -7,4 +7,4 @@ WARNING: Work in progress
 
 == Introduction
 
-This chapter explains how to install a bootc container image in an actual system, so you can test behaviors and settings that are not possible with Podman.
+This chapter explains how to install a bootc container image in an actual system, so you can test behaviors and settings that are not possible to verify with Podman.
