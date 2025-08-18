@@ -341,9 +341,7 @@ Connection to 127.0.0.1 closed.
 +
 WARNING: Beware that these operations to NOT reset the state of the `/etc` and `/var` directories, which might intefere with your testing of different bootc container images.
 
-7. Clean your test environment before moving to the final chapter.
-
-.. Delete your test VM.
+7. Delete your test VM to conserve resources.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -352,15 +350,6 @@ Domain 'bootc-test' destroyed
 $ *virsh undefine bootc-test --remove-all-storage*
 Domain 'bootc-test' has been undefined
 Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
---
-
-.. If you wish, you can also remove your temporary directories, especially the large OCI directory which now contains hunders of MB of bootc container image layers.
-+
-[source,subs="verbatim,quotes"]
---
-$ *cd*
-$ *rm -rf temp-bootc*
-$ *rm -rf temp-test-vm*
 --
 
 == What's Next
