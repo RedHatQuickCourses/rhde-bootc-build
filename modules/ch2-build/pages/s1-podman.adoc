@@ -17,6 +17,73 @@ WARNING: Not Started
 * Containerfiles for bootc images vs Containerfiles for application images
 * Reproducible builds?
 
+== Provisioning and updating image mode systems
+
+The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends up with specialized tools from the bootc world.
+
+image::s1-devices-fig-5.svg[title="Workflow for installing and updating image mode systems"]
+
+In summary, the process is:
+
+. Create a containerfile, which refers to a base bootc container image, and which aggregages RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.
+
+. Use Podman (or any other tool capable of producing OCI containers) to build the bootc container image from your containerfile.
+
+. Upload (push) your bootc container image to an OCI container registry, where it can be downloaded (pull) to perform installation and updates of image mode systems.
+
+. Use the standard RHEL installer (Anaconda) with a custom kickstart file, which refers to the bootc container image as its installation source.
+
+. Alternatively, use *bootc image builder* utility to convert your bootc container image into a custom RHEL installation media, which you can write to an USB media, or copy to a network boot server, and use it to install image mode systems without requiring access to an OCI container registry.
+
+. Use the bootc utility, from an image mode system, to download a new bootc container image and make it the new system image.
+
+. Alternatively, use the bootc utility, from an image mode system, to copy a new bootc container image from removable storage and make it the new system image.
+
+This course, which is the first in a series of three, focus on steps 1-4 above. 
+These are steps a developer would perform to create and test a bootc container image.
+
+image::s1-devices-fig-6.svg[title="Scope of this course"]
+
+The remaining steps are detailed in follow-up courses, and corresponds to steps an IT or OT professional would perform on edge systems.
+
+//TODO This is very long, can we postpone some of it to later sections?
+
+////
+
+=== What is bootc
+
+https://bootc-dev.github.io/bootc/[Bootc] is the utility which manages installing and updating image mode systems from OCI container images.
+It is included as part of bootc container images, and it is usually run as a privileged container from those images.
+
+Most of the time, developers and system administradors do NOT interact directly with the bootc utility.
+It is included with a base bootc container image, and the process of building derived bootc container images looks just the same as the process for building derived application container images. 
+
+=== What are booc container images
+
+A system image for image mode systems is an OCI container image which includes a number of componentes not usually included with regular container images, among them:
+
+* A Linux kernel and loadable modules
+* An initial ram disk (initrd) and a boot loader (grub)
+* The System Daemon (Systemd) and a number of privileged Systemd unit to manage hardware, networking, and system services
+* The D-Bus system messaging middleware
+* The bootc utility
+
+We call those system images _bootc container images_ to differentiate them from regular OCI container images, which we call _application container images_.
+
+IMPORTANT: It was common to refer to bootc container images as https://developers.redhat.com/articles/2024/09/24/bootc-getting-started-bootable-containers[bootable containers], but that term is misleading: no current firmware, hypervisor, or IaaS cloud provider is able to boot from an OCI container image.
+So bootc container iamges are not actually bootable.
+
+Typical OCI container images are designed to provide a single application, and include only the required userspace components required to support that application, such a programming language runtime and required dependency libraries.
+Bootc container images are designed to provide a complete system, including its kernel mode components and possibly multiple applications, system services, and network services.
+
+But, other than the fact that bootc container images are a lot bigger, they are standard OCI container images.
+Nothing prevents you from running a bootc container.
+Just beware that the results might not be what you expect, because a container CANNOT run the kernel, system services, and other componentes from a bootc container image.
+Containers would run only the userspace components of a bootc container image, as they would for a regular application container.
+
+////
+
+
 == Bootc Containers Versus Application Containers
 
 Lorem ipsum
