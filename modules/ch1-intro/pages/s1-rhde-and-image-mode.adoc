@@ -1,6 +1,6 @@
 :time_estimate: 16
 
-= Provision and Manage Edge Devices with Red Hat
+= Provision and Manage Edge Devices with RHEL
 
 _Estimated reading time: *{time_estimate} minutes*._
 
@@ -30,7 +30,7 @@ In both cases, you get the full feature set of RHEL.
 
 To be clear: Red Hat Device Edge is NOT a different edition of RHEL, nor a subset of RHEL.
 Many features of RHEL, which were developed originally for the requirements of edge scenarios, are also very valuable in data center scenarios.
-Oh the other had, features from RHEL that were designed for data center scenarios are also useful in edge scenarios, bringing in more standardization and ultimately reducing the effort and cost of managing edge devices.
+On the other had, features from RHEL that were designed for data center scenarios are also useful in edge scenarios, bringing in more standardization and ultimately reducing the effort and cost of managing edge devices.
 
 === What is image mode for RHEL
 
@@ -157,7 +157,7 @@ But if a system update fails on package mode, your system can be left in an inte
 
 There are two technologies which can create, deploy, and update system images for RHEL systems:
 
-RPM-OStree::
+RPM-OSTree::
 It uses _OSTree commits_ as its system images, and requires specialized tooling to build such images, in addition to management of specialized OSTree repository servers.
 It is available with RHEL 8 and 9
 
@@ -169,10 +169,10 @@ This course focuses on the second option.
 Though the first option is, conceptually, also an "image mode" for RHEL, the term usually refers to the second.
 If you need enablement on the first option, please refer to https://redhatquickcourses.github.io/rhde-build/[Building Red Hat Device Edge Images].
 
-RPM-OStree and image mode for RHEL represent https://www.redhat.com/en/blog/what-image-mode-means-users-rhel-edge[different approaches to implement a similar philosophy], and they provide similar benefits.
+RPM-OSTree and image mode for RHEL represent https://www.redhat.com/en/blog/what-image-mode-means-users-rhel-edge[different approaches to implement a similar philosophy], and they provide similar benefits.
 They also share a lot of their underlying technologies.
 
-Other popular features of RHEL for edge, such as greenboot and kiosk mode, work with image mode as well, and some of them even with package mode.
+Other popular features of RHEL for edge, such as greenboot, FIDO Device Onboard (FDO) support, and kiosk mode, work with image mode as well, and some of them even with package mode.
 
 === What are bootc container images, or "bootable containers"
 
