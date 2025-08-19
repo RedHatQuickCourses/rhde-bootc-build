@@ -14,7 +14,9 @@ Design docs for the course series and individual courses are available to Red Ha
 
 * [Design of this course] (https://docs.google.com/document/d/12tShckf7LVLsD3U_vUZ4kYA8eOGNZwfH-Luk-wA91-Y/edit?usp=sharing)
 
-Location of sample code and figures are still TBD.
+Sample code for this course series is in its own [git repository](https://github.com/RedHatQuickCourses/rhde-bootc-samples).
+
+Figures are in a [google slides](https://docs.google.com/presentation/d/17AHILn-P_dRWYGDkk2EuHAKackIKftrhpRRMTt-ViAg/edit?usp=sharing) which is available only to Red Hat employees, but they are exported to SVG or PNG and available alongside the asciidoc sources.
 
 Refer to the [Red Hat Quick Courses Contributor Guide](https://redhatquickcourses.github.io/welcome/1/guide/overview.html) for instructions about collaborating in this repository. **Click here: [![Contribute](https://www.eclipse.org/che/contribute.svg)](https://devspaces.apps.tools-na100.dev.ole.redhat.com/#https://github.com/RedHatQuickCourses/rhde-bootc-build) to start the development using devspace.**
 
