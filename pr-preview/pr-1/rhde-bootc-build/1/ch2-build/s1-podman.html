@@ -227,6 +227,61 @@ Not Started
 </div>
 </div>
 <div class="sect1">
+<h2 id="_provisioning_and_updating_image_mode_systems"><a class="anchor" href="#_provisioning_and_updating_image_mode_systems"></a>Provisioning and updating image mode systems</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends up with specialized tools from the bootc world.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="s1-devices-fig-5.svg" alt="s1 devices fig 5">
+</div>
+<div class="title">Figure 1. Workflow for installing and updating image mode systems</div>
+</div>
+<div class="paragraph">
+<p>In summary, the process is:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a containerfile, which refers to a base bootc container image, and which aggregages RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.</p>
+</li>
+<li>
+<p>Use Podman (or any other tool capable of producing OCI containers) to build the bootc container image from your containerfile.</p>
+</li>
+<li>
+<p>Upload (push) your bootc container image to an OCI container registry, where it can be downloaded (pull) to perform installation and updates of image mode systems.</p>
+</li>
+<li>
+<p>Use the standard RHEL installer (Anaconda) with a custom kickstart file, which refers to the bootc container image as its installation source.</p>
+</li>
+<li>
+<p>Alternatively, use <strong>bootc image builder</strong> utility to convert your bootc container image into a custom RHEL installation media, which you can write to an USB media, or copy to a network boot server, and use it to install image mode systems without requiring access to an OCI container registry.</p>
+</li>
+<li>
+<p>Use the bootc utility, from an image mode system, to download a new bootc container image and make it the new system image.</p>
+</li>
+<li>
+<p>Alternatively, use the bootc utility, from an image mode system, to copy a new bootc container image from removable storage and make it the new system image.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This course, which is the first in a series of three, focus on steps 1-4 above.
+These are steps a developer would perform to create and test a bootc container image.</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="s1-devices-fig-6.svg" alt="s1 devices fig 6">
+</div>
+<div class="title">Figure 2. Scope of this course</div>
+</div>
+<div class="paragraph">
+<p>The remaining steps are detailed in follow-up courses, and corresponds to steps an IT or OT professional would perform on edge systems.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_bootc_containers_versus_application_containers"><a class="anchor" href="#_bootc_containers_versus_application_containers"></a>Bootc Containers Versus Application Containers</h2>
 <div class="sectionbody">
 <div class="paragraph">
