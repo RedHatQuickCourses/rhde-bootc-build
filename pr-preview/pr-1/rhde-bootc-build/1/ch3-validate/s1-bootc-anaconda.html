@@ -224,6 +224,113 @@ Not Started
 </div>
 </div>
 <div class="sect1">
+<h2 id="_day_0_and_day_1_system_configuration"><a class="anchor" href="#_day_0_and_day_1_system_configuration"></a>Day-0 and Day-1 System Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bootc container images open the possibily for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.</p>
+</div>
+<div class="paragraph">
+<p>This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to onboard its users.</p>
+</div>
+<div class="paragraph">
+<p>Some organization perform such day-1 configurations using system installation scripting tools such as Anaconda kickstart and Cloud-init.
+Others perform such configuration using automation technologies such as Red Hat Ansible Automation Platform.</p>
+</div>
+<div class="paragraph">
+<p>The need for performing day-1 configurations does NOT typically disappear with image mode systems, because it may not be a good idea having all configurations in a system image.
+You may include a large set of configurations embedded in a system image, but there are always something which must be different between devices or between edge sites.</p>
+</div>
+<div class="paragraph">
+<p>Managing a large number of images, to account for those variations, may become a challenge.
+It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.</p>
+</div>
+<div class="sect2">
+<h3 id="_secrets_management_and_device_onboarding"><a class="anchor" href="#_secrets_management_and_device_onboarding"></a>Secrets management and device onboarding</h3>
+<div class="paragraph">
+<p>Even if you could perform all system and application configuration from a single system image, or a custom installation script, it may not be a good idea.
+Consider some potential risk scenarios, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A a removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.</p>
+</li>
+<li>
+<p>A rogue device is plugged into network of an edge site, installed as a genuine device, and them taken off-site to access its system disk and grab the credentials stored there.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present much of the same risks.</p>
+</div>
+<div class="paragraph">
+<p>To manage such risks, many organizations employ secure and auditable <em>onboarding</em> processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for acessing applications and other resources in either the edge site or around the corporate network.</p>
+</div>
+<div class="paragraph">
+<p>You can implement effective onboarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively there are alternatives technologies and tools, designed to address the challenges of provisioning and onboarding edge devices at scale and in a secure way. Among them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The FIDO Device Onboarding (FDO) standard</p>
+</li>
+<li>
+<p>The Red Hat Edge Manager product, based on the Flightctl open source project</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or servers, and dealing with lower network bandwith or higher latency than in typical data centers and office buildings.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_secrets_in_bootc_container_images"><a class="anchor" href="#_secrets_in_bootc_container_images"></a>Secrets in bootc container images</h3>
+<div class="paragraph">
+<p>In summary, the general advice is to avoid having secrets embedded in a bootc container image, and use instead some day-1 configuration approach to add them.
+Consider that user passwords, for log in in a system console, and SSH keys, for remote access to a system, are also secrets.</p>
+</div>
+<div class="paragraph">
+<p>Some secrets are designed to be public and could be safely embedded into a system image, for example a CA certificate to access corporate servers without disabling TLS validation.</p>
+</div>
+<div class="paragraph">
+<p>Some other secrets may require careful assessments of the risks, for example credentials to download container images from a private registry:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If such images contain corporate intelectual property, you may handle these credentials as sensitive secrets.</p>
+</li>
+<li>
+<p>If such images are just mirrors of publicly available images, you may embed these credentials on your system images.</p>
+</li>
+<li>
+<p>If your registry contains a mix of public and privage images, you may need different credentials for each set of images, and audit access permissions granted to each of them.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+In this course, we will provide secrets using kickstart files, for simplicity.
+Be aware it may not be a secure alternative for your real-world scenarios.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Also consider the different secrets you may require at bootc image build time, versus the secrets you require at runtime, on actual edge devices, and during system or integration testing.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_the_bootc_utility"><a class="anchor" href="#_the_bootc_utility"></a>The Bootc Utility</h2>
 <div class="sectionbody">
 <div class="paragraph">

@@ -195,34 +195,10 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Not Started
+Work in progress
 </td>
 </tr>
 </table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_provisory_outline"><a class="anchor" href="#_provisory_outline"></a>PROVISORY OUTLINE</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Bootc container images are NOT bootable and are NOT intended to be executed in a container.</p>
-</li>
-<li>
-<p>Bootc base images vs bootc derived images.</p>
-</li>
-<li>
-<p>Filesystem layout with composefs. Unlike rpm-ostree, you can install packages and binaries in /opt and /usr/local, as long as you don’t write data on these folders (write on /var or create symlinks to /var)</p>
-</li>
-<li>
-<p>Containerfiles for bootc images vs Containerfiles for application images</p>
-</li>
-<li>
-<p>Reproducible builds?</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -232,9 +208,9 @@ Not Started
 <div class="paragraph">
 <p>The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends up with specialized tools from the bootc world.</p>
 </div>
-<div class="imageblock unresolved">
+<div class="imageblock">
 <div class="content">
-<img src="s1-devices-fig-5.svg" alt="s1 devices fig 5">
+<img src="_images/s1-podman-fig-1.svg" alt="s1 podman fig 1">
 </div>
 <div class="title">Figure 1. Workflow for installing and updating image mode systems</div>
 </div>
@@ -254,38 +230,178 @@ Not Started
 </li>
 <li>
 <p>Use the standard RHEL installer (Anaconda) with a custom kickstart file, which refers to the bootc container image as its installation source.</p>
-</li>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Alternatively, use <strong>bootc image builder</strong> utility to convert your bootc container image into a custom RHEL installation media, which you can write to an USB media, or copy to a network boot server, and use it to install image mode systems without requiring access to an OCI container registry.</p>
 </li>
+</ol>
+</div>
+</li>
 <li>
 <p>Use the bootc utility, from an image mode system, to download a new bootc container image and make it the new system image.</p>
-</li>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Alternatively, use the bootc utility, from an image mode system, to copy a new bootc container image from removable storage and make it the new system image.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p>This course, which is the first in a series of three, focus on steps 1-4 above.
-These are steps a developer would perform to create and test a bootc container image.</p>
+</li>
+</ol>
 </div>
-<div class="imageblock unresolved">
+<div class="paragraph">
+<p>This course, which is the first in a series of three, focus on steps 1-4 above, up tp the point you upload a bootc container image to a container image registry.
+These are steps a developer would perform to create and test a bootc container image, as part of their <em>inner loop</em>.</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<img src="s1-devices-fig-6.svg" alt="s1 devices fig 6">
+<img src="_images/s1-podman-fig-2.svg" alt="s1 podman fig 2">
 </div>
 <div class="title">Figure 2. Scope of this course</div>
 </div>
 <div class="paragraph">
-<p>The remaining steps are detailed in follow-up courses, and corresponds to steps an IT or OT professional would perform on edge systems.</p>
+<p>The remaining steps are detailed in follow-up courses, and corresponds to steps an IT or OT professional would perform on edge systems, as part of an <em>outer loop</em>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_bootc_containers_versus_application_containers"><a class="anchor" href="#_bootc_containers_versus_application_containers"></a>Bootc Containers Versus Application Containers</h2>
+<h2 id="_what_is_bootc"><a class="anchor" href="#_what_is_bootc"></a>What is bootc</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Lorem ipsum</p>
+<p><a href="https://bootc-dev.github.io/bootc/">Bootc</a> is the utility which performs installation and updates of image mode systems from OCI container images.
+It is included as part of all bootc container images, and it is usually run as a privileged container from those images.</p>
+</div>
+<div class="paragraph">
+<p>Most of the time, developers and system administradors do NOT have to interact directly with the bootc utility.
+It is provided by a base bootc container image, and the process of building derived bootc container images looks just the same as the process for building derived application container images.</p>
+</div>
+<div class="sect2">
+<h3 id="_bootc_containers_versus_application_containers"><a class="anchor" href="#_bootc_containers_versus_application_containers"></a>Bootc containers versus application containers</h3>
+<div class="paragraph">
+<p>If you remember from the previous chapter, bootc container images includes a number of components not usually included in application container images, among them:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A Linux kernel and loadable modules</p>
+</li>
+<li>
+<p>An initial ram disk (initrd) and a boot loader (grub)</p>
+</li>
+<li>
+<p>The System Daemon (Systemd) and a number of privileged Systemd unit to manage hardware, networking, and system services</p>
+</li>
+<li>
+<p>The D-Bus system messaging middleware</p>
+</li>
+<li>
+<p>The bootc utility</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Typical OCI container images are designed to provide a single application, and include only the required userspace components required to support that application, such a programming language runtime and required dependency libraries.
+Bootc container images are designed to provide a complete system, including its kernel mode components and possibly multiple applications, system services, and network services.</p>
+</div>
+<div class="paragraph">
+<p>But, other than the fact that bootc container images are a lot bigger, they are standard OCI container images.
+Nothing prevents you from running a bootc container using a standard container engine.
+Just beware that the results might not be what you expect, because a container engine CANNOT run the kernel, system services, and other componentes from a bootc container image.
+Container engines would run only the userspace components of a bootc container image, as they would for a regular application container.</p>
+</div>
+<div class="paragraph">
+<p>So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a containerfile for a bootc container images is the use of a bootc container image as its base image, in its <code>FROM</code> directive.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filesystem_layout_of_an_image_mode_system"><a class="anchor" href="#_filesystem_layout_of_an_image_mode_system"></a>Filesystem layout of an image mode system</h3>
+<div class="paragraph">
+<p>As you craft a containerfile to produce a bootc container image, you must be aware that bootc sets up the filesystems of an image mode system in a very specific way:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>/</code> directory, and almost all its subdirectories, like <code>/usr</code> and <code>/opt</code>, are read-only.
+This gives image mode systems their "immutable" characteristic, although that term is not a precise description if them, as we will see in the next bullet.</p>
+</li>
+<li>
+<p>The <code>/etc</code> directory is read-write, so that system administrators are able the configurations of an image mode system at day-2.
+The truth is, you cannot always pre-configure everything in a system image.</p>
+</li>
+<li>
+<p>The <code>/var</code> directory is also read-write, so that applications can store user data, logs, and other data.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Some standard writable directories, such as <code>/home</code> and <code>/etc</code>, that would exist in package mode system outside of <code>/var</code> become symbolic links to directories under <code>/var</code> in image mode systems.
+For example, <code>/home</code> is a symbolic link to <code>/var/home</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you need additional writable directories, for example to be mount points of additional disk devices, you must create them under <code>/var</code>, and possibly create symlinks to the locations these directories would be expected to be.
+Symbolic links themselves can be read-only and still refer to a read-write directory.</p>
+</div>
+<div class="paragraph">
+<p>You can and typically do include content of those wriable directories in a bootc container image, but that content is treated differently when you install or update an image mode system:</p>
+</div>
+<div class="paragraph">
+<p>During installation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Files from <code>/etc</code> are copied from the bootc image to the actual image mode system, so they provide an initial configuration which can be modified, during installation time, by tools such as Anaconda kickstart and Cloud-init.</p>
+</li>
+<li>
+<p>Files from <code>/var</code> are copied from the bootc image to the actual image mode system, so they provide an initial set of application data, and also data directories with the proper owners and file system permissions.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>During updates:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Files form <code>/etc</code> are merged between the current state in an image mode system and the state on the image.
+This way, a bootc image can provide new configuration files, or changes to the default configuration files, without overriding configuration changes performed on the system at day-2.</p>
+</li>
+<li>
+<p>Files from <code>/var</code> are ignored, retaining their state on the image mode system.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There are other subtle differences in runtime behavior between an image mode system and a package mode system, which could affect the way applications are packaged and deployed in an image mode system.
+These differences are, for the most part, not a reason to claim incompatibility between image mode and any specific application, but a reason to configure applications and systems in a different way, which you could also apply to package mode systems.</p>
+</div>
+<div class="paragraph">
+<p>Most times, compatibility issues com from applications with hard-coded assumptions around system configuration, and if it happens, it may be necessary to change the application to replace those hard-coded assumption with configurable settings, or with a different assumption that matches typical configurations of an image mode system.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_bootc_containers_in_disconnected_mode"><a class="anchor" href="#_building_bootc_containers_in_disconnected_mode"></a>Building bootc containers in disconnected mode</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is a common security policy, especially at large corporations, that no software artifacts can be downloaded directly from the Internet.
+They must be previouly vetted by corporate TI to prevent compromises by artifacts infected with malware or from supply chain attacks.</p>
+</div>
+<div class="paragraph">
+<p>As you build bootc container images, you usually install additional RPM packages from RHEL and third-party vendors.
+If you cannot download those packages directly from Red Hat and their respecitive vendors, you must provide a mirror YUM repository containing them.</p>
+</div>
+<div class="paragraph">
+<p>You must also provide, as part of your containerfile, YUM repostory configurations that point to your mirrors.</p>
+</div>
+<div class="paragraph">
+<p>By the same reason, you must provide a container registry with mirrors the bootc base container image and write your containerfile to refer to that privage registry instead of to <code>redhat.regsistry.io</code></p>
+</div>
+<div class="paragraph">
+<p>Notice that you would be required to do the same to build regular application container images in a disconnected environment.
+These are NOT changes required by bootc.</p>
 </div>
 </div>
 </div>
