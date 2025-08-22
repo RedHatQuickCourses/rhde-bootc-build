@@ -17,6 +17,63 @@ WARNING: Not Started
 * Mention Podman Machine/Podman Desktop tools for Windows and Mac developers
 
 
+== Day-0 and Day-1 System Configuration
+
+Bootc container images open the possibily for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.
+
+This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to onboard its users.
+
+Some organization perform such day-1 configurations using system installation scripting tools such as Anaconda kickstart and Cloud-init. 
+Others perform such configuration using automation technologies such as Red Hat Ansible Automation Platform.
+
+The need for performing day-1 configurations does NOT typically disappear with image mode systems, because it may not be a good idea having all configurations in a system image.
+You may include a large set of configurations embedded in a system image, but there are always something which must be different between devices or between edge sites.
+
+Managing a large number of images, to account for those variations, may become a challenge.
+It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.
+
+=== Secrets management and device onboarding
+
+Even if you could perform all system and application configuration from a single system image, or a custom installation script, it may not be a good idea.
+Consider some potential risk scenarios, such as:
+
+* A a removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.
+* A rogue device is plugged into network of an edge site, installed as a genuine device, and them taken off-site to access its system disk and grab the credentials stored there.
+
+Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present much of the same risks.
+
+To manage such risks, many organizations employ secure and auditable _onboarding_ processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for acessing applications and other resources in either the edge site or around the corporate network.
+
+You can implement effective onboarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios. 
+
+Alternatively there are alternatives technologies and tools, designed to address the challenges of provisioning and onboarding edge devices at scale and in a secure way. Among them:
+
+* The FIDO Device Onboarding (FDO) standard
+* The Red Hat Edge Manager product, based on the Flightctl open source project
+
+These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or servers, and dealing with lower network bandwith or higher latency than in typical data centers and office buildings.
+
+=== Secrets in bootc container images
+
+In summary, the general advice is to avoid having secrets embedded in a bootc container image, and use instead some day-1 configuration approach to add them.
+Consider that user passwords, for log in in a system console, and SSH keys, for remote access to a system, are also secrets.
+
+Some secrets are designed to be public and could be safely embedded into a system image, for example a CA certificate to access corporate servers without disabling TLS validation.
+
+Some other secrets may require careful assessments of the risks, for example credentials to download container images from a private registry:
+
+* If such images contain corporate intelectual property, you may handle these credentials as sensitive secrets.
+
+* If such images are just mirrors of publicly available images, you may embed these credentials on your system images.
+
+* If your registry contains a mix of public and privage images, you may need different credentials for each set of images, and audit access permissions granted to each of them.
+
+WARNING: In this course, we will provide secrets using kickstart files, for simplicity.
+Be aware it may not be a secure alternative for your real-world scenarios.
+
+Also consider the different secrets you may require at bootc image build time, versus the secrets you require at runtime, on actual edge devices, and during system or integration testing.
+
+
 == The Bootc Utility
 
 Lorem ipsum
