@@ -35,7 +35,7 @@ A follow-up course will teach option (3) as the recommended way of deploying edg
 
 Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, let's consider how much configurations, or how little, should actually be in a bootc container or left to be performed after installing an image mode systems.
 
-== Day-0 and Day-1 System Configuration
+== Day-0 and day-1 system configuration
 
 Bootc container images open the possibily for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.
 
@@ -178,7 +178,7 @@ These options are not yet available from graphical front-ends to libvirt, but th
 
 After you create your test VM, you can manage it using any libvirt front-end, for example the `virsh` command or Cockpit.
 
-== What's Next
+== What's next
 
 The next activity uses the standard RHEL installation media to create a libvirt VM which boots from the contents of a bootc container image.
 This is one way you can perform comprehensive tests of bootc container images, before you publish it for use in production systems.

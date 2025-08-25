@@ -189,7 +189,7 @@ We call those system images _bootc container images_ to differentiate them from 
 IMPORTANT: It was common to refer to bootc container images as https://developers.redhat.com/articles/2024/09/24/bootc-getting-started-bootable-containers[bootable containers], but that term is misleading: no current firmware, hypervisor, or IaaS cloud provider is able to boot directly from an OCI container image.
 So bootc container images are NOT actually "bootable".
 
-=== Day-1 and Day-2 with image mode for RHEL
+=== Day-1 and day-2 with image mode for RHEL
 
 Package mode systems require extensive day-2 customizations, after initial provisioning, to perform tasks such as installing additional packages and editting system configuration files.
 
@@ -239,7 +239,7 @@ It is your choice to build site-specific system images, which embed customizatio
 In any case, you can use Ansible automation to apply or change site and device-specific customizations, similar to what you would do with package mode systems.
 You just expect to have fewer customizations to apply at day-2, using automation, because more of them are already embedded in the system image.
 
-== What's Next
+== What's next
 
 Before learning about crafting containerfiles for bootc container images, you will assess your understanding of how edge sites differ from traditional corporate IT data centers and cloud IT.
 

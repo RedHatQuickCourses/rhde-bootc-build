@@ -99,6 +99,6 @@ But you CANNOT verify that these settings are actually in effect, nor that they 
 Remember that container engines run application containers with their current host kernel and system settings.
 The kernel, system services, and settings inside a bootc container image are simply ignored when run from a container engine.
 
-== What's Next
+== What's next
 
 The next activity builds a bootc container image which varied system settings, demonstrates that these settings are stored in the image but not active in a container. The next chapter shows how to perform system testing of bootc container images by installing them in a local VM.

@@ -117,6 +117,6 @@ By the same reason, you must provide a container registry with mirrors the bootc
 Notice that you would be required to do the same to build regular application container images in a disconnected environment.
 These are NOT changes required by bootc.
 
-== What's Next
+== What's next
 
 The next activity builds a simple bootc container image and performs early testing of those images using Linux containers, to demonstrate the need for system testing in addition to container testing of bootc container images.
