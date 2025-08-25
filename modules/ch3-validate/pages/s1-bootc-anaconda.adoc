@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Introduce the bootc utility and how the RHEL installer (Anaconda) can use a bootc container image as its installation source.
 
-WARNING: Not Started
+WARNING: Work in progress
 
 == PROVISORY OUTLINE
 
@@ -177,6 +177,22 @@ This way, you can create test VMs over an SSH connection or as part of a CI/CD p
 These options are not yet available from graphical front-ends to libvirt, but they are available from the `virt-install` command, which we use in the next activity.
 
 After you create your test VM, you can manage it using any libvirt front-end, for example the `virsh` command or Cockpit.
+
+== System testing with Podman Desktop
+
+Recent releases of Podman Desktop include the ability of creating test VMs from bootc container images.
+But wait, Podman Desktop is a tool to manage containers, not VMs!
+
+In fact, developers using Podman, or any other container engine on Windows and MacOS, are running a Linux VM.
+When most people refer to "containers", they are actually referring to "Linux containers" which require being on a Linux system, interacting with a Linux kernel and other Linux operating system services.
+
+So container engines already have a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
+That thin VM management layer usually interfaces with the native hypervisor on Windows, MacOS, and Linux systems, so that developers are insulated from VM management and only care about containers.
+
+The Podman Machine project, which provides the VM managemen layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
+Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offer a simple and portable abstraction for developers who need to perform system testing of their bootc container images.
+
+NOTE: in this course, we are NOT using Podman Deskop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this possibility.
 
 == What's next
 
