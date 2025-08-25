@@ -195,7 +195,7 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Not Started
+Work in progress
 </td>
 </tr>
 </table>
@@ -504,6 +504,39 @@ This way, you can create test VMs over an SSH connection or as part of a CI/CD p
 <div class="paragraph">
 <p>After you create your test VM, you can manage it using any libvirt front-end, for example the <code>virsh</code> command or Cockpit.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_system_testing_with_podman_desktop"><a class="anchor" href="#_system_testing_with_podman_desktop"></a>System testing with Podman Desktop</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Recent releases of Podman Desktop include the ability of creating test VMs from bootc container images.
+But wait, Podman Desktop is a tool to manage containers, not VMs!</p>
+</div>
+<div class="paragraph">
+<p>In fact, developers using Podman, or any other container engine on Windows and MacOS, are running a Linux VM.
+When most people refer to "containers", they are actually referring to "Linux containers" which require being on a Linux system, interacting with a Linux kernel and other Linux operating system services.</p>
+</div>
+<div class="paragraph">
+<p>So container engines already have a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
+That thin VM management layer usually interfaces with the native hypervisor on Windows, MacOS, and Linux systems, so that developers are insulated from VM management and only care about containers.</p>
+</div>
+<div class="paragraph">
+<p>The Podman Machine project, which provides the VM managemen layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
+Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offer a simple and portable abstraction for developers who need to perform system testing of their bootc container images.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+in this course, we are NOT using Podman Deskop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this possibility.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
