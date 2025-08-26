@@ -203,27 +203,6 @@ Work in progress
 </div>
 </div>
 <div class="sect1">
-<h2 id="_provisory_outline"><a class="anchor" href="#_provisory_outline"></a>PROVISORY OUTLINE</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Bootc is inside bootc containers and involved at deployment, updates, and other moments</p>
-</li>
-<li>
-<p>Using bootc install to a disk or filesystem</p>
-</li>
-<li>
-<p>Introduction to libvirt and macadm</p>
-</li>
-<li>
-<p>Mention Podman Machine/Podman Desktop tools for Windows and Mac developers</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_how_to_install_image_mode_systems"><a class="anchor" href="#_how_to_install_image_mode_systems"></a>How to install image mode systems</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -435,7 +414,7 @@ QEMU is also capable of emulating a complete system, for example to emulare an A
 You can use the native hypervisor of your Windows or MacOS laptop, but this course does not provide instructions for doing it.</p>
 </div>
 <div class="sect2">
-<h3 id="_libvirt_developer_features"><a class="anchor" href="#_libvirt_developer_features"></a>Libvirt developer features</h3>
+<h3 id="_libvirt_features_for_developers"><a class="anchor" href="#_libvirt_features_for_developers"></a>Libvirt features for developers</h3>
 <div class="paragraph">
 <p>Libvirt is the single host management layer at the foundation of many of enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
 It provides many advanced capabilities at its API level, which require dealing with XML configuration files.</p>
@@ -452,7 +431,7 @@ Yes, you can run VMs in Linux without <code>sudo</code>.</p>
 </dd>
 <dt class="hdlist1">User mode networking</dt>
 <dd>
-<p>Avoids the need for privileged access to configure host networking, such as virtual NICs and bridge devices.
+<p>Avoids the need for elevated privileges to configure host networking, such as virtual NICs and bridge devices.
 It is the same technology which enables network connections to rootless containers with Podman.</p>
 </dd>
 <dt class="hdlist1">Direct kernel loading</dt>
@@ -461,7 +440,7 @@ It is the same technology which enables network connections to rootless containe
 </dd>
 <dt class="hdlist1">Virtio devices backed by host directories</dt>
 <dd>
-<p>Enables sharing files with a VM without creation of disk images, and without requiring privileged access for managing loopback devices.</p>
+<p>Enables sharing files with a VM without creation of disk images, and without requiring elevated privileges for managing loopback devices.</p>
 </dd>
 </dl>
 </div>
@@ -495,7 +474,7 @@ A similar process is normally used to provision RHEL systems using network boot,
 </ul>
 </div>
 <div class="paragraph">
-<p>You can also give the kernel more options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
+<p>You can also give the kernel additional options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
 This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting.</p>
 </div>
 <div class="paragraph">
