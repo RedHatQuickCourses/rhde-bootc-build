@@ -1,30 +1,123 @@
-:time_estimate: 5
+:time_estimate: 9
 
 = Strategies for Publishing and Distributing Bootc Container Images
 
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Introduce the bootc utility and its usage to test bootc container images.
+Introduce the direct usage of the bootc utility to test bootc container images and strategies for tagging bootc container images for test and production environments.
 
-WARNING: Not Started
+WARNING: Work in progress
 
-== PROVISORY OUTLINE
+As you have your bootc container images not just built but tested in a virtual system, it is time to upload (push) it to an OCI container registry, where it can be downloaded (pulled) by edge devices during installation and upgrades.
 
-* Essential image name/ID/tag concepts and strategies for floating tags.
-* Image labels that identify bootc containers (cannot podman search on them, but useful on Quay searches? Or only on the Red Hat Container Catalog?)
-* Variations of the bootc install command
+Or maybe these images are submitted to the next step of an automated CI/CD process, where they are subject to more extensive system testing, performance testing, and vulnerability tests.
+Either way, your bootc container images were not created just to sit on your development machine.
 
+== Installing bootc container images using the bootc utility
 
-== Installing, Updating, and Switching Bootc Container Images
+The bootc utility is the primary tool responsible for installing and upgrading image mode systems.
+You can also use the bootc utility to convert a system from package mode to image mode, and some developers find this a nice approach for system testing and some kinds of integration testing.
 
-Lorem ipsum
+Developers like to use cloud instances, which can be quickly provisioned, as RHEL package mode systems, from cloud images that are readily available from their cloud providers, and convert them to image mode systems.
+This is another way of performing system testing new bootc container images. 
+This way, they skip the potentially time-consuming steps of creating a custom cloud image and uploading it to the cloud provider.
+
+When you use bootc to install a bootc container image on a package mode system, it does NOT attempt to preserve any of the configurations and data of the original system. 
+The system ends up with a default system configuration and with default or empty application data directories, as they exist on the bootc container image.
+
+So it is NOT actually a "conversion" from package mode to image mode, but a new installation using image mode, overwriting the existing package mode installation with a brand new image mode installation.
+
+An interesting thing about the booc utility, when used for installing image mode systems, is that it is supposed to be run from the actual bootc container image being installed, as a privileged container, with access to the root file system, devices directory, and other capabilities which application containers are not usualy granted.
+
+So you do NOT need to install booc on a package mode system to be reinstalled as an image mode system.
+You just run the bootc container image with a specialy crafted command that invokes bootc with all required options.
+
+The only real utility of the bootc utility, in a package mode system, is reporting that the system was NOT installed as an image mode system.
+
+=== Day-1 configuration using the bootc utility
+
+The bootc utility was  not designed to be the main installation tool of an image mode system, but to be invoked by installation tools such as Anaconda.
+So bootc does not provide for day-1 customizations, such as network configuration and user passwords.
+
+This means any package mode system that is reinstalled as an image mode system by bootc may become completely locked down, with no network configurations and no user passwords nor SSH keys to access it.
+
+Nothing prevents you from building a bootc container image with predefined network settings, such as a static IP address and hostname, or with a user with a known password.
+You may want to do that for a quick test, but it is NOT how you are recommended to do for production systems.
+
+The only day-1 configuration which can be provided by the bootc utility itself is setting up SSH keys for the root user.
+If you build your bootc container image on the assumption that it takes dynamic network settings from a DHCP server or from cloud-init, the reinstalled cloud instance becomes accessible though the root SSH key.
+Else, you have to provide network settings as kernel arguments, during installation time.
+
+=== Updating and switching bootc container images
+
+In future courses we will also see other uses of the bootc utility:
+
+* To check if the current bootc container image installed in a system was updated, and if true, upgrade to the newer image.
+
+* To switch an image mode system to a different bootc container image, which could serve to "repurpose" an image mode system to a new role.
+
+In both cases, the bootc utility will preserve configuration and data on the image mode system.
+The only difference between upgrade and switch operations is that upgrades assume the system keeps using the same container image reference, that is, the name and tag, and from the same OCI container registry.
+
+Switches, on the other hand, happen when you change either part of the bootc container image reference.
+In both cases, you run the bootc utility directly from its image mode system, and after it downloads the new or updated container image, it runs the bootc utility from that image to install the kernel, bootloader, and perform other required tasks.
+
+A future course will demonstrate how to apply upgrades and switches to image mode system, and the implications of those operations on system settings and application data, along with common strategies for dealing with it.
+
+For now, it is just important that you consider that any bootc conainer images you build now may be applied to systems which already were image mode systems.
+You want to somehow distinguish between different versions of the same bootc container image and especially between new versions which were already subject to extensive system and integration testing from others which were not.
 
 == Floating and Non-Floating Tags.
 
-Lorem ipsum
+What you know as the _name_ of a container image is actually the name of a _repository_ of container images. 
+The real ID of a container image is a SHA-256 checksum of its manifest, which lists all layers on the container image and provides  metadata such as labels.
 
+In very old container engines, just copying an image between container registries, or from a registry to the local storage of a container engine, would change its ID.
+Nowadays, you can expect to be able to download and copy container images and preserve their IDs.
+
+A single container image repository could contain hundreds of different images, and each of them is accessible by their own ID.
+Each container image in a repository could be completely unrelated to others, not sharing any layers at all.
+This is not common, but could be done.
+
+Because humans do not like to deal with very long random strings (the SHA-256 checksums), images can be tagged, and then you can refer to a specific image by its name and tag pair, that is `name:tag`.
+
+So a name and tag pair links to a specific image ID, but that link could change, like a symbolic link in a Linux file system.
+If you expect that a tag links to a new image ID in the future, you call it a _floating_ tag.
+The `latest` tag is an example of a floating tag.
+
+If you expect that a tag remains linked to the same image ID forever, you call it a _fixed_ or _non-floating_ tag.
+It is common that continuous integration (CI) systems and other automatic build systems assign a fixed tag, based on a sequential build number or on a timestamp, to all container images they produce.
+
+=== Floating and fixed tags in a CI pipeline
+
+It is also common practice that a set of floating tags map to the latest version of an image, according to semantic versioning, and those tags are updated at the end of the testing and integration pipeline.
+
+For example, conside the following sequence of events:
+
+* There is a floating tag named `v1.2`, and it now points to the same image that is also tagged as `v1.2-3245`.
+
+* You produce a new build of that container image, which is tagged as `v1.2-3246`.
+
+* Some test fails with the new build, which is never promoted to a released container image.
+
+* You produce another build of the same container image, which is tagged as `v1.2-3247`.
+
+* That newest build pass all tests, so it is also tagged as the new `v1.2`.
+Now tags `v1.2` and `v1.2-3247` link to the same image ID.
+
+Similar tagging strategies enable having multiple container images, in different stages of testing, and copying (or mirroring) to  edge sites (or end customers) only the images which were actually released, while enabling different systems to perform different tests.
+
+For example, a container registry named `internal.example.com` contains all container images produced by CI/CD, and test systems grab images from that registry.
+
+Another container registry, named `production.example.com`, only contains images which pass all tests and are intended to be used in production systems.
+
+This second registry would NOT contain all container images that exist in the first one.
+Having a consistent tagging scheme enables administrators to take corrective action if copying or mirroring from one registry to the other fails for any reason.
+
+You see, these are just generic practices for managing application container images, and they apply as well to bootc container images.
 
 == What's Next
 
-The next activity uses the `bootc install` command, in a libvirt VM, to perform comprehensive tests of bootc container images, before you publish it for use in production systems.
+In the next activity, you will publish a bootc container image for use by integration testings, which are performened using pre-existing VMs with the `bootc install` command.
+After tests, you will you publish the bootc container with a floating tag, as a released image for use by production systems.

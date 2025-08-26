@@ -9,13 +9,6 @@ Introduce the bootc utility and how the RHEL installer (Anaconda) can use a boot
 
 WARNING: Work in progress
 
-== PROVISORY OUTLINE
-
-* Bootc is inside bootc containers and involved at deployment, updates, and other moments
-* Using bootc install to a disk or filesystem
-* Introduction to libvirt and macadm
-* Mention Podman Machine/Podman Desktop tools for Windows and Mac developers
-
 == How to install image mode systems
 
 Previous chapters demonstrate the need to perform system testing of bootc container images.
@@ -135,7 +128,7 @@ A number of tools from RHEL, for example the Cockpit web management interface, a
 You do NOT requite a RHEL system, nor a Linux system with libvirt, to perform system testing of bootc container images.
 You can use the native hypervisor of your Windows or MacOS laptop, but this course does not provide instructions for doing it.
 
-=== Libvirt developer features
+=== Libvirt features for developers
 
 Libvirt is the single host management layer at the foundation of many of enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
 It provides many advanced capabilities at its API level, which require dealing with XML configuration files.
@@ -147,14 +140,14 @@ Enables managing local VMs in _rootless_ mode.
 Yes, you can run VMs in Linux without `sudo`.
 
 User mode networking::
-Avoids the need for privileged access to configure host networking, such as virtual NICs and bridge devices.
+Avoids the need for elevated privileges to configure host networking, such as virtual NICs and bridge devices.
 It is the same technology which enables network connections to rootless containers with Podman.
 
 Direct kernel loading::
 Bypass the boot loader in a disk image or device, and loads a Linux kernel and initial ram disk directly from a local or remote directory.
 
 Virtio devices backed by host directories::
-Enables sharing files with a VM without creation of disk images, and without requiring privileged access for managing loopback devices.
+Enables sharing files with a VM without creation of disk images, and without requiring elevated privileges for managing loopback devices.
 
 These features are commonly used by developers and platform engineers, running desktop Linux distributions such as Fedora, to manage RHEL VMs for testing.
 
@@ -171,7 +164,7 @@ But, using the features mentioned in the previous session, we can perform a quic
 * Direct kernel loading provides kernel commands that make Anaconda use the kickstart script.
 * The session interface and user mode networking elliminate the need for privileged access (`sudo`).
 
-You can also give the kernel more options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
+You can also give the kernel additional options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
 This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting.
 
 These options are not yet available from graphical front-ends to libvirt, but they are available from the `virt-install` command, which we use in the next activity.
