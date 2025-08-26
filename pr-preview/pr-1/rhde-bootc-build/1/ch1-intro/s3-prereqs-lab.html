@@ -184,7 +184,7 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.</p>
+<p>Prepare for air-gaped building of bootc container images and disconnected deployment of edge devices.</p>
 </dd>
 </dl>
 </div>
@@ -223,8 +223,10 @@ If not, please adapt the instructions to your test environment.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You will verify that you have access to mirrors of Red Hat Enterprise Linux (RHEL) package repositories and bootc container images from RHEL.
-You will also configure your <em>development machine</em> with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.
-As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.</p>
+You will also configure your <em>development machine</em> with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.</p>
+</div>
+<div class="paragraph">
+<p>As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -279,7 +281,7 @@ Description  : Bootable container system</code></pre>
 <li>
 <p>Install the container tools on your <em>development machine</em>.</p>
 <div class="paragraph">
-<p>You already have Podman installed, but during this course you will use additional conveniente tools, such as Skopeo.</p>
+<p>You already have Podman installed, but during this course you will use additional convenience tools, such as Skopeo.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -303,7 +305,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>List all images available on the privage registry.
+<p>List all images available on the private registry.
 The list should include some application container images and some bootc container images, for different release of RHEL.</p>
 <div class="listingblock">
 <div class="content">
@@ -425,7 +427,7 @@ Because the output of the last command is empty, you may want to retrieve and fo
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Bootc container images include the bootable container system (the <code>bootc</code> package and command with the same name).</p>
+<p>Bootc container images include the <em>bootable container system</em> utility, that is, the <code>bootc</code> package and the command with the same name.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman run --rm --name bootc registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q bootc"</strong>
