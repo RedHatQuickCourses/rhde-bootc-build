@@ -2,13 +2,13 @@
 
 This is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge.
 
-* Building Red Hat Device Edge system images with image mode for RHEL (this course)
+* Building Red Hat Device Edge System Images with Image Mode for RHEL (this course)
 
-* Provisioning Red Hat Device Edge devices using image mode for RHEL (not created yet)
+* Provisioning Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
-* Updating and Repurposing Red Hat Device Edge devices using image mode for RHEL (not created yet)
+* Updating and Repurposing Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
-Design docs for the course series and individual courses are available to Red Hat employees:
+Design docs for the course series and individual courses are available only to Red Hat employees:
 
 * [Learning approach design] (https://docs.google.com/document/d/1vINNgOw9NVnxssptkDOqBnHhFCaY9eW5ATwT2dOhkdU/edit?usp=sharing)
 
@@ -20,7 +20,7 @@ Figures are in a [google slides](https://docs.google.com/presentation/d/17AHILn-
 
 Refer to the [Red Hat Quick Courses Contributor Guide](https://redhatquickcourses.github.io/welcome/1/guide/overview.html) for instructions about collaborating in this repository. **Click here: [![Contribute](https://www.eclipse.org/che/contribute.svg)](https://devspaces.apps.tools-na100.dev.ole.redhat.com/#https://github.com/RedHatQuickCourses/rhde-bootc-build) to start the development using devspace.**
 
-The virtual classroom environment is a ROLE classroom, which is shared by all image mode with Red Hat Device Edge quick courses and updated as required by future related courses: *HOL019: Image mode with Red Hat Device Edge Quick Course Series*. This virtual classroom will be available to Red Hatters and partners, and also customers with a Red Hat Learning Subscription.
+The virtual classroom environment is a ROLE classroom, which is shared by all image mode with Red Hat Device Edge quick courses and updated as required by future related courses: *HOL019: Image Mode with Red Hat Device Edge Quick Course Series*. This virtual classroom will be available to Red Hat employees and partners, and also customers with a Red Hat Learning Subscription.
 
 
 

@@ -1,5 +1,5 @@
 name: rhde-bootc-build
-title: Building System Images for Red Hat Device Edge With Image Mode for RHEL
+title: Building System Images for Red Hat Device Edge with Image Mode for RHEL
 version: 1
 asciidoc:
   attributes:

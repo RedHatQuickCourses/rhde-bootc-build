@@ -9,11 +9,11 @@ This course teaches how to create Red Hat Device Edge system images, which are s
 
 It is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge, which will consist of three courses:
 
-. *Building Red Hat Device Edge system images with image mode for RHEL* (this course)
+. *Building Red Hat Device Edge System Images with Image Mode for RHEL* (this course)
 
-. Provisioning Red Hat Device Edge devices using image mode for RHEL (not created yet)
+. Provisioning Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
-. Updating and Repurposing Red Hat Device Edge devices using image mode for RHEL (not created yet)
+. Updating and Repurposing Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
 IMPORTANT: Red Hat employees must enroll using its LMS entry [ADD LINK], and Red Hat Partners must enroll using its Partner Portal entry [ADD LINK].
 
@@ -21,14 +21,14 @@ IMPORTANT: Red Hat employees must enroll using its LMS entry [ADD LINK], and Red
 
 On completing this course, you should be able to:
 
-* Understand the usage of image mode for RHEL on Red Hat Device Edge devices.
-* Build RHEL for edge device images using image mode for RHEL.
-* Test and Validate RHEL for edge device images using local VMs.
-* Publish RHEL for edge device images in an OCI container registry.
+* Understand the usage of image mode for RHEL on Red Hat Device Edge systems.
+* Build system images for edge device using image mode for RHEL.
+* Test and validate system images for edge device images using local VMs.
+* Publish system images for edge devices in an OCI container registry.
 
 == Audience
 
-Operations-focused customer roles, who design and implement device edge images, but are not usually in-person at edge sites:
+Operations-focused customer roles, who design and implement sustem images for edge devices, but are not usually in-person at edge sites:
 
 * System Administrators (IT - Information Technology, and OT - Operations Technology)
 * Site Reliability Engineers (SREs)
@@ -37,7 +37,7 @@ Operations-focused customer roles, who design and implement device edge images, 
 
 Red Hat and Partner roles that perform demonstrations, PoC and PoV of Red Hat Device Edge as part of a sales motion, such as Solutions Architects
 
-Red Hat and Partner roles that support Red Hat Device Edge on customers, such as Services Consultants and Customer Support Engineers.
+Red Hat and Partner roles that support customers of Red Hat Device Edge, such as Services Consultants and Customer Support Engineers.
 
 == Prerequisites
 
@@ -93,4 +93,4 @@ For documentation about Red Hat Device Edge, check its https://docs.redhat.com/e
 Training Content Architect +
 Red Hat - Product Portfolio Marketing & Learning
 
-Special thanks to [LIST CONTRIBUTORS AND SUPPORTERS]
+//Special thanks to [LIST CONTRIBUTORS AND SUPPORTERS]
