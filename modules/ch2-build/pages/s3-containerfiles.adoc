@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Present common issues and recommendations for building bootc container images using containerfiles.
 
-WARNING: Work in progress
+WARNING: Pending review
 
 Now that you know now to build a bootc container image from a containerfile, and you also know that most things you would do in a containerfile for application containers also apply to containerfiles for bootc containers, it's time to consider what you could do in containerfiles for bootc images that you would NOT usually for application containers.
 
