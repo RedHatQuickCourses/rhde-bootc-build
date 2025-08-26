@@ -22,8 +22,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
-You will build a containerfile which configures different aspects of a RHEL system.
-You will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.
+You will review a containerfile which configures different aspects of a RHEL system, and build a bootc container image from it.
+Then you will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
@@ -46,7 +46,7 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that booc container image.
+2. Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.
 
 .. Enter the `httpd-system` directory.
 +
@@ -62,7 +62,7 @@ $ *cd httpd-system*
 include::1@samples:httpd-system:example$Containerfile[]
 --
 
-.. Review its sysctl configuration files.
+.. Review its kernel configuration files.
 +
 `sysctl.d/90-ipv4-forward.conf`::
 +
@@ -78,7 +78,7 @@ include::1@samples:httpd-system:example$sysctl.d/90-ipv4-forward.conf[]
 include::1@samples:httpd-system:example$sysctl.d/90-sysrq.conf[]
 --
 
-.. Review its bootc kernel argument configuration files.
+.. Review its kernel command-line configuration files.
 +
 `kargs.d/00-mitigations.toml`::
 +
@@ -171,7 +171,7 @@ inactive
 +
 This is expected, because an application container does NOT run the kernel from its container image, and does NOT apply the system configurations inside its image.
 +
-WARNING: While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container this way could potentially damage the configurations of its host, in the case your _development machine_.
+WARNING: While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container image this way could have unexpected and potentially dangerous effects on its host, in the case your _development machine_.
 +
 [source,subs="verbatim,quotes"]
 --

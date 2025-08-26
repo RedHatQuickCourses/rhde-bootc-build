@@ -1,11 +1,11 @@
-:time_estimate: 5
+:time_estimate: 7
 
 = Lab: Build and Test Bootc Containers
 
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Create containerfiles and build bootc container images suitable to RHEL for edge systems
+Create containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.
 
 WARNING: Pending review
 
@@ -25,7 +25,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 You will build a containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
 You will also compare the bootc container image for your application with a regular application image for the same application.
 
-1. Prepare to start this activity by cloning the sample code repository and loggin in the private registry.
+1. Prepare to start this activity by cloning the sample code repository and logging in the private registry.
 
 .. Create a local clone of the sample code repository of this course, and make it your working directory.
 +
@@ -45,7 +45,7 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. Inspect the Containerfile for a single-page web applicaiton, which uses the Apache Web Server to host your HTML and JavaScript code.
+2. Inspect the containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.
 
 .. Enter the directory `httpd-bootc`.
 +
@@ -54,8 +54,8 @@ Login Succeeded!
 $ *cd httpd-bootc*
 --
 
-.. Review the Cointainerfile.
-It installs the `httpd` package and enables the `httpd` service, them adds the files that mock a singe-page web application.
+.. Review the containerfile.
+It installs the `httpd` package and enables the `httpd` service, them adds HTML files that mock a singe-page web application.
 +
 [source,subs="verbatim"]
 --
@@ -92,10 +92,10 @@ $ *podman run -d -p 8080:80 --name httpd httpd-bootc*
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of your single-page web application.
+This would be the HTML and JavaScript code of your single-page web application.
 --
 
-.. Verify that your bootc contrainer image inherits the `containers.bootc` label key from the bootc base image.
+.. Verify that your bootc container image inherits the `containers.bootc` label key from the bootc base image.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -128,7 +128,7 @@ bash-5.2# *exit*
 exit
 --
 +
-There are many processes that are NOT common in application containers, such as NetworkManager, DBus, and the SSH daemon.
+There are many processes that are NOT common in application containers, such as the NetworkManager, DBus, and SSH daemons.
 
 .. Stop and delete your bootc container.
 +
@@ -164,11 +164,12 @@ It violates a few recommendations for application containers, among them:
 ... It runs more processes than the application really requires.
 It should start the Apache Web Server as its `ENTRYPOINT`, instead of the System daemon.
 +
-... It does NOT send logs to the standard output, so those logs are NOT visible with `podman logs` and would also NOT be visible if run from a Kubernetes cluster.
+... It does NOT send logs to the standard output, so those logs are NOT visible with `podman logs` and would also NOT be visible from `kubectl logs` either, if run from a Kubernetes cluster.
 +
 ... It runs as `root`, because it does not set a `USER`.
 +
-... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration. It should listen to an unprivileged port, to not requile elevated privileges when run in a Kubernetes cluster.
+... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration.
+It should listen to an unprivileged port, to not require elevated privileges when run in a Kubernetes cluster.
 +
 NOTE: Providing a good example of a containerfile for a web application is outside the scope of this course.
 
@@ -182,7 +183,7 @@ Successfully tagged localhost/httpd-ubi:latest
 $ *podman run -d -p 8080:80 --name httpd httpd-ubi*
 ...
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of your single-page web application.
+This would be the HTML and JavaScript code of your single-page web application.
 --
 
 .. Inspect the processes running inside your application container.
@@ -206,7 +207,7 @@ exit
 Notice that the `ps` command is not available. Most most application containers do NOT include common troubleshooting commands and system services, so their container images are leaner.
 +
 Also notice, from the `pstree` output, that only the System daemon and Apache Web server are running.
-It also runs fewer Systemd services, because it does not inherit Systemd configurations from the bootc base container image.
+It only runs a much smaller set of Systemd services, because it does not inherit Systemd configurations from the bootc base container image.
 
 .. Stop and delete your application container.
 +
@@ -260,7 +261,7 @@ $ *podman run -d -p 8080:80 --name webapp webapp-bootc*
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of your IMPROVED single-page web application.
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.
 --
 
 .. Stop and delete your test container.
