@@ -1,13 +1,12 @@
 = Introduction to Red Hat Device Edge and Image Mode for RHEL.
 
 Goal::
-Understand the usage of image mode for RHEL on Red Hat Device Edge devices
+Understand the usage of image mode for RHEL on Red Hat Device Edge systems.
 
-WARNING: Work in progress
+WARNING: Pending review.
 
 == Introduction
 
-This chapter introduces the Red Hat Device Edge (RHDE) product.
-It offers an overview of how features of Red Hat Enterprise Linux (RHEL), such as image mode, relate to deploying and managing edge devices.
+This chapter introduces the Red Hat Device Edge (RHDE) product and presents an overview of how features of Red Hat Enterprise Linux (RHEL), such as image mode, relate to provisioning and managing edge devices.
 
-The hands-on activitiy verifies that your virtual labs environment provides all prerequisites to build system images in an air-gapped environment, using image mode for RHEL, and testing such images by provisioning virtual machines (VMs) using RHEL virtualization, based on KVM and libvirt.
+The hands-on activity verifies that your virtual labs environment provides all prerequisites to build system images in a disconnected environment, and also for testing system images using RHEL virtualization, based on KVM and libvirt.

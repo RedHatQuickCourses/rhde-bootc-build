@@ -1,4 +1,4 @@
-:time_estimate: 16
+:time_estimate: 17
 
 = Provision and Manage Edge Devices with RHEL
 
@@ -7,7 +7,7 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Introduction to edge devices, Red Hat Device Edge, and image mode for RHEL
 
-WARNING: Work in progress
+WARNING: Pending review
 
 == What is Red Hat Device Edge
 
@@ -21,22 +21,24 @@ image::s1-devices-fig-1.svg[title="Components of Red Hat Device Edge"]
 
 Most of these components can be purchased as part of other subscriptions from Red Hat.
 For example, RHEL and Ansible are frequently purchased as their own subscriptions, instead of as part of a bundle.
-Red Hat Device Edge brings in a pricing and suportability scope that is more aligned with the characteristics of edge devices.
+Red Hat Device Edge brings in a pricing and supportability scope that is more aligned with the characteristics of edge devices, as opposed to server-class machines.
 
-For example, the per-CPU and per-machine cost of running RHEL with a Red Hat Edge subscription is lower than the cost of running RHEL with a Red Hat Enterprise Linux subscription, because the first targets small edge devices, with a single CPU socket and a few GB of memory, while the second targets large servers in a data center, with multiple CPU sockets, each socket with a large number of cores, and hundres of GB of memory.
+For example, the per-CPU and per-machine cost of running RHEL with a Red Hat Edge subscription is lower than the cost of running RHEL with a Red Hat Enterprise Linux subscription.
+While the first targets small edge devices, with a single CPU socket and a few GB of memory, the second targets large servers in a data center, with multiple CPU sockets, each socket with a large number of cores, and hundreds of GB of memory.
 
-You may purchase Red Hat Device Edge to use RHEL in an army of small edge devices, but you could also find that some of your edge devices are "large" and requires a different subscription to get RHEL and other Red Hat products.
+You may purchase Red Hat Device Edge subscriptions to use RHEL in an army of small edge devices, but you could also find that some of your edge devices are too "large" and require a different subscription to get RHEL and other Red Hat products.
 In both cases, you get the full feature set of RHEL.
 
 To be clear: Red Hat Device Edge is NOT a different edition of RHEL, nor a subset of RHEL.
-Many features of RHEL, which were developed originally for the requirements of edge scenarios, are also very valuable in data center scenarios.
-On the other had, features from RHEL that were designed for data center scenarios are also useful in edge scenarios, bringing in more standardization and ultimately reducing the effort and cost of managing edge devices.
+Many features of RHEL were developed to address the requirements of edge scenarios and are also proven valuable in data center scenarios.
+On the other had, features from RHEL that were designed for data center scenarios are also valuable in edge scenarios.
+Using the same operating system (RHEL) for both edge and data center systems brings increased standardization and ultimately reduces the effort and cost of managing edge devices.
 
 === What is image mode for RHEL
 
-https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux-10/image-mode[Image mode] for Red Hat Enterprise Linux enables you to manage your OS with the same container tools and workflows as applications, creating a consistent experience and common language across teams.
+https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux-10/image-mode[Image mode^] for Red Hat Enterprise Linux enables you to manage your OS with the same tools and workflows as for application containers, creating a consistent experience and common language across development and infra-structure teams.
 
-Provisioning and updating RHEL systems based on image mode is faster and more reliable than with the traditional approach of dealing with RPM packages one at a time.
+Provisioning and updating RHEL systems using image mode is faster and more reliable than with the traditional approach of dealing with RPM packages one at a time.
 The traditional approach is now called _package mode_ for RHEL.
 
 Edge devices benefit from the consistency, reliability, and ease of rolling back updates to RHEL systems using image mode.
@@ -44,56 +46,61 @@ Image mode also enables easy repurposing of edge devices, by loading into them d
 
 It is also easier for Operational Technology (OT) professionals, who are typically NOT Linux sysadmins, to perform device provisioning and updates using image mode for RHEL on _far edge_ sites than with package mode for RHEL.
 
-There are organizations using traditional RHEL provisioning and management worklows, based on package mode, on edge sites.
-These organizations have more success on larger _near edge_ sites, which provide infrastructure similar to a data center, with larger machines, rack-based networking gear, and "server rooms". 
-As those organization replace legacy, single-purpose and proprietary edge devices with newer, more flexible and standards-based edge devices, they can adopt process and workflows based on image mode alongside with their existing package mode processes and workflows.
+There are organizations using traditional RHEL provisioning and management workflows, based on package mode, on edge sites.
+These organizations have more success on larger _near edge_ sites, which provide infrastructure similar to a data center, including larger machines, rack-based networking gear, and "server rooms". 
+As those organization replace legacy, single-purpose and proprietary edge devices with newer, more flexible and standards-based edge devices, they can adopt process and workflows based on image mode alongside their existing package mode processes and workflows.
 
 Before we dive deeper into the workflows and tools required by image mode for RHEL, let's discuss how edge devices differ from servers in a data center and and what kind of edge devices you can provision and manage using RHEL.
 
 == What is an edge device
 
 Edge devices, sometimes called edge endpoints, edge gateways, and edge servers, come in varying shapes and forms.
-For the purposes of this course, all of them are referred to as _edge devices_.
+For the purposes of this course, all of them are referred to as _edge devices_ or _edge systems_.
 
 Some of edge devices look just like standard computers, maybe in a rugged and smaller form factory.
 They could also take unique form factors which integrate sensors, servo-mechanisms, and other specialized peripherals in the same system board and might not look, from the outside, anything like a personal computer (PC).
 
 image::s1-devices-fig-2.svg[title="Illustrative images of edge devices and traditional computers"]
 
-Traditional edge devices were NOT capable of running a standard operating system like RHEL, and usually run an proprieraty operating system embeded into their firmware.
-These edge devices usually connect to a more standard computer, an _edge gateway_, which mediates the communication between these specialized and single-purpose edge devices with the larger network and IT infrastructure of their edge sites and corporate headquarters.
+Traditional edge devices were NOT capable of running a standard operating system like RHEL.
+They usually run an proprietary operating system embedded into their firmware.
+Such edge devices typically connect to a standard PC, called an _edge gateway_, which mediates the communication between these specialized and single-purpose edge devices and the larger network and IT infrastructure of their edge sites and corporate headquarters.
 
 More modern edge devices are built on the same fundamental architecture, processors, chipsets, and peripheral busses as a standard PC, thanks to the advancements of smart phones and ARM architectures.
-These devices may be similar, regarding cost and power consuption, to traditional edge devices, but because they are able to run a standard operating system, they are in fact multi-purpose devices, which a potentially longer life span.
+These devices may be similar, regarding cost and power consumption, to traditional edge devices, but because they are able to run a standard operating system, they are in fact multi-purpose devices, which a potentially longer life span.
 
 Some kinds of computers, such as mini-PCs, blur the line between a standard computer and an edge device.
 Depending on their capabilities, they may be eligible for Red Hat Device Edge subscriptions, or they may require a Red Hat Enterprise Linux subscription.
 
+IMPORTANT: RHEL is supported in a variety of CPU architectures, including many ARM variants.
+It may not support very small ARM boards similar to the Raspberry PI, but there are a number of vendors of small ARM computers which are certified for RHEL and many more which are either validated or compatible with RHEL.
+
 === Use cases for edge devices with Red Hat Device Edge
 
-RHEL for edge is designed to support devices which are closer in hardware architecture to standard personal computers and servers. It benefits from the large ecosystem of software and hardware certified for RHEL and large pool of professionals skilled in Linux.
+Red Hat Device Edge is designed to support devices which are closer in hardware architecture to standard personal computers and servers. It benefits from the large ecosystem of software and hardware certified for RHEL and large pool of professionals skilled in Linux.
 
 For example, you cannot run RHEL directly in most surveillance cameras. But you could run RHEL in edge devices that monitor the video feed from a surveillance camera (or from multiple cameras) to detect potential security threats and fire an alarm to call security or the police.
 
 A similar edge device could use a video camera to perform quality control in a factory, identifying defective pieces and reducing the need for human inspection, and also rerouting the defective pieces for either disposal or recycling without manual intervention.
 
-Now imagine that the same edge device controls a robotic arm with a spray gun: instead of being pre-programmed with a fixed path to paint only a pecific piece, known in advance, an edge device could adapt and optimize the paint process based on the specific piece it sees.
+Now imagine that the same edge device controls a robotic arm with a spray gun: instead of being pre-programmed with a fixed path to paint only a specific piece, known in advance, an edge device could adapt and optimize the paint process based on the specific piece it sees.
 
-Each of the scenarios above requires some specialized hardware, but they are more about the application software which controls the hardware than about custom chips and peripherals.
+Each of the scenarios above requires some specialized hardware, but they are really about the application software which controls the hardware than about custom chips and peripherals.
 Having a common and standard foundation for that software, based on Red Hat Device Edge, reduces the development and maintenance effort.
 
 There are many more potential scenarios for edge devices than we can describe here.
-Most times, edge devices co-exist with more traditional computers and applications on the same site.
-For more information on the applicability of RHEL for Edge and Red Hat Device Edge to different edge scenarios, we invite you to explore https://www.redhat.com/en/products/edge/hatville[HatVille, the miniature city where edge computing comes to life].
+For more information on the applicability of RHEL for Edge and Red Hat Device Edge to different edge scenarios, we invite you to explore https://www.redhat.com/en/products/edge/hatville[HatVille, the miniature city where edge computing comes to life^].
 
 Another set of factors to consider in assessing your edge device use case is the infrastructure available on an edge site.
 Edge devices may exist by themselves, in a site where the device owner has little control of anything, like a pick-up locker location or an ATM at a drugstore.
+
 On the other hand, edge devices might exist in a location which has a server room, uninterruptible power supplies, and reasonable environmental controls, such as in a large department store.
+Many times, edge devices co-exist with more traditional computers and applications on the same edge site.
 
 image::s1-devices-fig-3.svg[title="Generic edge site with many classes of edge devices"]
 
-The following table compares edge devices with more traditional computers to help you distinguish between scenarios of RHEL for edge versus a scenario for traditional RHEL.
-Parts of it may become quickly outdated as hardware evolves and costs come down, so instead of focusing on fixed numbers, focus on relative differences and check the https://www.redhat.com/en/resources/red-hat-enterprise-linux-subscription-guide[RHEL Subscription Guide] or ask your Red Hat Account Manager for pricing and eligibility for the many edge and non-edge product SKUs.
+The following table compares edge devices with more traditional computers to help you distinguish between scenarios of RHEL for edge versus scenarios for traditional RHEL.
+Parts of it may become quickly outdated as hardware evolves and costs come down, so instead of focusing on fixed numbers, focus on relative differences and check the https://www.redhat.com/en/resources/red-hat-enterprise-linux-subscription-guide[RHEL Subscription Guide^] or ask a Red Hat Account Manager for pricing and eligibility for the many edge and non-edge product SKUs.
 
 [options="header",cols="1,1, 1"]  
 |===
@@ -131,7 +138,7 @@ Parts of it may become quickly outdated as hardware evolves and costs come down,
 
 | Exposed to end users, customers, and outsiders, sometimes in public areas
 | Exposed to office employees, protected by corporate access controls
-| Locked in server rooms
+| Locked in server rooms, accessible only to IT personnel
 
 | Rely on minimal to no infrastructure on edge sites, such as DHCP servers and IP routers
 | Depend on extensive infra-structure from corporate IT, such as identity managers, backup appliances, file servers, and remote control
@@ -145,15 +152,15 @@ Parts of it may become quickly outdated as hardware evolves and costs come down,
 
 == Image mode versus package mode
 
-The main characteristic of RHEL for edge, from the point of view of a systems administrator, is the focus on image mode systems, while traditional RHEL server deployments are usually package mode systems.
+The main characteristic of RHEL for edge, from the point of view of a systems administrator, is the focus on image mode systems, while traditional RHEL server deployments are package mode systems.
 
 image::s1-devices-fig-4.svg[title="RHEL systems with package mode versus image mode"]
 
 Image mode systems are provisioned and updated from a single system image, in a transactional operation.
-Package mode systems, on the other hand, require installing or updating packages one by one, each as an individual transation, by using a package manager.
+Package mode systems, on the other hand, require installing or updating packages one by one, each as an individual transaction, by using a package manager.
 
 If a system update fails on image mode, you can just continue using the previous system image.
-But if a system update fails on package mode, your system can be left in an intermediate state, where some packages were updated and others weren't.
+But if a system update fails on package mode, your system can be left in an intermediate state, where some packages were updated and others were not.
 
 There are two technologies which can create, deploy, and update system images for RHEL systems:
 
@@ -167,31 +174,31 @@ It is available with RHEL 9 (since 9.5) and 10.
 
 This course focuses on the second option.
 Though the first option is, conceptually, also an "image mode" for RHEL, the term usually refers to the second.
-If you need enablement on the first option, please refer to https://redhatquickcourses.github.io/rhde-build/[Building Red Hat Device Edge Images].
+If you need enablement on the first option, please refer to the https://redhatquickcourses.github.io/rhde-build/[Building Red Hat Device Edge Images^] quick course.
 
-RPM-OSTree and image mode for RHEL represent https://www.redhat.com/en/blog/what-image-mode-means-users-rhel-edge[different approaches to implement a similar philosophy], and they provide similar benefits.
+RPM-OSTree and image mode for RHEL represent https://www.redhat.com/en/blog/what-image-mode-means-users-rhel-edge[different approaches to implement a similar philosophy^], and they provide similar benefits.
 They also share a lot of their underlying technologies.
 
-Other popular features of RHEL for edge, such as greenboot, FIDO Device Onboard (FDO) support, and kiosk mode, work with image mode as well, and some of them even with package mode.
+Other popular features of RHEL for edge, such as Greenboot, FIDO Device Onboard (FDO) support, and Gnome kiosk mode, work with image mode as well, and some of them even with package mode.
 
 === What are bootc container images, or "bootable containers"
 
-A system image for image mode systems is an OCI container image which includes a number of componentes not usually found within typical container images, among them:
+A system image for image mode systems is an OCI container image which includes a number of components not usually found within typical container images, among them:
 
 * A Linux kernel and loadable modules
 * An initial ram disk (initrd) and a boot loader (grub)
-* The System Daemon (Systemd) and a number of privileged Systemd unit to manage hardware, networking, and system services
+* The System Daemon (Systemd) and a number of privileged Systemd units to manage hardware, networking, and system services
 * The D-Bus system messaging middleware
 * The bootc utility
 
 We call those system images _bootc container images_ to differentiate them from regular OCI container images, which we call _application container images_.
 
-IMPORTANT: It was common to refer to bootc container images as https://developers.redhat.com/articles/2024/09/24/bootc-getting-started-bootable-containers[bootable containers], but that term is misleading: no current firmware, hypervisor, or IaaS cloud provider is able to boot directly from an OCI container image.
+IMPORTANT: It was common to refer to bootc container images as https://developers.redhat.com/articles/2024/09/24/bootc-getting-started-bootable-containers[bootable containers^], but that term is misleading: no current firmware, hypervisor, or IaaS cloud provider is able to boot directly from an OCI container image.
 So bootc container images are NOT actually "bootable".
 
 === Day-1 and day-2 with image mode for RHEL
 
-Package mode systems require extensive day-2 customizations, after initial provisioning, to perform tasks such as installing additional packages and editting system configuration files.
+Package mode systems require extensive day-2 customizations, after initial provisioning, to perform tasks such as installing additional packages and edit   ing system configuration files.
 
 Image mode systems, on the other hand, assume that most day-2 customizations are already embedded in their the system image. This is consistent with the _shift-left_ approaches popular among DevOps and cloud-native practitioners.
 
@@ -211,21 +218,21 @@ The following table compares common actions for deploying and managing tradition
 | Download and deploy a complete system image, while retaining the previous system image unchanged.
 You can keeping the previous system image after switching to the new system image, and rollback to it, if desired.
 | Update individual RPM packages using DNF.
-You might update some packages and not others, either on purpose, by mistake, or because some indivdual package could not be downloaded or applied.
+You might update some packages and not others, either on purpose, by mistake, or because some individual package could not be downloaded or applied.
 
 | Easy to check the state of the entire system: it corresponds to one and only one of the available system images.
 | Hard to track the state of a package-based system, as a whole: it could contain any permutation of all packages and versions available.
 
 | Install all operating system components (and possibly applications too) at once, as part of the system image.
 Can also install applications from OCI container images, after or during initial provisioning.
-| Install individual operating system components and applications one by one, from individual RPM packages and optionaly from OCI container images.
+| Install individual operating system components and applications one by one, from individual RPM packages and optionally from OCI container images.
 
 | Embed operating system and application configuration files in the system image, and perform minimal local customization or edits, per-device or per-site, as a day-2 activity.
 | Edit operating system and application configuration files one by one, as a day-2 activity, after initial system provisioning.
 
 |===
 
-When you create a RHEL cloud instance, for example using the standard RHEL AMI or Qcow2 cloud images, they provision package-based RHEL systems, which you manage on day-2 the same way as if you installed from the RHEL installation media.
+When you create a RHEL cloud instance, for example using the standard RHEL AMI or Qcow2 cloud images, they provision package-based RHEL systems, which you manage on day-2 the same way as if you installed it from the RHEL installation media.
 
 Alternatively, image mode for RHEL enables creation of cloud images which provision systems from a bootc container image, no matter if your cloud instances are edge cloud instances or not.
 
@@ -235,13 +242,13 @@ You may find that many, if not most, of the day-2 customizations you are used to
 For example, the public key of your corporate certificate authority, for secure TLS communications, is a customization that applies to all your edge devices equally, in all sites.
 But the IP address of a web proxy is probably different for each site and multiple devices on the same site require the same web proxy configuration.
 
-It is your choice to build site-specific system images, which embed customizations for each individual site, or build a single edge image for all edge sites, and apply the similar configurations to multiple devices in the same location.
-In any case, you can use Ansible automation to apply or change site and device-specific customizations, similar to what you would do with package mode systems.
+It is your choice to build site-specific system images, which embed customizations for each individual site, or build a single edge image for all edge sites, and later apply site-specific configurations to all in the same location.
+In any case, you can use Ansible automation to apply or change site and device-specific customizations, in the same way you would do with package mode systems.
 You just expect to have fewer customizations to apply at day-2, using automation, because more of them are already embedded in the system image.
 
 == What's next
 
-Before learning about crafting containerfiles for bootc container images, you will assess your understanding of how edge sites differ from traditional corporate IT data centers and cloud IT.
+Before learning about crafting containerfiles for bootc container images, you will assess your understanding of how edge sites differ from traditional corporate data centers and cloud IT.
 
 The first activity verifies that you have all necessary prerequisites to build and deploy bootc container images in a disconnected environment.
-It should provide enough information for you to replicate the activities in your own environment, if you prefer, or try a simpler deployment, not air-gaped.
+It should provide enough information for you to replicate the activities in your own environment, if you prefer, or try a simpler deployment, not disconnected.

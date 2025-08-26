@@ -5,7 +5,7 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.
+Prepare for air-gaped building of bootc container images and disconnected deployment of edge devices.
 
 WARNING: Pending review
 
@@ -23,6 +23,7 @@ If not, please adapt the instructions to your test environment.
 
 You will verify that you have access to mirrors of Red Hat Enterprise Linux (RHEL) package repositories and bootc container images from RHEL. 
 You will also configure your _development machine_ with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.
+
 As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.
 
 1. Verify that your _development machine_ has access to the RHEL package repositories from a DNF mirror.
@@ -67,7 +68,7 @@ Description  : Bootable container system
 
 2. Install the container tools on your _development machine_.
 +
-You already have Podman installed, but during this course you will use additional conveniente tools, such as Skopeo.
+You already have Podman installed, but during this course you will use additional convenience tools, such as Skopeo.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -86,7 +87,7 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-.. List all images available on the privage registry.
+.. List all images available on the private registry.
 The list should include some application container images and some bootc container images, for different release of RHEL.
 +
 [source,subs="verbatim,quotes"]
@@ -170,7 +171,7 @@ NOTE: Because the output of the last command is empty, you may want to retrieve 
 
 4. Explore the contents of a bootc container image and an application container image and notice important packages that are present or not.
 
-.. Bootc container images include the bootable container system (the `bootc` package and command with the same name).
+.. Bootc container images include the _bootable container system_ utility, that is, the `bootc` package and the command with the same name.
 +
 [source,subs="verbatim,quotes"]
 --
