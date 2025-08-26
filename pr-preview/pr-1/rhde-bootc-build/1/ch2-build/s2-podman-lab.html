@@ -74,7 +74,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Build Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Build Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s1-podman.html">Build Bootc Containers With Podman</a>
@@ -164,7 +164,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Build Bootc Containers for Edge Devices</a></li>
+    <li><a href="index.html">Build Bootc Container Images for Edge Devices</a></li>
     <li><a href="s2-podman-lab.html">Lab: Build and Test Bootc Containers</a></li>
   </ul>
 </nav>
@@ -178,13 +178,13 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
+<p><em>Estimated reading time: <strong>7 minutes</strong>.</em></p>
 </div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Create containerfiles and build bootc container images suitable to RHEL for edge systems</p>
+<p>Create containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.</p>
 </dd>
 </dl>
 </div>
@@ -230,7 +230,7 @@ You will also compare the bootc container image for your application with a regu
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Prepare to start this activity by cloning the sample code repository and loggin in the private registry.</p>
+<p>Prepare to start this activity by cloning the sample code repository and logging in the private registry.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -257,7 +257,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Inspect the Containerfile for a single-page web applicaiton, which uses the Apache Web Server to host your HTML and JavaScript code.</p>
+<p>Inspect the containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -269,8 +269,8 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Review the Cointainerfile.
-It installs the <code>httpd</code> package and enables the <code>httpd</code> service, them adds the files that mock a singe-page web application.</p>
+<p>Review the containerfile.
+It installs the <code>httpd</code> package and enables the <code>httpd</code> service, them adds HTML files that mock a singe-page web application.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/rhel10/rhel-bootc:10.0
@@ -329,12 +329,12 @@ The last argument of the <code>podman build</code> command above is a dot, for t
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
-This would be the HTML and Javascrit code of your single-page web application.</code></pre>
+This would be the HTML and JavaScript code of your single-page web application.</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Verify that your bootc contrainer image inherits the <code>containers.bootc</code> label key from the bootc base image.</p>
+<p>Verify that your bootc container image inherits the <code>containers.bootc</code> label key from the bootc base image.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ index .Labels "containers.bootc" }}' containers-storage:localhost/httpd-bootc</strong>
@@ -368,7 +368,7 @@ exit</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>There are many processes that are NOT common in application containers, such as NetworkManager, DBus, and the SSH daemon.</p>
+<p>There are many processes that are NOT common in application containers, such as the NetworkManager, DBus, and SSH daemons.</p>
 </div>
 </li>
 <li>
@@ -422,13 +422,14 @@ ENTRYPOINT ["/lib/systemd/systemd"]</code></pre>
 It should start the Apache Web Server as its <code>ENTRYPOINT</code>, instead of the System daemon.</p>
 </li>
 <li>
-<p>It does NOT send logs to the standard output, so those logs are NOT visible with <code>podman logs</code> and would also NOT be visible if run from a Kubernetes cluster.</p>
+<p>It does NOT send logs to the standard output, so those logs are NOT visible with <code>podman logs</code> and would also NOT be visible from <code>kubectl logs</code> either, if run from a Kubernetes cluster.</p>
 </li>
 <li>
 <p>It runs as <code>root</code>, because it does not set a <code>USER</code>.</p>
 </li>
 <li>
-<p>It listens to a privileged TCP port (80), as per the default Apache Web Server configuration. It should listen to an unprivileged port, to not requile elevated privileges when run in a Kubernetes cluster.</p>
+<p>It listens to a privileged TCP port (80), as per the default Apache Web Server configuration.
+It should listen to an unprivileged port, to not require elevated privileges when run in a Kubernetes cluster.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -455,7 +456,7 @@ Successfully tagged localhost/httpd-ubi:latest
 $ <strong>podman run -d -p 8080:80 --name httpd httpd-ubi</strong>
 ...
 $ <strong>curl 127.0.0.1:8080</strong>
-This would be the HTML and Javascrit code of your single-page web application.</code></pre>
+This would be the HTML and JavaScript code of your single-page web application.</code></pre>
 </div>
 </div>
 </li>
@@ -482,7 +483,7 @@ exit</code></pre>
 </div>
 <div class="paragraph">
 <p>Also notice, from the <code>pstree</code> output, that only the System daemon and Apache Web server are running.
-It also runs fewer Systemd services, because it does not inherit Systemd configurations from the bootc base container image.</p>
+It only runs a much smaller set of Systemd services, because it does not inherit Systemd configurations from the bootc base container image.</p>
 </div>
 </li>
 <li>
@@ -564,7 +565,7 @@ Successfully tagged localhost/webapp-bootc:latest</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
-This would be the HTML and Javascrit code of your IMPROVED single-page web application.</code></pre>
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.</code></pre>
 </div>
 </div>
 </li>

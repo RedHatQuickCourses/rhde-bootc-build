@@ -74,7 +74,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Build Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Build Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s1-podman.html">Build Bootc Containers With Podman</a>
@@ -164,7 +164,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Build Bootc Containers for Edge Devices</a></li>
+    <li><a href="index.html">Build Bootc Container Images for Edge Devices</a></li>
     <li><a href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a></li>
   </ul>
 </nav>
@@ -224,8 +224,8 @@ If not, please adapt the instructions to your test environment.</p>
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will build a containerfile which configures different aspects of a RHEL system.
-You will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.</p>
+<p>You will review a containerfile which configures different aspects of a RHEL system, and build a bootc container image from it.
+Then you will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -258,7 +258,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that booc container image.</p>
+<p>Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -288,7 +288,7 @@ ADD html /var/www/html</code></pre>
 </div>
 </li>
 <li>
-<p>Review its sysctl configuration files.</p>
+<p>Review its kernel configuration files.</p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>sysctl.d/90-ipv4-forward.conf</code></dt>
@@ -311,7 +311,7 @@ ADD html /var/www/html</code></pre>
 </div>
 </li>
 <li>
-<p>Review its bootc kernel argument configuration files.</p>
+<p>Review its kernel command-line configuration files.</p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>kargs.d/00-mitigations.toml</code></dt>
@@ -434,7 +434,7 @@ inactive</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container this way could potentially damage the configurations of its host, in the case your <em>development machine</em>.
+While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container image this way could have unexpected and potentially dangerous effects on its host, in the case your <em>development machine</em>.
 </td>
 </tr>
 </table>
