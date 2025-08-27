@@ -5,7 +5,7 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Troubleshoot and fix a bootc container image which works with Podman but fails in a local VM.
+Troubleshoot and fix a bootc container image which works in a container engine but fails in a local VM.
 
 WARNING: Pending review
 
@@ -23,7 +23,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 == Instructions
 
 You will create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
-This time, you will find that the system does NOT works as expected, and you find the root cause of the failure, fix the containerfile, create another VM with the updated bootc container image, and verify that its now working as expected.
+This time, you will find that the system does NOT works as expected.
+You will then find the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
@@ -68,8 +69,8 @@ $ *virsh list --all*
 +
 NOTE: It is fine if you have some local VMs on your system, as long as there isn't a VM named `bootc-test`.
 
-.. Verify that you have, on your home directory, a temporary directory with scripts for creating test VMs and another temporary directory with an OCI container image directory.
-If you do not, please review the xref:ch3-validate:s2-install-bootc[previous lab] which explains those scripts.
+.. Verify that you have, on your home directory, a temporary directory with scripts and SSH keys for creating test VMs, and another temporary directory with an OCI container image directory.
+If you do not, please review the xref:ch3-validate:s2-install-bootc[previous lab] which creates those directories.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -100,7 +101,7 @@ $ *sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks*
 
 .. Create a test VM, using the kickstart script you just changed.
 +
-Make sure it reports using the `webapp-bootc` container iamge as its installation source.
+Make sure it reports using the `webapp-bootc` container image as its installation source.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -120,7 +121,7 @@ Escape character is ^] (Ctrl + ])
 
 3. Verify that your test VM is NOT working as expect, and troubleshoot it.
 
-.. Try to access your single-page web applicaiton.
+.. Try to access your single-page web application.
 Instead of the expected mock message, you should get the standard welcome page from RHEL.
 +
 [source,subs="verbatim,quotes"]
@@ -135,7 +136,7 @@ $ *curl 127.0.0.1:8080*
 --
 +
 Remember that this container image did work fine when run from Podman, in a xref:ch2-build:s2-podman-lab.adoc[previous lab].
-Let's find what is wrong.
+Now find what is wrong.
 
 .. Start a SSH session to your test VM.
 +
@@ -165,32 +166,32 @@ $ *sudo tail /var/log/httpd/error_log*
 +
 [source,subs="verbatim,quotes"]
 --
-[core@bootc-test ~]$ ls -la /webapp
+$ *ls -la /webapp*
 total 12
 drwxr-xr-x.  3 root root   43 Jan  1  1970 .
 drwxr-xr-x. 16 root root 4096 Jan  1  1970 ..
 drwxr-xr-x.  2 root root   49 Jan  1  1970 html
-[core@bootc-test ~]$ ls -l /webapp/html
+$ *ls -l /webapp/html*
 total 4
 -rw-r--r--. 1 root root 88 Jan  1  1970 index.html
 --
 
-.. What else can deny permission to access files and directories?
+.. What else could deny permission to access files and directories?
 Maybe it is SELinux.
 +
 [source,subs="verbatim,quotes"]
 --
-[core@bootc-test ~]$ *sudo journalctl | grep avc:*
+$ *sudo journalctl | grep avc:*
 ...
 Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc:  denied  { getattr } for  pid=1058 comm="httpd" path="/webapp/html/index.html" dev="overlay" ino=11826 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:default_t:s0 tclass=file permissive=0
 ...
 --
 
-.. And indeed, the single-page web application files have a `default_t` context label, instead of the `httpd_sys_content_t` label required by the SELinux policy in RHEL.
+.. Indeed, the single-page web application files have a `default_t` context label, instead of the `httpd_sys_content_t` label required by the targeted SELinux policy in RHEL.
 +
 [source,subs="verbatim,quotes"]
 --
-[core@bootc-test ~]$ *ls -laZ /webapp/html/*
+$ *ls -laZ /webapp/html/*
 total 12
 drwxr-xr-x. 2 root root system_u:object_r:default_t:s0 49 Jan  1  1970 .
 drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
@@ -201,7 +202,7 @@ drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
 +
 [source,subs="verbatim,quotes"]
 --
-[core@bootc-test ~]$ *exit*
+$ *exit*
 logout
 Connection to 127.0.0.1 closed.
 $ *virsh destroy bootc-test*
@@ -213,9 +214,10 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 
 4. Build a new bootc container image with the required fixes
 
-.. The sample code repository already provides a containerfile with the required fixes.
+.. The sample code repository already provides a containerfile with all fixes.
 +
-For your reference, the fix is just adding a `semanage` command:
+For your reference, the fix is just adding a `semanage` command to update the policy and specify a context label for the `/webapp` directory tree.
+The bootc utility labels all files, according to the policy inside the bootc container image, at installation time.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -233,7 +235,7 @@ $ *podman build -t webapp-fixed .*
 Successfully tagged localhost/webapp-fixed:latest
 --
 
-.. If you wish, test the new bootc container image with podman, but the instructions here proceed straight to installing it in a new test VM.
+.. If you wish, test the new bootc container image with Podman, but the instructions here proceed straight to installing it in a new test VM.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -262,7 +264,7 @@ Escape character is ^] (Ctrl + ])
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of your IMPROVED single-page web application.
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.
 --
 
 6. *Optional:* you do not need to create a brand new test VM every time you build a new bootc container image.
@@ -294,15 +296,15 @@ Writing manifest to image destination
 [source,subs="verbatim,quotes"]
 --
 $ *ssh -i edge-key -p 8022 core@127.0.0.1*
-[core@bootc-test ~]$ *sudo bootc status*
+$ *sudo bootc status*
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
        Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
-[core@bootc-test ~]$ *sudo bootc upgrade*
+$ *sudo bootc upgrade*
 ...
 Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-fixed
 ...
-[core@bootc-test ~]$ *sudo bootc status*
+$ *sudo bootc status*
   Staged image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
        Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
@@ -310,7 +312,7 @@ Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-f
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
        Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
-[core@bootc-test ~]$ *sudo systemctl reboot*
+$ *sudo systemctl reboot*
 ...
 Connection to 127.0.0.1 closed.
 --
@@ -328,7 +330,7 @@ New version of the single-page web application.
 [source,subs="verbatim,quotes"]
 --
 $ *ssh -i edge-key -p 8022 core@127.0.0.1*
-[core@bootc-test ~] *sudo bootc status*
+$ *sudo bootc status*
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
        Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
@@ -341,9 +343,9 @@ logout
 Connection to 127.0.0.1 closed.
 --
 
-.. Instead of the `bootc upgrade` command, which stages a new version of the same container image, you could use the `bootc switch` to stage a different container image, and keep reusing the same test VM to test different system images, instead of newer builds of the same system image.
+.. Instead of the `bootc upgrade` command, which stages a new version of the same container image, you could use the `bootc switch` to stage a different container image, and keep reusing the same test VM to test different system images, in addition to newer builds of the same system image.
 +
-WARNING: Beware that these operations to NOT reset the state of the `/etc` and `/var` directories, which might intefere with your testing of different bootc container images.
+WARNING: Beware that these operations do NOT reset the state of the `/etc` and `/var` directories, which might interfere with your testing of different bootc container images.
 
 7. Delete your test VM to conserve resources.
 +
@@ -356,6 +358,6 @@ Domain 'bootc-test' has been undefined
 Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.
 --
 
-== What's Next
+== What's next
 
 The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and virtual machines on the data center.

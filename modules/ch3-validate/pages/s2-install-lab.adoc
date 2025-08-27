@@ -5,7 +5,7 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Deploy a local bootc container image in a local VM.
+Deploy a bootc container image, from the local containers storage, in a local VM.
 
 WARNING: Pending review
 
@@ -22,7 +22,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
-You will use the RHEL installation media, with a custom kickstart script, to install RHEL in a local VM from a bootc container image.
+You will use the standard RHEL installation media, with a custom kickstart script, to install RHEL in a local VM from a bootc container image.
 Thanks to the direct kernel loading feature of libvirt, and also to virtio devices backed by user directories, you do NOT require PXE boot, HTTP servers, nor custom installation media.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
@@ -94,12 +94,12 @@ $ *cd temp-test-vm*
 
 .. Review the example kickstart file named `inst.ks`.
 +
-It is a sandard RHEL Anaconda configuration for unatenneded installation, which uses a number of features:
+It is a standard RHEL Anaconda configuration for unattended installation, which uses a number of features:
 +
 ... A virtiofs mount, in a `%pre` script, to get the contents of your bootc container image.
-... The `ostreecontainer` command, to set a bootc container iamge as the installation source.
+... The `ostreecontainer` command, to set a bootc container image as the installation source.
 ... A `%post` script which creates an initial user, with a known password and SSH key.
-... Also in the `%post` script, it sets an initial hostname, which helps you identify your test VM and recognize it didn't went into any day-2 configuration or onboarding process yet.
+... Also in the `%post` script, it sets an initial hostname, which helps you identify your test VM and recognize it didn't went into any day-2 configuration or on-boarding process yet.
 +
 // Could use callouts, and embed them into the example file as comments.
 +
@@ -120,7 +120,8 @@ $ *sed -i "s|REPLACE_WTH_SSH_PUB_KEY|$SSH_PUB_KEY|" inst.ks*
 
 .. Review the `virt-install.sh` script which creates a test VM.
 +
-It is designed to be console-friendly, so you do not need to switch to a graphical console or remote desktop session just to view the test VM boot screens, and to NOT require access to a remote container registry, by using the following features of libvirt:
+It is designed to be run in text mode, so you do not need to switch to a graphical console or remote desktop session just to view the test VM boot screens.
+It is also designed to require no access to a remote container registry, by using the following features of libvirt:
 +
 ... User mode networking with the Passt provider and port-forwarding to enable network connections from your _development machine_ to services running inside the test VM.
 ... Direct kernel loading (the `--location` option) to grab the Linux kernel and initial RAM disk from a remote HTTP server.
@@ -137,7 +138,7 @@ include::1@samples:ks:example$virt-install.sh[]
 
 .. Run the installation script.
 +
-You could use it from a machine you do NOT have root access, as long as someone already installed Libvirt and its tooling.
+You could use it from a machine you do not have root access, as long as someone already installed Libvirt and its tooling.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -146,7 +147,7 @@ $ *bash virt-install.sh*
 
 .. Observe your test VM boot screen and RHEL Anaconda messages, as it boots, installs RHEL, and reboots into the newly installed system.
 +
-The following messages indicate when Anaconda is done preparing the system and starts reading your bootc container image:
+The message which states `Deployment staring` indicates when Anaconda is done preparing the system and starts reading your bootc container image:
 +
 [source,subs="verbatim,quotes"]
 --
@@ -168,7 +169,7 @@ Deployment starting: /mnt/host-var-srv/oci:httpd-bootc
 ...
 --
 
-.. If all goes well, you will see a message which states that your VM (_domain_ or _guest_ in libvirt's jargon) was created, but you may not see its RHEL login screen.
+.. If all goes well, you will see a message which states that your VM (_domain_ or _guest_ in libvirt's jargon) was created, but you may not see its RHEL login screen on the terminal.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -203,7 +204,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 --
 
 
-4. Verify that your test VM was actually provisioned from the contents of your bootc container iamage.
+4. Verify that your test VM was actually provisioned from the contents of your bootc container image.
 
 .. Verify that your test VM contains an active bootc deployment.
 +
@@ -232,7 +233,7 @@ active
 [source,subs="verbatim,quotes"]
 --
 $ *cat /var/www/html/index.html*
-This would be the HTML and Javascrit code of your single-page web application.
+This would be the HTML and JavaScript code of your single-page web application.
 --
 
 .. Inspect the processes running inside your test VM.
@@ -262,7 +263,7 @@ systemd─┬─NetworkManager───3*[{NetworkManager}]
         └─systemd-userdbd───3*[systemd-userwor]
 --
 +
-Notice the much higher number of running processes, compared to the previous lab, where you run the same bootc container image from Podman. Also notice processes such as terminal login managers, a Cron daemon, and additional System daemon services you did not see running from Podman.
+Notice the much higher number of running processes, compared to the previous lab, where you run the same bootc container image from Podman. Also notice processes such as terminal login managers, a Cron daemon, and additional Systemd services you did not see running from Podman.
 
 .. Exit your SSH session and return to your _development machine_.
 +
@@ -275,16 +276,16 @@ Connection to 127.0.0.1 closed.
 
 5. Verify that your _development machine_ can access the singe-page web app running in the test VM.
 
-.. Verfify that you get, though the libvirt port-forward tunnel, the contents of your singe-page web app.
+.. Verify that you get, through the libvirt port-forward tunnel, the contents of your singe-page web app.
 +
 [source,subs="verbatim,quotes"]
 --
 $ *curl 127.0.0.1:8080*
-This would be the HTML and Javascrit code of your single-page web application.
+This would be the HTML and JavaScript code of your single-page web application.
 --
 
 .. If all went well, stop and destroy your test VM to conserve resources.
-If you want to keep it, you must edit your scripts to change the name of the VM you will create on the next steps.
+If you want to keep it, you must edit your scripts to change the name of the VM you will create on the next activity.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -299,4 +300,4 @@ NOTE: You could reuse the same test VM, and use the `bootc` command to switch it
 
 == What's Next
 
-The next activity walks through trobleshooting a bootc container image which fails to run correctly in a VM and fix the issue by updating its Containerfile and building a new bootc image.
+The next activity walks through troubleshooting a bootc container image which fails to run correctly in a VM and fix the issue by updating its containerfile and building a new bootc image.
