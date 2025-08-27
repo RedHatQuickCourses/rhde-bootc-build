@@ -93,4 +93,4 @@ For documentation about Red Hat Device Edge, check its https://docs.redhat.com/e
 Training Content Architect +
 Red Hat - Product Portfolio Marketing & Learning
 
-//Special thanks to [LIST CONTRIBUTORS AND SUPPORTERS]
+Special thanks to Colin Walters and Gregory Giguashvili, who provided sample commands and scripts which either inspired or were copied verbatim to the hands-on activities in this course.
