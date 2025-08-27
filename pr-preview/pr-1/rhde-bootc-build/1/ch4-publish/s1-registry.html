@@ -115,13 +115,13 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Publish Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Publish Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container Image in a Private Container Registry</a>
+    <a class="nav-link" href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
   </li>
 </ul>
   </li>
@@ -164,7 +164,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Publish Bootc Containers for Edge Devices</a></li>
+    <li><a href="index.html">Publish Bootc Container Images for Edge Devices</a></li>
     <li><a href="s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a></li>
   </ul>
 </nav>
@@ -195,7 +195,7 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Work in progress
+Pending review
 </td>
 </tr>
 </table>
@@ -204,7 +204,7 @@ Work in progress
 <p>As you have your bootc container images not just built but tested in a virtual system, it is time to upload (push) it to an OCI container registry, where it can be downloaded (pulled) by edge devices during installation and upgrades.</p>
 </div>
 <div class="paragraph">
-<p>Or maybe these images are submitted to the next step of an automated CI/CD process, where they are subject to more extensive system testing, performance testing, and vulnerability tests.
+<p>Or maybe these images are yet to be submitted to the next step of an automated CI/CD process, where they are subject to more extensive system testing, performance testing, and vulnerability tests.
 Either way, your bootc container images were not created just to sit on your development machine.</p>
 </div>
 </div>
@@ -217,8 +217,8 @@ Either way, your bootc container images were not created just to sit on your dev
 You can also use the bootc utility to convert a system from package mode to image mode, and some developers find this a nice approach for system testing and some kinds of integration testing.</p>
 </div>
 <div class="paragraph">
-<p>Developers like to use cloud instances, which can be quickly provisioned, as RHEL package mode systems, from cloud images that are readily available from their cloud providers, and convert them to image mode systems.
-This is another way of performing system testing new bootc container images.
+<p>Start from a cloud instance, which is quickly provisioned as a RHEL package mode system, using cloud images that are readily available from their cloud providers.
+Then convert it to an image mode system.
 This way, they skip the potentially time-consuming steps of creating a custom cloud image and uploading it to the cloud provider.</p>
 </div>
 <div class="paragraph">
@@ -229,32 +229,44 @@ The system ends up with a default system configuration and with default or empty
 <p>So it is NOT actually a "conversion" from package mode to image mode, but a new installation using image mode, overwriting the existing package mode installation with a brand new image mode installation.</p>
 </div>
 <div class="paragraph">
-<p>An interesting thing about the booc utility, when used for installing image mode systems, is that it is supposed to be run from the actual bootc container image being installed, as a privileged container, with access to the root file system, devices directory, and other capabilities which application containers are not usualy granted.</p>
+<p>A caveat about the booc utility, when used for installing image mode systems, is that it is supposed to be run from the actual bootc container image being installed, as a privileged container.
+It also requires with access to the host&#8217;s root file system, devices directory, and other capabilities which application containers are not usually granted.</p>
 </div>
 <div class="paragraph">
-<p>So you do NOT need to install booc on a package mode system to be reinstalled as an image mode system.
-You just run the bootc container image with a specialy crafted command that invokes bootc with all required options.</p>
+<p>So you do not need to install bootc on a package mode system about to be reinstalled as an image mode system.
+You just run the bootc container image with a specially crafted Podman command which invokes bootc with all required options.</p>
 </div>
 <div class="paragraph">
-<p>The only real utility of the bootc utility, in a package mode system, is reporting that the system was NOT installed as an image mode system.</p>
+<p>The only common scenario for running the bootc utility in a package mode system is reporting that the system was NOT installed as an image mode system.</p>
 </div>
 <div class="sect2">
 <h3 id="_day_1_configuration_using_the_bootc_utility"><a class="anchor" href="#_day_1_configuration_using_the_bootc_utility"></a>Day-1 configuration using the bootc utility</h3>
 <div class="paragraph">
-<p>The bootc utility was  not designed to be the main installation tool of an image mode system, but to be invoked by installation tools such as Anaconda.
-So bootc does not provide for day-1 customizations, such as network configuration and user passwords.</p>
+<p>The bootc utility was NOT designed to be a stand-alone installation tool for image mode system, but to be invoked by other installation tools such as Anaconda.
+The bootc utility is not able to perform typical day-1 customizations, such as network configuration and user passwords.</p>
 </div>
 <div class="paragraph">
 <p>This means any package mode system that is reinstalled as an image mode system by bootc may become completely locked down, with no network configurations and no user passwords nor SSH keys to access it.</p>
 </div>
-<div class="paragraph">
-<p>Nothing prevents you from building a bootc container image with predefined network settings, such as a static IP address and hostname, or with a user with a known password.
-You may want to do that for a quick test, but it is NOT how you are recommended to do for production systems.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Nothing prevents you from building a bootc container image with predefined network settings, such as a static IP address and hostname, or with a user with a known password.
+You may want to do that for a quick test, but it is NOT how you are recommended to do for production systems.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>The only day-1 configuration which can be provided by the bootc utility itself is setting up SSH keys for the root user.
-If you build your bootc container image on the assumption that it takes dynamic network settings from a DHCP server or from cloud-init, the reinstalled cloud instance becomes accessible though the root SSH key.
-Else, you have to provide network settings as kernel arguments, during installation time.</p>
+If you build your bootc container image on the assumption that it takes dynamic network settings from a DHCP server or from cloud-init, then reinstall a cloud instance from it, the cloud instance can be accessed through the root SSH key.</p>
+</div>
+<div class="paragraph">
+<p>Else, you must to provide network settings as kernel arguments, using command-line options of the bootc utility, as part of the Podman command which invokes it.</p>
 </div>
 </div>
 <div class="sect2">
@@ -268,38 +280,31 @@ Else, you have to provide network settings as kernel arguments, during installat
 <p>To check if the current bootc container image installed in a system was updated, and if true, upgrade to the newer image.</p>
 </li>
 <li>
-<p>To switch an image mode system to a different bootc container image, which could serve to "repurpose" an image mode system to a new role.</p>
+<p>To switch an image mode system to a different bootc container image, which could serve to "re-purpose" an image mode system to a new role.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>In both cases, the bootc utility will preserve configuration and data on the image mode system.
-The only difference between upgrade and switch operations is that upgrades assume the system keeps using the same container image reference, that is, the name and tag, and from the same OCI container registry.</p>
-</div>
-<div class="paragraph">
-<p>Switches, on the other hand, happen when you change either part of the bootc container image reference.
-In both cases, you run the bootc utility directly from its image mode system, and after it downloads the new or updated container image, it runs the bootc utility from that image to install the kernel, bootloader, and perform other required tasks.</p>
 </div>
 <div class="paragraph">
 <p>A future course will demonstrate how to apply upgrades and switches to image mode system, and the implications of those operations on system settings and application data, along with common strategies for dealing with it.</p>
 </div>
 <div class="paragraph">
-<p>For now, it is just important that you consider that any bootc conainer images you build now may be applied to systems which already were image mode systems.
+<p>For now, it is just important that you consider that any bootc container images you build now might be applied to systems which already were image mode systems.
 You want to somehow distinguish between different versions of the same bootc container image and especially between new versions which were already subject to extensive system and integration testing from others which were not.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_floating_and_non_floating_tags"><a class="anchor" href="#_floating_and_non_floating_tags"></a>Floating and Non-Floating Tags.</h2>
+<h2 id="_floating_and_fixed_tags"><a class="anchor" href="#_floating_and_fixed_tags"></a>Floating and fixed tags.</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>What you know as the <em>name</em> of a container image is actually the name of a <em>repository</em> of container images.
-The real ID of a container image is a SHA-256 checksum of its manifest, which lists all layers on the container image and provides  metadata such as labels.</p>
+<p>What you intuitively know as the <em>name</em> of a container image is actually the name of a <em>repository</em> of container images.
+The real ID of a container image is a SHA-256 digest of its image manifest, which lists all layers on the container image and also provides metadata such as labels.</p>
 </div>
 <div class="paragraph">
 <p>In very old container engines, just copying an image between container registries, or from a registry to the local storage of a container engine, would change its ID.
-Nowadays, you can expect to be able to download and copy container images and preserve their IDs.</p>
+Nowadays, you expect that download (pull) and copy (mirror) operations preserve the IDs of OCI container images.
+Using up-to-date container tools, which preserve image IDs, is crucial to support security mechanisms such as container image signatures.</p>
 </div>
 <div class="paragraph">
 <p>A single container image repository could contain hundreds of different images, and each of them is accessible by their own ID.
@@ -307,7 +312,7 @@ Each container image in a repository could be completely unrelated to others, no
 This is not common, but could be done.</p>
 </div>
 <div class="paragraph">
-<p>Because humans do not like to deal with very long random strings (the SHA-256 checksums), images can be tagged, and then you can refer to a specific image by its name and tag pair, that is <code>name:tag</code>.</p>
+<p>Because humans do not like to deal with very long random strings (the SHA-256 digests), images can be tagged, and then you can refer to a specific image by its name and tag pair, that is <code>name:tag</code>.</p>
 </div>
 <div class="paragraph">
 <p>So a name and tag pair links to a specific image ID, but that link could change, like a symbolic link in a Linux file system.
@@ -316,15 +321,15 @@ The <code>latest</code> tag is an example of a floating tag.</p>
 </div>
 <div class="paragraph">
 <p>If you expect that a tag remains linked to the same image ID forever, you call it a <em>fixed</em> or <em>non-floating</em> tag.
-It is common that continuous integration (CI) systems and other automatic build systems assign a fixed tag, based on a sequential build number or on a timestamp, to all container images they produce.</p>
+It is common that continuous integration (CI) systems and other automatic build systems assign a fixed tag, based on a sequential build number or a time stamp, to all container images they produce.</p>
 </div>
 <div class="sect2">
 <h3 id="_floating_and_fixed_tags_in_a_ci_pipeline"><a class="anchor" href="#_floating_and_fixed_tags_in_a_ci_pipeline"></a>Floating and fixed tags in a CI pipeline</h3>
 <div class="paragraph">
-<p>It is also common practice that a set of floating tags map to the latest version of an image, according to semantic versioning, and those tags are updated at the end of the testing and integration pipeline.</p>
+<p>It is also common practice that a set of floating tags map to the latest version of an image, according to semantic versioning, and those tags are updated at the end of a continuous integration pipeline, after an image pass automated tests.</p>
 </div>
 <div class="paragraph">
-<p>For example, conside the following sequence of events:</p>
+<p>For example, consider the following sequence of events:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -347,7 +352,7 @@ Now tags <code>v1.2</code> and <code>v1.2-3247</code> link to the same image ID.
 </ul>
 </div>
 <div class="paragraph">
-<p>Similar tagging strategies enable having multiple container images, in different stages of testing, and copying (or mirroring) to  edge sites (or end customers) only the images which were actually released, while enabling different systems to perform different tests.</p>
+<p>Similar tagging strategies enable having multiple container images, in different stages of testing, and mirroring to edge sites (or making available to end customers) only the images which were actually released, while enabling different systems to perform different kinds of tests.</p>
 </div>
 <div class="paragraph">
 <p>For example, a container registry named <code>internal.example.com</code> contains all container images produced by CI/CD, and test systems grab images from that registry.</p>
@@ -357,26 +362,26 @@ Now tags <code>v1.2</code> and <code>v1.2-3247</code> link to the same image ID.
 </div>
 <div class="paragraph">
 <p>This second registry would NOT contain all container images that exist in the first one.
-Having a consistent tagging scheme enables administrators to take corrective action if copying or mirroring from one registry to the other fails for any reason.</p>
+Having a consistent tagging scheme enables administrators to take corrective action if mirroring from one registry to the other fails for any reason.</p>
 </div>
 <div class="paragraph">
-<p>You see, these are just generic practices for managing application container images, and they apply as well to bootc container images.</p>
+<p>These are, in fact, recommended practices for managing application container images, and they apply to bootc container images as well.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s Next</h2>
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the next activity, you will publish a bootc container image for use by integration testings, which are performened using pre-existing VMs with the <code>bootc install</code> command.
-After tests, you will you publish the bootc container with a floating tag, as a released image for use by production systems.</p>
+<p>In the next activity, you will publish a bootc container image for use by integration testings, which are performed using pre-existing VMs with the <code>bootc install</code> command.
+After tests, you will you publish the bootc container with a semantic versioning floating tag, as a released image for use by production systems.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html">Publish Bootc Containers for Edge Devices</a></span>
-  <span class="next"><a href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container Image in a Private Container Registry</a></span>
+  <span class="prev"><a href="index.html">Publish Bootc Container Images for Edge Devices</a></span>
+  <span class="next"><a href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a></span>
 </nav>
 </article>
   </div>

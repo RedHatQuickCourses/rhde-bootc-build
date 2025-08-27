@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Lab: Publish a Bootc Container Image in a Private Container Registry :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <title>Lab: Publish a Bootc Container in a Private Container Registry :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
     <link rel="prev" href="s1-registry.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
@@ -114,13 +114,13 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Publish Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Publish Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container Image in a Private Container Registry</a>
+    <a class="nav-link" href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
   </li>
 </ul>
   </li>
@@ -163,8 +163,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Publish Bootc Containers for Edge Devices</a></li>
-    <li><a href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container Image in a Private Container Registry</a></li>
+    <li><a href="index.html">Publish Bootc Container Images for Edge Devices</a></li>
+    <li><a href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a></li>
   </ul>
 </nav>
 </div>
@@ -173,7 +173,7 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Lab: Publish a Bootc Container Image in a Private Container Registry</h1>
+<h1 class="page">Lab: Publish a Bootc Container in a Private Container Registry</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -226,7 +226,7 @@ You will log in with the same user on the <code>servera</code> VM, as your <em>t
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reprovision an existing system from that container image, as an alternative approach to perform system testing.</p>
+<p>You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reinstall an existing system from that container image, as an alternative approach to perform system testing.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -273,7 +273,7 @@ localhost/httpd-system                            latest      8b0253366051  18 h
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform more builds of the same image.</p>
+<p>Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform new builds of the same image.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/httpd-system:v1.0-1234</strong>
@@ -313,7 +313,7 @@ In the ROLE classroom, the <code>registry</code> hostname is an alias (that is, 
 </div>
 </li>
 <li>
-<p>Copy the <code>bootc-install.sh</code> script, so you do not have to type a long podman command to run the boot utility from your bootc container image, later in this lab.</p>
+<p>Copy the <code>bootc-install.sh</code> script, so you do not have to type a long Podman command to run the boot utility from your bootc container image, later in this lab.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>scp rhde-bootc-samples/bootc-install/bootc-install.sh servera:~</strong>
@@ -342,8 +342,8 @@ bootc-install.sh</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Alternatively, you can open a web terminal direclty on the <code>servera</code> machine, using the ROLE web interface.
-Notice that the web terminal will stop work ater you reinstall your <em>test machine</em>.
+Alternatively, you can open a web terminal directly on the <code>servera</code> machine, using the ROLE web interface.
+Notice that the web terminal will stop working after you reinstall your <em>test machine</em>.
 </td>
 </tr>
 </table>
@@ -421,7 +421,8 @@ ipv4.method:                            manual</code></pre>
 </div>
 </li>
 <li>
-<p>Make a note that the network configuration is manual, it&#8217;s using the <code>ens3</code> device, and its IP address, default gateway, and DNS server address.</p>
+<p>Make a note that the network configuration is manual, and the primary network interface is the <code>ens3</code> device.
+Also make a not if and its IP address, default gateway, and DNS server address.</p>
 </li>
 </ol>
 </div>
@@ -438,22 +439,10 @@ ipv4.method:                            manual</code></pre>
 $ <strong>sudo update-ca-trust extract</strong></code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-In the ROLE classroom, <code>registry</code> is a CNAME for the <code>utility</code> VM.
-</td>
-</tr>
-</table>
-</div>
 </li>
 <li>
-<p>Log in on your private registry, but using the <code>root</code> user.
-Remember that the previous registry login was done on your <em>developer machine</em>.</p>
+<p>Log in on your private registry, but from the <code>root</code> user.
+Remember that previous registry login were done on your <em>developer machine</em> from your unprivileged user.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo podman login -u student -p redhat registry.lab.example.com:5000</strong>
@@ -472,7 +461,7 @@ Writing manifest to image destination</code></pre>
 </div>
 </li>
 <li>
-<p>Review the <code>bootc-install.sh</code> script form your <em>developer machine</em> to your <em>test machine</em>, so you do not have to type a long podman command.
+<p>Review the <code>bootc-install.sh</code> script.
 Notice the following:</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
@@ -486,16 +475,16 @@ Notice the following:</p>
 <p>The privileged container also mounts the SSH key you copied from your <em>development machine</em>.</p>
 </li>
 <li>
-<p>The <code>--skip-fetch</code> option is required, else the <code>bootc install</code> command would try access the private registry, but would have no TLS certificate nor credentials.</p>
+<p>The <code>--skip-fetch</code> option is required, else the <code>bootc install</code> command would try access the private registry, but would fail because it has no TLS certificate nor credentials.</p>
 </li>
 <li>
-<p>The <code>--acknowledge-destructive</code> option skips a wait time before performing potentially destructive operations.</p>
+<p>The <code>--acknowledge-destructive</code> option skips a wait time before starting the installation.</p>
 </li>
 <li>
-<p>The <code>--replace alongside</code> option preserve the old contents of the existing system root.</p>
+<p>The <code>--replace alongside</code> option preserve the old contents of the existing system root, which could be useful for troubleshooting.</p>
 </li>
 <li>
-<p>The <code>--kargs</code> option provides static network configuration.</p>
+<p>The <code>--kargs</code> option provide static network configuration.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">#!/bin/bash
@@ -538,7 +527,7 @@ Installation complete!</code></pre>
 </div>
 </li>
 <li>
-<p>Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment.</p>
+<p>Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment on its root disk.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>bootc status</strong>
@@ -577,18 +566,37 @@ If you wish, you can open the console of the <code>serverb</code> VM on ROLE and
 </table>
 </div>
 </li>
-<li>
-<p>If you perceive you did a mistake, BEFORE you reboot, you can run the <code>bootc install</code> command with the <code>--stateroot tryagain</code> option where <code>tryagain</code> is any name you wish to assign to your new bootc system installation.</p>
-</li>
-<li>
-<p>If you only perceive a mistake after reboot you can retry using the <code>serverb</code> VM as your <em>test machine</em>.
-Just remember to repace the IP address of the <code>servera</code> VM (172.25.250.10) with the IP address of the <code>serverb</code> VM (172.25.250.11) on your <code>bootc-install.sh</code> script.</p>
-<div class="paragraph">
-<p>If you do so, remember to replace, in the remaining steps, the <code>servera</code> hostname name with the <code>serverb</code> hostname.</p>
+</ol>
 </div>
 </li>
 <li>
-<p>If you want to try again, after having already rebooted both <code>servera</code> and <code>serverb</code> VMs, you must delete and re-create your ROLE classroom, and them perform the previous labs that prepare your <em>development machine</em> and build the <code>httpd-system</code> bootc container images.</p>
+<p>If you perceive you did a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+if all went well so far, you can skip this entire step.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>BEFORE you reboot your <em>test machine</em>, you can run the <code>bootc install</code> command, adding the <code>--stateroot tryagain</code> option, where <code>tryagain</code> is any name you wish to assign to your new bootc system installation, other than <code>default</code>.</p>
+</li>
+<li>
+<p>If you only perceive a mistake AFTER reboot, you can retry using the <code>serverb</code> VM as your <em>test machine</em>.
+Just remember to replace the IP address of the <code>servera</code> VM (172.25.250.10) with the IP address of the <code>serverb</code> VM (172.25.250.11) on your <code>bootc-install.sh</code> script.</p>
+<div class="paragraph">
+<p>If you do so, remember to replace, in the remaining steps of this lab, the <code>servera</code> hostname name with the <code>serverb</code> hostname.</p>
+</div>
+</li>
+<li>
+<p>If you want to try again, but after having already rebooted both <code>servera</code> and <code>serverb</code> VMs, you must delete and re-create your ROLE classroom, and then perform the previous labs that prepare your <em>development machine</em> and build the <code>httpd-system</code> bootc container images.</p>
 </li>
 <li>
 <p>You could also try creating a libvirt VM, installing RHEL on it, and running the <code>bootc install</code> on the local VM.
@@ -637,7 +645,7 @@ Misc tests of bootc images and firewalld</code></pre>
 <li>
 <p>On your <em>test machine</em>, verify that it has all system settings from its bootc container image applied and active.</p>
 <div class="paragraph">
-<p>If you do not remember about those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you build that image and verified that its settings are not applied under podman.</p>
+<p>If you do not remember about those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you build that image and verified that its settings were not applied with Podman.</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -746,7 +754,7 @@ Writing manifest to image destination</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-A CI/CD system would probaly use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
+A CI/CD system would probably use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
 This activity uses both styles to demonstrate that it makes no different on the final result.
 </td>
 </tr>
@@ -771,6 +779,20 @@ $ <strong>skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.
 sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Your digests will be different from the output above, because containerfile builds are NOT reproducible.
+If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
+There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ol>
 </div>
@@ -780,10 +802,10 @@ sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2</code></
 </div>
 </div>
 <div class="sect1">
-<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s Next</h2>
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This was the final lab in this course, but the next course of this learning approach shows how to use the bootc image builder utility to create customized installation medias for edge devices and how to create customized boot disk images for clouds and hypervisors.</p>
+<p>This was the final lab in this course, but the next course of this learning approach shows how to use the <strong>bootc image builder</strong> utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.</p>
 </div>
 </div>
 </div>
