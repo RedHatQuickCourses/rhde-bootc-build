@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Test Bootc Containers With Anaconda :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <title>Test Bootc Container Images with Anaconda :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
     <link rel="prev" href="index.html">
     <link rel="next" href="s2-install-lab.html">
     <meta name="generator" content="Antora 3.1.3">
@@ -96,10 +96,10 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Test Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Test Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="s1-bootc-anaconda.html">Test Bootc Containers With Anaconda</a>
+    <a class="nav-link" href="s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
@@ -164,8 +164,8 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Test Bootc Containers for Edge Devices</a></li>
-    <li><a href="s1-bootc-anaconda.html">Test Bootc Containers With Anaconda</a></li>
+    <li><a href="index.html">Test Bootc Container Images for Edge Devices</a></li>
+    <li><a href="s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a></li>
   </ul>
 </nav>
 </div>
@@ -174,7 +174,7 @@
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Test Bootc Containers With Anaconda</h1>
+<h1 class="page">Test Bootc Container Images with Anaconda</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -195,7 +195,7 @@
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Work in progress
+Pending review
 </td>
 </tr>
 </table>
@@ -219,19 +219,19 @@ There are multiple ways of installing an image mode system, among them:</p>
 <p>Use the standard RHEL installation media and provide a custom kickstart configuration that references a bootc container image as its installation source.</p>
 </li>
 <li>
-<p>Start from a system already running RHEL and run the Bootc utility, from a bootc container image, to install the system, effectivelly overwriting its current RHEL installation with a booc container image.</p>
+<p>Start from a system already running RHEL and run the bootc utility, from a bootc container image, to install the system, effectively overwriting its current RHEL installation with a bootc container image.</p>
 </li>
 <li>
-<p>Use the Bootc Image Builder tool to build either a custom installation or a custom cloud image which embeds a pre-installed bootc container image.</p>
+<p>Use the bootc image builder tool to create either a custom installation media or a custom cloud image which embeds a bootc container image.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>In this chapter, we use option (1) above, and in the next chapter, we use option (2), as two ways of performing quick testing of a bootc container image.
+<p>In this chapter, we use option (1) above, and in the next chapter, we use option (2), to demonstrate two approaches for performing quick system testing of a bootc container image.
 A follow-up course will teach option (3) as the recommended way of deploying edge systems in production.</p>
 </div>
 <div class="paragraph">
-<p>Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, let&#8217;s consider how much configurations, or how little, should actually be in a bootc container or left to be performed after installing an image mode systems.</p>
+<p>Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, we have tp consider how much configurations, or how little, should actually be in a bootc container or left to be performed after installing an image mode systems.</p>
 </div>
 </div>
 </div>
@@ -239,10 +239,10 @@ A follow-up course will teach option (3) as the recommended way of deploying edg
 <h2 id="_day_0_and_day_1_system_configuration"><a class="anchor" href="#_day_0_and_day_1_system_configuration"></a>Day-0 and day-1 system configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Bootc container images open the possibily for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.</p>
+<p>Bootc container images open the possibility for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.</p>
 </div>
 <div class="paragraph">
-<p>This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to onboard its users.</p>
+<p>This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to its intended uses.</p>
 </div>
 <div class="paragraph">
 <p>Some organizations perform such day-1 configurations using system installation scripting tools, for example Anaconda kickstart and Cloud-init.
@@ -250,14 +250,14 @@ Others perform such configuration using automation technologies, such as Red Hat
 </div>
 <div class="paragraph">
 <p>The need for performing day-1 configurations does NOT disappear with image mode systems.
-Sure, you may include a large set of configurationsin a system image, but there are usually something which must be different between devices or between edge sites.</p>
+Sure, you may include a large set of configurations in a system image, but in most cases there is something which must be different between individual devices or between different edge sites.</p>
 </div>
 <div class="paragraph">
 <p>Managing a large number of images, to account for those variations, may become a challenge.
 It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.</p>
 </div>
 <div class="sect2">
-<h3 id="_secrets_management_and_device_onboarding"><a class="anchor" href="#_secrets_management_and_device_onboarding"></a>Secrets management and device onboarding</h3>
+<h3 id="_secrets_management_and_device_on_boarding"><a class="anchor" href="#_secrets_management_and_device_on_boarding"></a>Secrets management and device on-boarding</h3>
 <div class="paragraph">
 <p>Another concern with including system and application configurations in a system images come from potential risk scenarios related to secrets management, such as:</p>
 </div>
@@ -267,7 +267,7 @@ It may be easier to produce a golden system image, which is shared by a large nu
 <p>A a removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.</p>
 </li>
 <li>
-<p>A rogue device is plugged into network of an edge site, installed as a genuine device, and them taken off-site to access its system disk and grab the credentials stored there.</p>
+<p>A rogue device is plugged into network of an edge site, automatically discovered and installed as if it were a genuine device, and then taken off-site to access its system disk and grab the credentials stored there.</p>
 </li>
 </ul>
 </div>
@@ -275,26 +275,41 @@ It may be easier to produce a golden system image, which is shared by a large nu
 <p>Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present similar risks.</p>
 </div>
 <div class="paragraph">
-<p>To manage such risks, many organizations employ secure and auditable <em>onboarding</em> processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for acessing applications and other resources in either the edge site or around the corporate network.</p>
+<p>To manage such risks, many organizations employ secure and auditable <em>on-boarding</em> processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for accessing applications and other resources in either the edge site or around the corporate network.</p>
 </div>
 <div class="paragraph">
-<p>You can implement effective onboarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
+<p>Such on-boarding processes must rely on an initial set of credentials, but those credentials must be short lived, and deleted from the device right at the beginning of the process.
+Anyway, the initial credentials provide access to the device itself but not to anything outside of the device.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively there are alternatives technologies and tools, designed to address the challenges of provisioning and onboarding edge devices at scale and in a secure way. Among them:</p>
+<p>If you put such credentials in your bootc container image, you would NOT be able to remove them, and it becomes a security vulnerability.
+As stated by the <a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/">OWASP Top 10 2021</a>:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Do not ship or deploy with any default credentials, particularly for admin users.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>You can implement effective on-boarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
+</div>
+<div class="paragraph">
+<p>There are alternatives technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way. Among them:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The FIDO Device Onboarding (FDO) standard</p>
+<p>The <a href="https://fidoalliance.org/device-onboarding-overview/" target="_blank" rel="noopener">FIDO Device Onboarding</a> (FDO) standard.</p>
 </li>
 <li>
-<p>The Red Hat Edge Manager product, based on the Flightctl open source project</p>
+<p>The <a href="https://www.redhat.com/en/about/press-releases/red-hat-introduces-red-hat-edge-manager-overseeing-fleets-devices" target="_blank" rel="noopener">Red Hat Edge Manager product</a>, based on the <a href="https://github.com/flightctl/flightctl" target="_blank" rel="noopener">flightctl</a> open source project.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or servers, and dealing with lower network bandwith or higher latency than in typical data centers and office buildings.</p>
+<p>These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or hundreds of servers, and dealing with lower network bandwidth or higher latency than in typical data centers and office buildings.</p>
 </div>
 </div>
 <div class="sect2">
@@ -312,13 +327,13 @@ Consider that user passwords, for log in in a system console, and SSH keys, for 
 <div class="ulist">
 <ul>
 <li>
-<p>If such images contain corporate intelectual property, you may handle these credentials as sensitive secrets.</p>
+<p>If such images contain corporate intellectual property, you may handle these credentials as sensitive secrets.</p>
 </li>
 <li>
 <p>If such images are just mirrors of publicly available images, you may embed these credentials on your system images.</p>
 </li>
 <li>
-<p>If your registry contains a mix of public and privage images, you may need different credentials for each set of images, and audit access permissions granted to each of them.</p>
+<p>If your registry contains a mix of public and private images, you may need different credentials for each set of images, and audit access permissions granted to each of them.</p>
 </li>
 </ul>
 </div>
@@ -350,36 +365,36 @@ Be aware it may not be a secure alternative for your real-world scenarios.
 <div class="ulist">
 <ul>
 <li>
-<p>In the first case, the installation source is a DNF repository which provides RHEL packages.</p>
+<p>In the first case, the installation source is a DNF or YUM repository which provides RHEL packages.</p>
 </li>
 <li>
-<p>In the second case, the insallation source is a bootc container image.</p>
+<p>In the second case, the installation source is a bootc container image.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>When Anaconda uses a bootc container image, it runs bootc to install the kernel, bootloader, and other settings from the container image.
+<p>When Anaconda uses a bootc container image, it runs bootc to install the kernel, boot loader, and other settings from the container image.
 Before running bootc, Anaconda performs any required preparation, for example partitioning disks and initializing network, and also performs any day-1 configuration selected by the user, such as setting a root password.</p>
 </div>
 <div class="paragraph">
 <p>Current releases of Anaconda default to package mode systems, using DNF repositories from either Red Hat, over the Internet, or from the RHEL installation media itself.
-The difference between the two RHEL installation medias, the smaller "standard" one (which used to be called the <em>netinstall</em> media) and the larger one, which allows off-line installation, is just the presense of such repository on the media itself.</p>
+The difference between the two RHEL installation medias, the smaller "standard" one (which used to be called the <em>netinstall</em> media) and the larger one (the <em>DVD</em> media), which allows off-line installation, is just the presence of such repositories on the media itself.</p>
 </div>
 <div class="paragraph">
-<p>Both RHEL installation medias contain a complete RHEL system, which boots and autoruns Anaconda, which in turn starts a set of interactive screens for configuring package selection, destination disk, partitioning, network configuration, and initial users.</p>
+<p>Both RHEL installation medias contain a minimal, bootable RHEL system, which runs Anaconda to provide a set of interactive screens for configuring package selection, destination disk, partitioning, network configuration, and initial users.</p>
 </div>
 <div class="paragraph">
 <p>Kickstart scripts automate those screens, enabling fully automated and even headless installation of RHEL, and also provide access to Anaconda features which may not be available on its interactive screens.</p>
 </div>
 <div class="paragraph">
-<p>Unfortunatelly, <strong>you CANNOT use the interactive mode of Anaconda to select a bootc container image as its installation source</strong>.
+<p>Unfortunately, <strong>you CANNOT yet use the interactive mode of Anaconda to select a bootc container image as its installation source</strong>.
 You MUST provide a kickstart script to install an image mode system.
 It does not need to be a complete kickstart script for unattended installation, but it probably will be, for edge devices.
-So you can provide a kickstart file which selects a bootc container image and still use interactive screens to partition disks and set a root password.</p>
+You could provide a minimal kickstart file which just selects a bootc container image and use interactive screens to partition disks and set a root password.</p>
 </div>
 <div class="paragraph">
-<p>Kickstart scripts can also embed custom scripts which they run before starting installation (in a <code>%pre</code> block) and after completing the insallation, but before rebooting the system (in a <code>%post</code> block).
-These capabilities will be handly to perform system testing of bootc container images without requiring custom installation media nor an OCI container registry server.</p>
+<p>Kickstart scripts can also embed custom scripts which they run before starting installation (in a <code>%pre</code> block) and after completing the installation, but before rebooting the system (in a <code>%post</code> block).
+These capabilities will be handy to perform system testing of bootc container images without requiring custom installation media nor an OCI container registry server.</p>
 </div>
 </div>
 </div>
@@ -387,7 +402,7 @@ These capabilities will be handly to perform system testing of bootc container i
 <h2 id="_local_vms_on_rhel"><a class="anchor" href="#_local_vms_on_rhel"></a>Local VMs on RHEL</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The native local hypervidor on RHEL systems is a stack composed of three parts:</p>
+<p>The native local hypervisor on RHEL systems is a stack composed of three parts:</p>
 </div>
 <div class="dlist">
 <dl>
@@ -398,7 +413,7 @@ These capabilities will be handly to perform system testing of bootc container i
 <dt class="hdlist1">QEMU</dt>
 <dd>
 <p>A software emulator which provides all other virtual hardware required to create an actual VM, for example video, disk, and network devices.
-QEMU is also capable of emulating a complete system, for example to emulare an ARM CPU on an Intel system.</p>
+QEMU is also capable of emulating a complete system, for example to emulate an ARM CPU on an Intel system.</p>
 </dd>
 <dt class="hdlist1">Libvirt</dt>
 <dd>
@@ -420,7 +435,7 @@ You can use the native hypervisor of your Windows or MacOS laptop, but this cour
 It provides many advanced capabilities at its API level, which require dealing with XML configuration files.</p>
 </div>
 <div class="paragraph">
-<p>For system testing of bootc container images, we are more interested on libvirt features designed to support a developer inner loop, such as:</p>
+<p>For system testing of bootc container images, we are more interested on libvirt features designed to support a developer&#8217;s inner loop, such as:</p>
 </div>
 <div class="dlist">
 <dl>
@@ -436,7 +451,7 @@ It is the same technology which enables network connections to rootless containe
 </dd>
 <dt class="hdlist1">Direct kernel loading</dt>
 <dd>
-<p>Bypass the boot loader in a disk image or device, and loads a Linux kernel and initial ram disk directly from a local or remote directory.</p>
+<p>Bypass the boot loader in a disk image or device, and loads a Linux kernel and initial ram disk directly from a local or remote directory, or from installation media.</p>
 </dd>
 <dt class="hdlist1">Virtio devices backed by host directories</dt>
 <dd>
@@ -449,16 +464,16 @@ It is the same technology which enables network connections to rootless containe
 </div>
 </div>
 <div class="sect2">
-<h3 id="_unnatended_vm_creation_with_the_virt_install_comand"><a class="anchor" href="#_unnatended_vm_creation_with_the_virt_install_comand"></a>Unnatended VM creation with the virt-install comand</h3>
+<h3 id="_unattended_vm_creation_with_the_virt_install_comand"><a class="anchor" href="#_unattended_vm_creation_with_the_virt_install_comand"></a>Unattended VM creation with the virt-install comand</h3>
 <div class="paragraph">
 <p>Typically, a RHEL administrator would provide kickstart scripts in an HTTP server, and use the interactive features of Grub to provide kernel arguments that reference that kickstart file.
 A similar process is normally used to provision RHEL systems using network boot, either PXE or UEFI.</p>
 </div>
 <div class="paragraph">
-<p>It is also somewhat common that RHEL administrators use the <code>xorriso</code> tool suite, such as the <code>mkksiso</code> command, to produce a custom RHEL installation media which already embeds a custom kickstart script and third-party package repositories, so they do NOT need to enter Grub&#8217;s interactive screens.</p>
+<p>It is also somewhat common that RHEL administrators use the <code>xorriso</code> tool suite, especially the <code>mkksiso</code> command, to produce a custom RHEL installation media which already embeds a custom kickstart script and third-party package repositories, so they do not need to enter Grub&#8217;s interactive screens.</p>
 </div>
 <div class="paragraph">
-<p>But, using the features mentioned in the previous session, we can perform a quicker workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:</p>
+<p>But, using the features mentioned in the previous session, we can implement a simpler workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -469,13 +484,13 @@ A similar process is normally used to provision RHEL systems using network boot,
 <p>Direct kernel loading provides kernel commands that make Anaconda use the kickstart script.</p>
 </li>
 <li>
-<p>The session interface and user mode networking elliminate the need for privileged access (<code>sudo</code>).</p>
+<p>The session interface and user mode networking eliminate the need for privileged access (<code>sudo</code>).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p>You can also give the kernel additional options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
-This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting.</p>
+This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting, if something goes wrong.</p>
 </div>
 <div class="paragraph">
 <p>These options are not yet available from graphical front-ends to libvirt, but they are available from the <code>virt-install</code> command, which we use in the next activity.</p>
@@ -495,14 +510,14 @@ But wait, Podman Desktop is a tool to manage containers, not VMs!</p>
 </div>
 <div class="paragraph">
 <p>In fact, developers using Podman, or any other container engine on Windows and MacOS, are running a Linux VM.
-When most people refer to "containers", they are actually referring to "Linux containers" which require being on a Linux system, interacting with a Linux kernel and other Linux operating system services.</p>
+When most people refer to "containers", they are actually referring to "Linux containers" which require running on a Linux system, interacting with a Linux kernel and other Linux operating system services.</p>
 </div>
 <div class="paragraph">
-<p>So container engines already have a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
+<p>So most container engines already provide a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
 That thin VM management layer usually interfaces with the native hypervisor on Windows, MacOS, and Linux systems, so that developers are insulated from VM management and only care about containers.</p>
 </div>
 <div class="paragraph">
-<p>The Podman Machine project, which provides the VM managemen layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
+<p>The Podman Machine project, which provides the VM management layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
 Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offer a simple and portable abstraction for developers who need to perform system testing of their bootc container images.</p>
 </div>
 <div class="admonitionblock note">
@@ -512,7 +527,7 @@ Thanks to that capability, recent releases of Podman Desktop provide a bootc ext
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-in this course, we are NOT using Podman Deskop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this possibility.
+in this course, we are not using Podman Desktop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this alternative.
 </td>
 </tr>
 </table>
@@ -529,7 +544,7 @@ This is one way you can perform comprehensive tests of bootc container images, b
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="index.html">Test Bootc Containers for Edge Devices</a></span>
+  <span class="prev"><a href="index.html">Test Bootc Container Images for Edge Devices</a></span>
   <span class="next"><a href="s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a></span>
 </nav>
 </article>

@@ -96,10 +96,10 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Test Bootc Containers for Edge Devices</a>
+    <a class="nav-link" href="index.html">Test Bootc Container Images for Edge Devices</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="s1-bootc-anaconda.html">Test Bootc Containers With Anaconda</a>
+    <a class="nav-link" href="s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
@@ -164,7 +164,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Test Bootc Containers for Edge Devices</a></li>
+    <li><a href="index.html">Test Bootc Container Images for Edge Devices</a></li>
     <li><a href="s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a></li>
   </ul>
 </nav>
@@ -184,7 +184,7 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Troubleshoot and fix a bootc container image which works with Podman but fails in a local VM.</p>
+<p>Troubleshoot and fix a bootc container image which works in a container engine but fails in a local VM.</p>
 </dd>
 </dl>
 </div>
@@ -225,7 +225,8 @@ If not, please adapt the instructions to your test environment.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You will create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
-This time, you will find that the system does NOT works as expected, and you find the root cause of the failure, fix the containerfile, create another VM with the updated bootc container image, and verify that its now working as expected.</p>
+This time, you will find that the system does NOT works as expected.
+You will then find the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -288,8 +289,8 @@ It is fine if you have some local VMs on your system, as long as there isn&#8217
 </div>
 </li>
 <li>
-<p>Verify that you have, on your home directory, a temporary directory with scripts for creating test VMs and another temporary directory with an OCI container image directory.
-If you do not, please review the <a href="#ch3-validate:s2-install-bootc">previous lab</a> which explains those scripts.</p>
+<p>Verify that you have, on your home directory, a temporary directory with scripts and SSH keys for creating test VMs, and another temporary directory with an OCI container image directory.
+If you do not, please review the <a href="#ch3-validate:s2-install-bootc">previous lab</a> which creates those directories.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls temp-test-vm</strong>
@@ -328,7 +329,7 @@ $ <strong>sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks</strong></code></pre
 <li>
 <p>Create a test VM, using the kickstart script you just changed.</p>
 <div class="paragraph">
-<p>Make sure it reports using the <code>webapp-bootc</code> container iamge as its installation source.</p>
+<p>Make sure it reports using the <code>webapp-bootc</code> container image as its installation source.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -356,7 +357,7 @@ Escape character is ^] (Ctrl + ])</code></pre>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Try to access your single-page web applicaiton.
+<p>Try to access your single-page web application.
 Instead of the expected mock message, you should get the standard welcome page from RHEL.</p>
 <div class="listingblock">
 <div class="content">
@@ -371,7 +372,7 @@ Instead of the expected mock message, you should get the standard welcome page f
 </div>
 <div class="paragraph">
 <p>Remember that this container image did work fine when run from Podman, in a <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a>.
-Let&#8217;s find what is wrong.</p>
+Now find what is wrong.</p>
 </div>
 </li>
 <li>
@@ -404,23 +405,23 @@ $ <strong>sudo tail /var/log/httpd/error_log</strong>
 <p>Verify that these files have the necessary read and execute (search) permissions.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[core@bootc-test ~]$ ls -la /webapp
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls -la /webapp</strong>
 total 12
 drwxr-xr-x.  3 root root   43 Jan  1  1970 .
 drwxr-xr-x. 16 root root 4096 Jan  1  1970 ..
 drwxr-xr-x.  2 root root   49 Jan  1  1970 html
-[core@bootc-test ~]$ ls -l /webapp/html
+$ <strong>ls -l /webapp/html</strong>
 total 4
 -rw-r--r--. 1 root root 88 Jan  1  1970 index.html</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>What else can deny permission to access files and directories?
+<p>What else could deny permission to access files and directories?
 Maybe it is SELinux.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[core@bootc-test ~]$ <strong>sudo journalctl | grep avc:</strong>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo journalctl | grep avc:</strong>
 ...
 Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc:  denied  { getattr } for  pid=1058 comm="httpd" path="/webapp/html/index.html" dev="overlay" ino=11826 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:default_t:s0 tclass=file permissive=0
 ...</code></pre>
@@ -428,10 +429,10 @@ Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc
 </div>
 </li>
 <li>
-<p>And indeed, the single-page web application files have a <code>default_t</code> context label, instead of the <code>httpd_sys_content_t</code> label required by the SELinux policy in RHEL.</p>
+<p>Indeed, the single-page web application files have a <code>default_t</code> context label, instead of the <code>httpd_sys_content_t</code> label required by the targeted SELinux policy in RHEL.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[core@bootc-test ~]$ <strong>ls -laZ /webapp/html/</strong>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls -laZ /webapp/html/</strong>
 total 12
 drwxr-xr-x. 2 root root system_u:object_r:default_t:s0 49 Jan  1  1970 .
 drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
@@ -443,7 +444,7 @@ drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
 <p>Exit and delete your test VM.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">[core@bootc-test ~]$ <strong>exit</strong>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>exit</strong>
 logout
 Connection to 127.0.0.1 closed.
 $ <strong>virsh destroy bootc-test</strong>
@@ -462,9 +463,10 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>The sample code repository already provides a containerfile with the required fixes.</p>
+<p>The sample code repository already provides a containerfile with all fixes.</p>
 <div class="paragraph">
-<p>For your reference, the fix is just adding a <code>semanage</code> command:</p>
+<p>For your reference, the fix is just adding a <code>semanage</code> command to update the policy and specify a context label for the <code>/webapp</code> directory tree.
+The bootc utility labels all files, according to the policy inside the bootc container image, at installation time.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -491,7 +493,7 @@ Successfully tagged localhost/webapp-fixed:latest</code></pre>
 </div>
 </li>
 <li>
-<p>If you wish, test the new bootc container image with podman, but the instructions here proceed straight to installing it in a new test VM.</p>
+<p>If you wish, test the new bootc container image with Podman, but the instructions here proceed straight to installing it in a new test VM.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
@@ -524,7 +526,7 @@ Escape character is ^] (Ctrl + ])</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
-This would be the HTML and Javascrit code of your IMPROVED single-page web application.</code></pre>
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.</code></pre>
 </div>
 </div>
 </li>
@@ -561,15 +563,15 @@ Writing manifest to image destination</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i edge-key -p 8022 core@127.0.0.1</strong>
-[core@bootc-test ~]$ <strong>sudo bootc status</strong>
+$ <strong>sudo bootc status</strong>
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
        Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
-[core@bootc-test ~]$ <strong>sudo bootc upgrade</strong>
+$ <strong>sudo bootc upgrade</strong>
 ...
 Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-fixed
 ...
-[core@bootc-test ~]$ <strong>sudo bootc status</strong>
+$ <strong>sudo bootc status</strong>
   Staged image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
        Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
@@ -577,7 +579,7 @@ Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-f
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
        Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
-[core@bootc-test ~]$ <strong>sudo systemctl reboot</strong>
+$ <strong>sudo systemctl reboot</strong>
 ...
 Connection to 127.0.0.1 closed.</code></pre>
 </div>
@@ -597,7 +599,7 @@ New version of the single-page web application.</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i edge-key -p 8022 core@127.0.0.1</strong>
-[core@bootc-test ~] <strong>sudo bootc status</strong>
+$ <strong>sudo bootc status</strong>
 ● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
         Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
        Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
@@ -612,7 +614,7 @@ Connection to 127.0.0.1 closed.</code></pre>
 </div>
 </li>
 <li>
-<p>Instead of the <code>bootc upgrade</code> command, which stages a new version of the same container image, you could use the <code>bootc switch</code> to stage a different container image, and keep reusing the same test VM to test different system images, instead of newer builds of the same system image.</p>
+<p>Instead of the <code>bootc upgrade</code> command, which stages a new version of the same container image, you could use the <code>bootc switch</code> to stage a different container image, and keep reusing the same test VM to test different system images, in addition to newer builds of the same system image.</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -620,7 +622,7 @@ Connection to 127.0.0.1 closed.</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Beware that these operations to NOT reset the state of the <code>/etc</code> and <code>/var</code> directories, which might intefere with your testing of different bootc container images.
+Beware that these operations do NOT reset the state of the <code>/etc</code> and <code>/var</code> directories, which might interfere with your testing of different bootc container images.
 </td>
 </tr>
 </table>
@@ -646,7 +648,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 </div>
 </div>
 <div class="sect1">
-<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s Next</h2>
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and virtual machines on the data center.</p>
