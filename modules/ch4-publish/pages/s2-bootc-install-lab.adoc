@@ -1,6 +1,6 @@
 :time_estimate: 5
 
-= Lab: Publish a Bootc Container Image in a Private Container Registry
+= Lab: Publish a Bootc Container in a Private Container Registry
 
 _Estimated reading time: *{time_estimate} minutes*._
 
@@ -24,7 +24,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
-You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reprovision an existing system from that container image, as an alternative approach to perform system testing.
+You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reinstall an existing system from that container image, as an alternative approach to perform system testing.
 
 1. On your _development machine_, prepare to start this activity by checking that you have the outcomes from previous activities.
 
@@ -58,7 +58,7 @@ localhost/httpd-system                            latest      8b0253366051  18 h
 
 2. Copy all artifacts you will need to reinstall your _test machine_ later in this lab.
 
-.. Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform more builds of the same image.
+.. Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform new builds of the same image.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -85,7 +85,7 @@ domain.crt
 +
 NOTE: In the ROLE classroom, the `registry` hostname is an alias (that is, a DNS `CNAME`) for the `utility` VM.
 
-.. Copy the `bootc-install.sh` script, so you do not have to type a long podman command to run the boot utility from your bootc container image, later in this lab.
+.. Copy the `bootc-install.sh` script, so you do not have to type a long Podman command to run the boot utility from your bootc container image, later in this lab.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -102,8 +102,8 @@ bootc-install.sh
 $ *ssh servera*
 --
 +
-NOTE: Alternatively, you can open a web terminal direclty on the `servera` machine, using the ROLE web interface.
-Notice that the web terminal will stop work ater you reinstall your _test machine_.
+NOTE: Alternatively, you can open a web terminal directly on the `servera` machine, using the ROLE web interface.
+Notice that the web terminal will stop working after you reinstall your _test machine_.
 
 .. As a convenience, install the bootc utility.
 +
@@ -162,7 +162,8 @@ $ *nmcli -f ipv4.method connection show 'cloud-init ens3'*
 ipv4.method:                            manual
 --
 
-.. Make a note that the network configuration is manual, it's using the `ens3` device, and its IP address, default gateway, and DNS server address.
+.. Make a note that the network configuration is manual, and the primary network interface is the `ens3` device.
+Also make a not if and its IP address, default gateway, and DNS server address.
 
 4. Re-install your _test machine_ from a bootc container image.
 
@@ -173,11 +174,9 @@ ipv4.method:                            manual
 $ *sudo cp domain.crt /etc/pki/ca-trust/source/anchors/*
 $ *sudo update-ca-trust extract*
 --
-+
-NOTE: In the ROLE classroom, `registry` is a CNAME for the `utility` VM.
 
-.. Log in on your private registry, but using the `root` user.
-Remember that the previous registry login was done on your _developer machine_.
+.. Log in on your private registry, but from the `root` user.
+Remember that previous registry login were done on your _developer machine_ from your unprivileged user.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -194,16 +193,16 @@ $ *sudo podman pull registry.lab.example.com:5000/httpd-system:v1.0-1234*
 Writing manifest to image destination
 --
 
-.. Review the `bootc-install.sh` script form your _developer machine_ to your _test machine_, so you do not have to type a long podman command.
+.. Review the `bootc-install.sh` script.
 Notice the following:
 +
 ... The script runs the `bootc install` command in a privileged container.
 ... The privileged container mounts the host root filesystem, its device tree, and container storage.
 ... The privileged container also mounts the SSH key you copied from your _development machine_.
-... The `--skip-fetch` option is required, else the `bootc install` command would try access the private registry, but would have no TLS certificate nor credentials.
-... The `--acknowledge-destructive` option skips a wait time before performing potentially destructive operations.
-... The `--replace alongside` option preserve the old contents of the existing system root.
-... The `--kargs` option provides static network configuration.
+... The `--skip-fetch` option is required, else the `bootc install` command would try access the private registry, but would fail because it has no TLS certificate nor credentials.
+... The `--acknowledge-destructive` option skips a wait time before starting the installation.
+... The `--replace alongside` option preserve the old contents of the existing system root, which could be useful for troubleshooting.
+... The `--kargs` option provide static network configuration.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -226,7 +225,7 @@ Installed: grub.cfg
 Installation complete!
 --
 
-.. Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment.
+.. Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment on its root disk.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -253,14 +252,18 @@ $ *systemctl reboot --now*
 --
 NOTE: If you wish, you can open the console of the `serverb` VM on ROLE and follow its shutdown and reboot messages.
 
-.. If you perceive you did a mistake, BEFORE you reboot, you can run the `bootc install` command with the `--stateroot tryagain` option where `tryagain` is any name you wish to assign to your new bootc system installation.
-
-.. If you only perceive a mistake after reboot you can retry using the `serverb` VM as your _test machine_.
-Just remember to repace the IP address of the `servera` VM (172.25.250.10) with the IP address of the `serverb` VM (172.25.250.11) on your `bootc-install.sh` script.
+5. If you perceive you did a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:
 +
-If you do so, remember to replace, in the remaining steps, the `servera` hostname name with the `serverb` hostname.
+IMPORTANT: if all went well so far, you can skip this entire step.
 
-.. If you want to try again, after having already rebooted both `servera` and `serverb` VMs, you must delete and re-create your ROLE classroom, and them perform the previous labs that prepare your _development machine_ and build the `httpd-system` bootc container images.
+.. BEFORE you reboot your _test machine_, you can run the `bootc install` command, adding the `--stateroot tryagain` option, where `tryagain` is any name you wish to assign to your new bootc system installation, other than `default`.
+
+.. If you only perceive a mistake AFTER reboot, you can retry using the `serverb` VM as your _test machine_.
+Just remember to replace the IP address of the `servera` VM (172.25.250.10) with the IP address of the `serverb` VM (172.25.250.11) on your `bootc-install.sh` script.
++
+If you do so, remember to replace, in the remaining steps of this lab, the `servera` hostname name with the `serverb` hostname.
+
+.. If you want to try again, but after having already rebooted both `servera` and `serverb` VMs, you must delete and re-create your ROLE classroom, and then perform the previous labs that prepare your _development machine_ and build the `httpd-system` bootc container images.
 
 .. You could also try creating a libvirt VM, installing RHEL on it, and running the `bootc install` on the local VM. 
 A local VM would have the advantage of relying on dynamic IP configuration, thus NOT requiring a correct `--kargs` option for the `bootc install` command.
@@ -268,7 +271,7 @@ A local VM would have the advantage of relying on dynamic IP configuration, thus
 But you would have to wait the time to install RHEL on your local VM, which takes considerably longer with package mode than with image mode.
 If all goes well, using either `servera` or `serverb` VMs is considerably faster.
 
-5. On your _developer machine_, verify that your _test machine_ runs the `httpd-system` bootc container image and open a nmew SSH session to your _test machine_
+6. On your _developer machine_, verify that your _test machine_ runs the `httpd-system` bootc container image and open a nmew SSH session to your _test machine_
 
 .. Verify that your _test machine_ now runs a web server containing your mock of a single-page web application.
 +
@@ -295,7 +298,7 @@ $ *ssh -i temp-test-vm/edge-key root@servera*
 
 6. On your _test machine_, verify that it has all system settings from its bootc container image applied and active.
 +
-If you do not remember about those settings, refer to the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab] where you build that image and verified that its settings are not applied under podman.
+If you do not remember about those settings, refer to the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab] where you build that image and verified that its settings were not applied with Podman.
 
 .. Verify that it now reports as having being deployed using bootc.
 +
@@ -382,7 +385,7 @@ Copying config 8f58cf789c done   |
 Writing manifest to image destination
 --
 +
-NOTE: A CI/CD system would probaly use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
+NOTE: A CI/CD system would probably use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
 This activity uses both styles to demonstrate that it makes no different on the final result.
 
 .. Verify that the three tags (one fixed, two floating) are listed in your bootc container image repository, and that the three tags possess the same digest, so they actually are alternate tags for exactly the same image.
@@ -402,6 +405,10 @@ sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
 $ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:latest*
 sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
 --
++
+NOTE: Your digests will be different from the output above, because containerfile builds are NOT reproducible. 
+If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
+There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
 
 ////
 Lab SSH key is at /etc/.rht_authorized_keys
@@ -412,6 +419,6 @@ system-reinstall-bootc didn't work for me, because of issues with registry crede
 bootc install to-existing-root also failed, but when I got the correct and complete podman run command, I realized I did ith with to-filesystem instead of to-existing-root, and I didn't went back to try it all again.
 ////
 
-== What's Next
+== What's next
 
-This was the final lab in this course, but the next course of this learning approach shows how to use the bootc image builder utility to create customized installation medias for edge devices and how to create customized boot disk images for clouds and hypervisors.
+This was the final lab in this course, but the next course of this learning approach shows how to use the *bootc image builder* utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.
