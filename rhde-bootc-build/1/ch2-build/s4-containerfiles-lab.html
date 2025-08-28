@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lab: System Configuration From Containers :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <link rel="prev" href="s3-containerfiles.html">
+    <link rel="next" href="../ch3-validate/index.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/rhde-bootc-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rhde-bootc-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL.</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Build Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s1-podman.html">Build Bootc Containers With Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s2-podman-lab.html">Lab: Build and Test Bootc Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch3-validate/index.html">Test Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch4-publish/index.html">Publish Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building System Images for Red Hat Device Edge with Image Mode for RHEL</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../samples/1/index.html">samples</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../samples/1/index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
+    <li><a href="index.html">Build Bootc Container Images for Edge Devices</a></li>
+    <li><a href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Lab: System Configuration From Containers</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Objective</dt>
+<dd>
+<p>Create containerfiles which include system configurations and demonstrate that they CANNOT be effectively tested using Podman.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Pending review
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_before_you_begin"><a class="anchor" href="#_before_you_begin"></a>Before you Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
+</div>
+<div class="paragraph">
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+</div>
+<div class="paragraph">
+<p>If you are using the course classroom, you will log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+If not, please adapt the instructions to your test environment.</p>
+</div>
+<div class="paragraph">
+<p>Make sure you verified your test environment by following the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a> of this course.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will review a containerfile which configures different aspects of a RHEL system, and build a bootc container image from it.
+Then you will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Prepare to start this activity by checking that you have the outcomes from previous activities.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>If needed, create a local clone of the samples code repository of this course, and make it your working directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
+$ <strong>git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git</strong>
+Cloning into 'rhde-bootc-samples'...
+...
+$ <strong>cd rhde-bootc-samples</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>If needed, login to your private registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
+Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Enter the <code>httpd-system</code> directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd httpd-system</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Review its containerfile.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/rhel10/rhel-bootc:10.0
+ADD yum.repos.d /etc/yum.repos.d
+RUN mkdir -p /usr/lib/bootc/kargs.d &amp;&amp; \
+  dnf install -y firewalld httpd &amp;&amp; \
+  dnf clean all &amp;&amp; \
+  firewall-offline-cmd --zone=public --add-service=http &amp;&amp; \
+  systemctl enable httpd &amp;&amp; \
+  systemctl enable firewalld
+ADD sysctl.d /usr/lib/sysctl.d
+ADD kargs.d /usr/lib/bootc/kargs.d
+ADD html /var/www/html</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Review its kernel configuration files.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>sysctl.d/90-ipv4-forward.conf</code></dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">net.ipv4.ip_forward = 0</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1"><code>sysctl.d/90-sysrq.conf</code></dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kernel.sysrq = 0</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+<li>
+<p>Review its kernel command-line configuration files.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>kargs.d/00-mitigations.toml</code></dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kargs = ["mitigations=nosmt"]</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Build and test the bootc container image.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Build your bootc container image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman build -t httpd-system .</strong>
+...
+Successfully tagged localhost/httpd-system:latest</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the bootc container image as a rootless application container, but do NOT stop and delete it yet.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman run -d -p 8080:80 --name httpd httpd-system</strong>
+...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use either a web browser or the Curl utility to access its HTTP server and confirm that you are running the right image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
+Misc tests of bootc images and firewalld</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Verify that your bootc container image does include system configurations, but they were NOT applied to the application container.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Start a shell inside your test container and verify that the configuration files exist and that they have the expected content.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman exec -it httpd bash</strong>
+bash-5.2# <strong>cat /usr/lib/sysctl.d/90-* </strong>
+net.ipv4.ip_forward = 0
+kernel.sysrq = 0
+bash-5.2# <strong>cat /usr/lib/bootc/kargs.d/* </strong>
+kargs = ["mitigations=nosmt"]
+bash-5.2# <strong>ls -l /etc/systemd/system/multi-user.target.wants/httpd.service</strong>
+lrwxrwxrwx. 1 root root 37 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/httpd.service -&gt; /usr/lib/systemd/system/httpd.service
+bash-5.2# <strong>ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service</strong>
+lrwxrwxrwx. 1 root root 41 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/firewalld.service -&gt; /usr/lib/systemd/system/firewalld.service
+bash-5.2# <strong>cat /etc/firewalld/zones/public.xml</strong>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;zone&gt;
+  &lt;short&gt;Public&lt;/short&gt;
+  &lt;description&gt;For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.&lt;/description&gt;
+  &lt;service name="ssh"/&gt;
+  &lt;service name="dhcpv6-client"/&gt;
+  &lt;service name="cockpit"/&gt;
+  &lt;service name="http"/&gt;
+  &lt;forward/&gt;
+&lt;/zone&gt;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify the active kernel and firewall settings inside the application container.</p>
+<div class="paragraph">
+<p>Notice that they do NOT match the configurations set by your bootc container image.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">bash-5.2# <strong>cat /proc/cmdline</strong>
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+bash-5.2# <strong>sysctl kernel.sysrq</strong>
+kernel.sysrq = 16
+bash-5.2# <strong>firewall-cmd --list-services</strong>
+FirewallD is not running</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that Systemd services which requires access to the kernel (such as Firewalld) were not started, but services which do not (such as the Apache Web Server) are fine.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">bash-5.2# <strong>systemctl is-active httpd</strong>
+active
+bash-5.2# <strong>systemctl is-active firewalld</strong>
+inactive</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Exit the shell and verify that all values obtained during the previous step actually match your <em>development machine</em>.</p>
+<div class="paragraph">
+<p>This is expected, because an application container does NOT run the kernel from its container image, and does NOT apply the system configurations inside its image.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container image this way could have unexpected and potentially dangerous effects on its host, in the case your <em>development machine</em>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">bash-5.2# <strong>exit</strong>
+exit
+$ <strong>cat /proc/cmdline</strong>
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+$ <strong>sysctl net.ipv4.ip_forward</strong>
+net.ipv4.ip_forward = 1
+$ <strong>sysctl kernel.sysrq</strong>
+kernel.sysrq = 16
+$ <strong>systemctl is-active firewalld</strong>
+active
+$ <strong>firewall-cmd --list-services</strong>
+cockpit dhcpv6-client pulseaudio ssh</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Stop and remove your test container, so it does not keep port 8080 busy on your <em>development machine</em>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman stop httpd</strong>
+httpd
+$ <strong>podman rm httpd</strong>
+httpd</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The next chapter demonstrates how to test your bootc container images from a local VM, so you can perform system testing of your containers and validate settings that you cannot validate with Podman.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a></span>
+  <span class="next"><a href="../ch3-validate/index.html">Test Bootc Container Images for Edge Devices</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
