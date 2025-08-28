@@ -1,0 +1,424 @@
+:time_estimate: 5
+
+= Lab: Publish a Bootc Container in a Private Container Registry
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Publish a system image in an OCI container registry and use it to perform system testing of edge devices.
+
+WARNING: Pending review
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
+
+You also need a _test machine_ running RHEL, to which you have unrestricted root access.
+
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+
+If you are using the course classroom, you will log in on the `workstation` VM, as your _development machine_, using the user `student` with password `student`.
+You will log in with the same user on the `servera` VM, as your _test machine_.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
+
+== Instructions
+
+You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reinstall an existing system from that container image, as an alternative approach to perform system testing.
+
+1. On your _development machine_, prepare to start this activity by checking that you have the outcomes from previous activities.
+
+.. If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
+Stay on your home directory to start this lab.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd*
+$ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
+Cloning into 'rhde-bootc-samples'...
+...
+--
++
+.. If needed, login to your private registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+.. Verify that you have a bootc container image named `httpd-system` in your local container storage.
+If you do not, please perform the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab] which builds that image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman image list | grep httpd-system*
+localhost/httpd-system                            latest      8b0253366051  18 hours ago  1.56 GB
+--
+
+2. Copy all artifacts you will need to reinstall your _test machine_ later in this lab.
+
+.. Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform new builds of the same image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/httpd-system:v1.0-1234*
+...
+Writing manifest to image destination
+--
+
+.. Copy a SSH public key that you will use it to access your _test machine_ after reboot.
++
+[source,subs="verbatim,quotes"]
+--
+$ *scp temp-test-vm/edge-key.pub servera:~*
+edge-key.pub
+--
+
+.. Copy the public CA certificate of your private container registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *scp utility:/opt/registry/certs/domain.crt servera:~*
+domain.crt 
+--
++
+NOTE: In the ROLE classroom, the `registry` hostname is an alias (that is, a DNS `CNAME`) for the `utility` VM.
+
+.. Copy the `bootc-install.sh` script, so you do not have to type a long Podman command to run the boot utility from your bootc container image, later in this lab.
++
+[source,subs="verbatim,quotes"]
+--
+$ *scp rhde-bootc-samples/bootc-install/bootc-install.sh servera:~*
+bootc-install.sh
+--
+
+3. Prepare your _test machine_ to be reinstalled from a bootc container image.
+
+.. Open an SSH session to your _test machine_.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh servera*
+--
++
+NOTE: Alternatively, you can open a web terminal directly on the `servera` machine, using the ROLE web interface.
+Notice that the web terminal will stop working after you reinstall your _test machine_.
+
+.. As a convenience, install the bootc utility.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo dnf install bootc*
+...
+Complete!
+--
+
+.. Verify that your _test machine_ was created in the traditional way, using package mode for RHEL.
++
+[source,subs="verbatim,quotes"]
+--
+$ *bootc status*
+System is not deployed via bootc.
+--
++
+NOTE: Most times, you would run the `bootc` command from a bootc container image instead of directly from a system installed using package mode.
+
+.. Review the network configuration of your _test machine_, so that you can replicate it as you reinstall the system.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ip -br addr show*
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+ens3             UP             172.25.250.10/24 fe80::5054:ff:fe00:fa0b/64 
+ens4             UP             
+$ *route*
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         classroom.lab.e 0.0.0.0         UG    100    0        0 ens3
+172.25.250.0    0.0.0.0         255.255.255.0   U     100    0        0 ens3
+$ *cat /etc/resolv.conf*
+# Generated by NetworkManager
+search lab.example.com example.com
+nameserver 172.25.250.220
+--
+
+.. Notice that, from the commands above, it is not clear if the network configuration is static or if it was provided by DHCP.
+You can use the Network Manage CLI to get that information and more.
++
+[source,subs="verbatim,quotes"]
+--
+$ *nmcli device status*
+DEVICE  TYPE      STATE                                  CONNECTION         
+ens3    ethernet  connected                              cloud-init ens3    
+ens4    ethernet  connecting (getting IP configuration)  Wired connection 1 
+lo      loopback  connected (externally)                 lo
+$ *nmcli connection show*
+NAME                UUID                                  TYPE      DEVICE 
+cloud-init ens3     fab1e257-61a6-3526-abf9-8c50c83a28c7  ethernet  ens3   
+Wired connection 1  6ee7c93a-43e8-3afe-bfc8-f6a32916459b  ethernet  ens4   
+lo                  6b429f96-be91-4a94-aed8-6b5b754f5c69  loopback  lo 
+$ *nmcli -f ipv4.method connection show 'cloud-init ens3'*
+ipv4.method:                            manual
+--
+
+.. Make a note that the network configuration is manual, and the primary network interface is the `ens3` device.
+Also make a not if and its IP address, default gateway, and DNS server address.
+
+4. Re-install your _test machine_ from a bootc container image.
+
+.. Install the public CA certificate of your private container registry, so you do NOT need to disable TLS validation when acessing its container images.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo cp domain.crt /etc/pki/ca-trust/source/anchors/*
+$ *sudo update-ca-trust extract*
+--
+
+.. Log in on your private registry, but from the `root` user.
+Remember that previous registry login were done on your _developer machine_ from your unprivileged user.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+.. Download the bootc container image to your _test machine_, again using the `root` user.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo podman pull registry.lab.example.com:5000/httpd-system:v1.0-1234*
+...
+Writing manifest to image destination
+--
+
+.. Review the `bootc-install.sh` script.
+Notice the following:
++
+... The script runs the `bootc install` command in a privileged container.
+... The privileged container mounts the host root filesystem, its device tree, and container storage.
+... The privileged container also mounts the SSH key you copied from your _development machine_.
+... The `--skip-fetch` option is required, else the `bootc install` command would try access the private registry, but would fail because it has no TLS certificate nor credentials.
+... The `--acknowledge-destructive` option skips a wait time before starting the installation.
+... The `--replace alongside` option preserve the old contents of the existing system root, which could be useful for troubleshooting.
+... The `--kargs` option provide static network configuration.
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:bootc-install:example$bootc-install.sh[lines=1..15]
+--
+.. Run the `bootc-install.sh` script.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sudo bash bootc-install.sh*
+Installing image: docker://registry.lab.example.com:5000/httpd-system:v1.0-1234
+Digest: sha256:6cc1713667782f7d55fd8f3f5308c79063c57bcf6419c659a7c55ebdf72f3262
+Initializing ostree layout
+layers already present: 0; layers needed: 72 (838.5 MB)
+Deploying container image...done (15 seconds)
+Injected: etc/tmpfiles.d/bootc-root-ssh.conf
+Running bootupctl to install bootloader
+> bootupctl backend install --write-uuid --update-firmware --auto --device /dev/sda /target
+Installed: grub.cfg
+Installation complete!
+--
+
+.. Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment on its root disk.
++
+[source,subs="verbatim,quotes"]
+--
+$ *bootc status*
+System is not deployed via bootc.
+$ *sudo ls /ostree/deploy/*
+default
+$ *sudo cat /boot/loader/entries/ostree-1.conf*
+title Red Hat Enterprise Linux 10.0 (Coughlan) (ostree:0)
+version 1
+options root=UUID=15507695-22bb-4c65-94e6-a438e095983f rw mitigations=nosmt ip=172.25.250.11::172.25.250.0:255.255.255.0:bootc:ens3:off:172.25.250.220 ostree=/ostree/boot.1/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0
+linux /boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64
+initrd /boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/initramfs-6.12.0-55.24.1.el10_0.x86_64.img
+aboot /ostree/deploy/default/deploy/13ba5cc346cb26e9147d3ddd54c88a4cc5947a31f7c1762b14389b6ddd4d1648.0/usr/lib/ostree-boot/aboot.img
+abootcfg /ostree/deploy/default/deploy/13ba5cc346cb26e9147d3ddd54c88a4cc5947a31f7c1762b14389b6ddd4d1648.0/usr/lib/ostree-boot/aboot.cfg
+--
+
+.. Reboot your _test machine_.
+You will lose your SSH connection to it.
++
+[source,subs="verbatim,quotes"]
+--
+$ *systemctl reboot --now*
+--
+NOTE: If you wish, you can open the console of the `serverb` VM on ROLE and follow its shutdown and reboot messages.
+
+5. If you perceive you did a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:
++
+IMPORTANT: if all went well so far, you can skip this entire step.
+
+.. BEFORE you reboot your _test machine_, you can run the `bootc install` command, adding the `--stateroot tryagain` option, where `tryagain` is any name you wish to assign to your new bootc system installation, other than `default`.
+
+.. If you only perceive a mistake AFTER reboot, you can retry using the `serverb` VM as your _test machine_.
+Just remember to replace the IP address of the `servera` VM (172.25.250.10) with the IP address of the `serverb` VM (172.25.250.11) on your `bootc-install.sh` script.
++
+If you do so, remember to replace, in the remaining steps of this lab, the `servera` hostname name with the `serverb` hostname.
+
+.. If you want to try again, but after having already rebooted both `servera` and `serverb` VMs, you must delete and re-create your ROLE classroom, and then perform the previous labs that prepare your _development machine_ and build the `httpd-system` bootc container images.
+
+.. You could also try creating a libvirt VM, installing RHEL on it, and running the `bootc install` on the local VM. 
+A local VM would have the advantage of relying on dynamic IP configuration, thus NOT requiring a correct `--kargs` option for the `bootc install` command.
++
+But you would have to wait the time to install RHEL on your local VM, which takes considerably longer with package mode than with image mode.
+If all goes well, using either `servera` or `serverb` VMs is considerably faster.
+
+6. On your _developer machine_, verify that your _test machine_ runs the `httpd-system` bootc container image and open a nmew SSH session to your _test machine_
+
+.. Verify that your _test machine_ now runs a web server containing your mock of a single-page web application.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl servera*
+Misc tests of bootc images and firewalld
+--
+
+.. Delete the entry for your _test machine_ from your SSH known hosts file.
++
+[source,subs="verbatim,quotes"]
+--
+$ *sed -i '/servera/d' ~/.ssh/known_hosts*
+--
+
+.. Connect to your _test machine_ using the SSH key you created for system testing of bootc container images.
++
+[source,subs="verbatim,quotes"]
+--
+$ *ssh -i temp-test-vm/edge-key root@servera*
+[root@servera ~]#
+--
+
+6. On your _test machine_, verify that it has all system settings from its bootc container image applied and active.
++
+If you do not remember about those settings, refer to the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab] where you build that image and verified that its settings were not applied with Podman.
+
+.. Verify that it now reports as having being deployed using bootc.
++
+[source,subs="verbatim,quotes"]
+--
+# *bootc status*
+● Booted image: registry.lab.example.com:5000/httpd-system:v1.0-1234
+        Digest: sha256:6cc1713667782f7d55fd8f3f5308c79063c57bcf6419c659a7c55ebdf72f3262
+       Version: 10.0 (2025-08-15 22:40:10.520003217 UTC)
+--
+
+.. Verify that its kernel command line now includes the `mitigations=nosmt` argument.
++
+[source,subs="verbatim,quotes"]
+--
+# *sudo cat /proc/cmdline*
+BOOT_IMAGE=(hd0,gpt3)/boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f rw mitigations=nosmt ip=172.25.250.11::172.25.250.0:255.255.255.0:bootc:ens3:off:172.25.250.220 ostree=/ostree/boot.1/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0
+--
+
+.. Verify that IP forwarding and the sysreq key are disabled.
++
+[source,subs="verbatim,quotes"]
+--
+# *sysctl net.ipv4.ip_forward*
+net.ipv4.ip_forward = 0
+# *sysctl kernel.sysrq*
+kernel.sysrq = 0
+--
+
+.. Verify that the Systemd service units for the Firewall Daemon and the Apache Web Server are active.
++
+[source,subs="verbatim,quotes"]
+--
+# *systemctl is-active httpd*
+active
+# *systemctl is-active firewalld*
+active
+--
+
+.. Verify that the HTTPD service is allowed in the firewall settings.
++
+[source,subs="verbatim,quotes"]
+--
+# *sudo firewall-cmd --list-services*
+cockpit dhcpv6-client http ssh
+--
+
+.. Verify that the old contents of your _test machine_ are still available in the `/sysroot` directory.
+For example, verify the files for the `student` user are there.
++
+[source,subs="verbatim,quotes"]
+--
+# *ls /sysroot/home/student/*
+bootc-install.sh  domain.crt  edge-key.pub
+--
+
+7. On your _development machine_, promote you bootc container image as vetted for use by actual edge devices.
+
+.. Set a floating tag for the major.minor version number of your image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/httpd-system:v1.0*
+...
+Copying blob 210b201289a0 skipped: already exists  
+Copying blob ad312c5c40cc skipped: already exists  
+...
+Copying config 8f58cf789c done   | 
+Writing manifest to image destination
+--
++
+Notice that the `skopeo copy` command above did NOT actually copied any layers, because all of them they already exist on the container registry, from the previous copy operation.
+
+.. Also tag the same image as `latest` in the container registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo copy docker://registry.lab.example.com:5000/httpd-system:v1.0-1234 docker://registry.lab.example.com:5000/httpd-system:latest*
+...
+Copying blob 4b7b4242bfaa skipped: already exists  
+Copying blob c7b030c219e8 skipped: already exists  
+...
+Copying config 8f58cf789c done   | 
+Writing manifest to image destination
+--
++
+NOTE: A CI/CD system would probably use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
+This activity uses both styles to demonstrate that it makes no different on the final result.
+
+.. Verify that the three tags (one fixed, two floating) are listed in your bootc container image repository, and that the three tags possess the same digest, so they actually are alternate tags for exactly the same image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ json .RepoTags }}' docker://registry.lab.example.com:5000/httpd-system | jq*
+[
+  "latest",
+  "v1.0",
+  "v1.0-1234"
+]
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:v1.0-1234*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:v1.0*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:latest*
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+--
++
+NOTE: Your digests will be different from the output above, because containerfile builds are NOT reproducible. 
+If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
+There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
+
+////
+Lab SSH key is at /etc/.rht_authorized_keys
+////
+
+////
+system-reinstall-bootc didn't work for me, because of issues with registry credentials and TLS validation.
+bootc install to-existing-root also failed, but when I got the correct and complete podman run command, I realized I did ith with to-filesystem instead of to-existing-root, and I didn't went back to try it all again.
+////
+
+== What's next
+
+This was the final lab in this course, but the next course of this learning approach shows how to use the *bootc image builder* utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.

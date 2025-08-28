@@ -1,0 +1,279 @@
+:time_estimate: 7
+
+= Lab: Build and Test Bootc Containers
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Create containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.
+
+WARNING: Pending review
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
+
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If not, please adapt the instructions to your test environment.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
+
+== Instructions
+
+You will build a containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
+You will also compare the bootc container image for your application with a regular application image for the same application.
+
+1. Prepare to start this activity by cloning the sample code repository and logging in the private registry.
+
+.. Create a local clone of the sample code repository of this course, and make it your working directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
+Cloning into 'rhde-bootc-samples'...
+...
+$ *cd rhde-bootc-samples*
+--
+
+.. If needed, login to your private registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+2. Inspect the containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.
+
+.. Enter the directory `httpd-bootc`.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd httpd-bootc*
+--
+
+.. Review the containerfile.
+It installs the `httpd` package and enables the `httpd` service, them adds HTML files that mock a singe-page web application.
++
+[source,subs="verbatim"]
+--
+include::1@samples:httpd-bootc:example$Containerfile[]
+--
++
+Notice that the container file does NOT define any of the usual container image metadata, such as `ENV`, `USER`, or `VOLUME`.
+It also does not define neither an `ENTRYPOINT` nor a `CMD`.
+
+3. Build and test the bootc container image for your single-page web application.
+
+.. Build your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman build -t httpd-bootc .*
+...
+Successfully tagged localhost/httpd-bootc:latest
+--
++
+WARNING: The last argument of the `podman build` command above is a dot, for the current directory.
+
+.. Run the bootc container image as a rootless application container.
++
+Because unprivileged processes cannot access the standard HTTP port (80), configure port-forwarding from a higher port number.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman run -d -p 8080:80 --name httpd httpd-bootc*
+--
+
+.. Use either a web browser or the Curl utility to access the mock of our single-page web application.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+This would be the HTML and JavaScript code of your single-page web application.
+--
+
+.. Verify that your bootc container image inherits the `containers.bootc` label key from the bootc base image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *skopeo inspect --format '{{ index .Labels "containers.bootc" }}' containers-storage:localhost/httpd-bootc*
+1
+--
+
+.. Inspect the processes running inside your bootc container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+bash-5.2# *ps ax | wc -l*
+25
+bash-5.2# *pstree*
+systemd-+-NetworkManager---3*[{NetworkManager}]
+        |-dbus-broker-lau---dbus-broker
+        |-gssproxy---5*[{gssproxy}]
+        |-httpd-+-httpd
+        |       |-httpd---68*[{httpd}]
+        |       `-2*[httpd---52*[{httpd}]]
+        |-rhsmcertd---{rhsmcertd}
+        |-rpcbind
+        |-sshd
+        |-systemd-journal
+        |-systemd-logind
+        |-systemd-userdbd---4*[systemd-userwor]
+        `-udisksd---6*[{udisksd}]
+bash-5.2# *exit*
+exit
+--
++
+There are many processes that are NOT common in application containers, such as the NetworkManager, DBus, and SSH daemons.
+
+.. Stop and delete your bootc container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman stop httpd*
+httpd
+$ *podman rm httpd*
+httpd
+--
+
+4. If you feel that our first bootc container could work basically the same way as a simple application container, you are right.
+Let's compare our bootc container with a regular application container for the same application.
+
+.. Change to the `httpd-ubi` directory
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd ../httpd-ubi*
+--
+
+.. The containerfile uses the standard UBI image, so it must install the `systemd` package and start the Systemd daemon as its `ENTRYPOINT`.
++
+[source,subs="verbatim"]
+--
+include::1@samples:httpd-ubi:example$Containerfile[]
+--
+
+.. This containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
++
+It violates a few recommendations for application containers, among them:
++
+... It runs more processes than the application really requires.
+It should start the Apache Web Server as its `ENTRYPOINT`, instead of the System daemon.
++
+... It does NOT send logs to the standard output, so those logs are NOT visible with `podman logs` and would also NOT be visible from `kubectl logs` either, if run from a Kubernetes cluster.
++
+... It runs as `root`, because it does not set a `USER`.
++
+... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration.
+It should listen to an unprivileged port, to not require elevated privileges when run in a Kubernetes cluster.
++
+NOTE: Providing a good example of a containerfile for a web application is outside the scope of this course.
+
+.. Build and run the application container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman build -t httpd-ubi .*
+...
+Successfully tagged localhost/httpd-ubi:latest
+$ *podman run -d -p 8080:80 --name httpd httpd-ubi*
+...
+$ *curl 127.0.0.1:8080*
+This would be the HTML and JavaScript code of your single-page web application.
+--
+
+.. Inspect the processes running inside your application container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+[root@965ed65344f0 /]# *ps ax | wc -l*
+bash: ps: command not found
+0
+[root@965ed65344f0 /]# *pstree*
+systemd─┬─httpd─┬─httpd
+        │       ├─httpd───68*[{httpd}]
+        │       └─2*[httpd───52*[{httpd}]]
+        ├─systemd-journal
+        └─systemd-userdbd───3*[systemd-userwor]
+[root@965ed65344f0 /]# *exit*
+exit
+--
++
+Notice that the `ps` command is not available. Most most application containers do NOT include common troubleshooting commands and system services, so their container images are leaner.
++
+Also notice, from the `pstree` output, that only the System daemon and Apache Web server are running.
+It only runs a much smaller set of Systemd services, because it does not inherit Systemd configurations from the bootc base container image.
+
+.. Stop and delete your application container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman stop httpd*
+httpd
+$ *podman rm httpd*
+httpd
+--
+
+5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your containerfile to serve the application code from `/webapp` instead of from `/var/www`.
+
+.. Change to the `webapp-bootc` directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd ../webapp-bootc*
+--
+
+.. Review its containerfile.
++
+It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`, in the Apache Web Server main configuration file.
++
+[source,subs="verbatim"]
+--
+include::1@samples:webapp-bootc:example$Containerfile[]
+--
+WARNING: That improved bootc container image has a serious issue, that you will NOT be able to see by simple testing using Podman.
+If you can spot what the issue is, *do NOT fix* it yet.
+We will see, later in this course, how to test the bootc container image in a way that makes that issue clear.
+
+.. Build your improved bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman build -t webapp-bootc .*
+...
+Successfully tagged localhost/webapp-bootc:latest
+--
+
+.. Run your improved bootc container image as a rootless application container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman run -d -p 8080:80 --name webapp webapp-bootc*
+--
+
+.. Use either a web browser or the Curl utility to view the mock of our single-page web application.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.
+--
+
+.. Stop and delete your test container.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman stop webapp*
+webapp
+$ *podman rm webapp*
+webapp
+--
+
+== What's next
+
+The next section presents some approaches for configuring Linux systems from a bootc container image.

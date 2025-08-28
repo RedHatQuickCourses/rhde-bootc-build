@@ -1,10 +1,11 @@
 site:
-  title: Building Red Hat Device Edge system images with image mode for RHEL
+  title: Building System Images for Red Hat Device Edge with Image Mode for RHEL
   start_page: rhde-bootc-build::index.adoc
 
 content:
   sources:
   - url: ./
+  - url: https://github.com/RedHatQuickCourses/rhde-bootc-samples.git
 
 asciidoc:
   attributes:

@@ -1,0 +1,204 @@
+:time_estimate: 5
+
+= Lab: System Configuration From Containers
+
+_Estimated reading time: *{time_estimate} minutes*._
+
+Objective::
+Create containerfiles which include system configurations and demonstrate that they CANNOT be effectively tested using Podman.
+
+WARNING: Pending review
+
+== Before you Begin
+
+You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
+
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+
+If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If not, please adapt the instructions to your test environment.
+
+Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
+
+== Instructions
+
+You will review a containerfile which configures different aspects of a RHEL system, and build a bootc container image from it.
+Then you will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.
+
+1. Prepare to start this activity by checking that you have the outcomes from previous activities.
+
+.. If needed, create a local clone of the samples code repository of this course, and make it your working directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd*
+$ *git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git*
+Cloning into 'rhde-bootc-samples'...
+...
+$ *cd rhde-bootc-samples*
+--
+
+.. If needed, login to your private registry.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman login -u student -p redhat registry.lab.example.com:5000*
+Login Succeeded!
+--
+
+2. Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.
+
+.. Enter the `httpd-system` directory.
++
+[source,subs="verbatim,quotes"]
+--
+$ *cd httpd-system*
+--
+
+.. Review its containerfile.
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$Containerfile[]
+--
+
+.. Review its kernel configuration files.
++
+`sysctl.d/90-ipv4-forward.conf`::
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$sysctl.d/90-ipv4-forward.conf[]
+--
++
+`sysctl.d/90-sysrq.conf`::
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$sysctl.d/90-sysrq.conf[]
+--
+
+.. Review its kernel command-line configuration files.
++
+`kargs.d/00-mitigations.toml`::
++
+[source,subs="verbatim,quotes"]
+--
+include::1@samples:httpd-system:example$kargs.d/00-mitigations.toml[]
+--
+
+3. Build and test the bootc container image.
+
+.. Build your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman build -t httpd-system .*
+...
+Successfully tagged localhost/httpd-system:latest
+--
+
+.. Run the bootc container image as a rootless application container, but do NOT stop and delete it yet.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman run -d -p 8080:80 --name httpd httpd-system*
+...
+--
+
+.. Use either a web browser or the Curl utility to access its HTTP server and confirm that you are running the right image.
++
+[source,subs="verbatim,quotes"]
+--
+$ *curl 127.0.0.1:8080*
+Misc tests of bootc images and firewalld
+--
+
+4. Verify that your bootc container image does include system configurations, but they were NOT applied to the application container.
+
+.. Start a shell inside your test container and verify that the configuration files exist and that they have the expected content.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman exec -it httpd bash*
+bash-5.2# **cat /usr/lib/sysctl.d/90-* **
+net.ipv4.ip_forward = 0
+kernel.sysrq = 0
+bash-5.2# **cat /usr/lib/bootc/kargs.d/* **
+kargs = ["mitigations=nosmt"]
+bash-5.2# *ls -l /etc/systemd/system/multi-user.target.wants/httpd.service*
+lrwxrwxrwx. 1 root root 37 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/httpd.service -> /usr/lib/systemd/system/httpd.service
+bash-5.2# *ls -l /etc/systemd/system/multi-user.target.wants/firewalld.service*
+lrwxrwxrwx. 1 root root 41 Aug 14 17:08 /etc/systemd/system/multi-user.target.wants/firewalld.service -> /usr/lib/systemd/system/firewalld.service
+bash-5.2# *cat /etc/firewalld/zones/public.xml*
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Public</short>
+  <description>For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.</description>
+  <service name="ssh"/>
+  <service name="dhcpv6-client"/>
+  <service name="cockpit"/>
+  <service name="http"/>
+  <forward/>
+</zone>
+--
+
+.. Verify the active kernel and firewall settings inside the application container.
++
+Notice that they do NOT match the configurations set by your bootc container image.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# *cat /proc/cmdline*
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+bash-5.2# *sysctl kernel.sysrq*
+kernel.sysrq = 16
+bash-5.2# *firewall-cmd --list-services*
+FirewallD is not running
+--
+
+.. Verify that Systemd services which requires access to the kernel (such as Firewalld) were not started, but services which do not (such as the Apache Web Server) are fine.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# *systemctl is-active httpd*
+active
+bash-5.2# *systemctl is-active firewalld*
+inactive
+--
+
+.. Exit the shell and verify that all values obtained during the previous step actually match your _development machine_.
++
+This is expected, because an application container does NOT run the kernel from its container image, and does NOT apply the system configurations inside its image.
++
+WARNING: While it is possible to run a privileged, rootful container with access to host namespaces, and thus affect system and kernel settings, running a bootc container image this way could have unexpected and potentially dangerous effects on its host, in the case your _development machine_.
++
+[source,subs="verbatim,quotes"]
+--
+bash-5.2# *exit*
+exit
+$ *cat /proc/cmdline*
+BOOT_IMAGE=(hd0,gpt3)/boot/vmlinuz-6.12.0-55.12.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f console=tty0 console=ttyS0,115200n8 no_timer_check crashkernel=2G-64G:256M,64G-:512M
+$ *sysctl net.ipv4.ip_forward*
+net.ipv4.ip_forward = 1
+$ *sysctl kernel.sysrq*
+kernel.sysrq = 16
+$ *systemctl is-active firewalld*
+active
+$ *firewall-cmd --list-services*
+cockpit dhcpv6-client pulseaudio ssh
+--
+
+5. Stop and remove your test container, so it does not keep port 8080 busy on your _development machine_.
++
+[source,subs="verbatim,quotes"]
+--
+$ *podman stop httpd*
+httpd
+$ *podman rm httpd*
+httpd
+--
+
+== What's next
+
+The next chapter demonstrates how to test your bootc container images from a local VM, so you can perform system testing of your containers and validate settings that you cannot validate with Podman.
