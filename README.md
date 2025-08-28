@@ -10,9 +10,9 @@ This is the first in a series of quick courses about using image mode for RHEL w
 
 Design docs for the course series and individual courses are available only to Red Hat employees:
 
-* [Learning approach design] (https://docs.google.com/document/d/1vINNgOw9NVnxssptkDOqBnHhFCaY9eW5ATwT2dOhkdU/edit?usp=sharing)
+* [Learning approach design](https://docs.google.com/document/d/1vINNgOw9NVnxssptkDOqBnHhFCaY9eW5ATwT2dOhkdU/edit?usp=sharing)
 
-* [Design of this course] (https://docs.google.com/document/d/12tShckf7LVLsD3U_vUZ4kYA8eOGNZwfH-Luk-wA91-Y/edit?usp=sharing)
+* [Design of this course](https://docs.google.com/document/d/12tShckf7LVLsD3U_vUZ4kYA8eOGNZwfH-Luk-wA91-Y/edit?usp=sharing)
 
 Sample code for this course series is in its own [git repository](https://github.com/RedHatQuickCourses/rhde-bootc-samples).
 
