@@ -14,7 +14,7 @@ This is a static web page, so the checkboxes are not clickable.
 
 == Questions
 
-For each of the following scenarios, which flavor of RHEL would be most adequate?
+For each of the following scenarios, which approach to deploying RHEL systems would be most adequate?
 There could be more than one right answer.
 
 1. A manager's workstation in a retail store, to run text processors, spreadsheets, email clients, and also access multiple corporate systems.
@@ -38,8 +38,8 @@ You CAN use image mode to provision graphical office workstations, most likely t
 .❑ Traditional RHEL (with package mode)
 [%collapsible]
 ====
-✘ _Incorrect: though kiosk machines have been frequently configured from standard desktop operating systems, they become high-maintenance and even potential sources of embarrassment if customers can get access to other applications on the device.
-A lower maintenance approach, such as the one from image mode systems, fits better this scenario._
+✘ _Incorrect: Though kiosk machines have been frequently configured from standard desktop operating systems, they become high-maintenance and even potential sources of embarrassment if customers can get access to other applications on the device.
+A lower maintenance approach, such as the one from image mode systems, fits this scenario better._
 ====
 +
 .❑ Red Hat Device Edge (with image mode)
@@ -69,13 +69,13 @@ You CAN provision and configure a large server using image mode for RHEL, but us
 .❑ Traditional RHEL (with package mode)
 [%collapsible]
 ====
-✘ _Incorrect: These computers are likely close to the security access devices, multiple of them are deployed in different parts of the building or campus, and they should be resistant to tampering, which makes them better suited for image mode deployments than to traditional package mode deployments._
+✘ _Incorrect: These computers are likely close to the security access devices, many of them are deployed in different parts of the building or campus, and they should be resistant to tampering, which makes them better suited for image mode deployments than to traditional package mode deployments._
 ====
 +
 .❑ Red Hat Device Edge (with image mode)
 [%collapsible]
 ====
-✔ *Correct: In addition to the considerations in the previous answer, these computers are likely rugged for outdoor conditions, and must be quick to replace in case of hardware failures.
+✔ *Correct: In addition to the considerations in the previous answer, these computers are likely rugged for outdoor conditions, and must be quickly replaceable in case of hardware failures.
 Besides, they are likely provided as appliances by the security equipment vendor, instead of managed by corporate IT as other LOB servers.*
 ====
 
@@ -92,7 +92,7 @@ It could use compute device which is rugged for factory floor conditions and pro
 [%collapsible]
 ====
 ✔ *Correct: As a single-purpose appliance, this is better suited to be deployed and managed as an image mode system.
-Beware that, to be entitled using Red Hat Device Edge Subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
+Be aware that, to be entitled using Red Hat Device Edge Subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
 Some of those devices do offer GPUs and other kinds of hardware accelerators suitable for this kind of applications.*
 ====
 
