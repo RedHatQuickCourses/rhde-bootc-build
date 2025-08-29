@@ -7,14 +7,12 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Introduce the bootc utility and how the RHEL installer (Anaconda) can use a bootc container image as its installation source.
 
-WARNING: Pending review
-
 == How to install image mode systems
 
 Previous chapters demonstrate the need to perform system testing of bootc container images.
-You just cannot validate that all system settings in a bootc container image are applied and work as intended using a container engine such as Podman.
+You cannot, however, validate that all system settings in a bootc container image are applied and work as intended by using a container engine such as Podman.
 
-To perform system testing, you must install an image mode system, and them boot the system.
+To perform system testing, you must install an image mode system, and then reboot the system.
 There are multiple ways of installing an image mode system, among them:
 
 . Use the standard RHEL installation media and provide a custom kickstart configuration that references a bootc container image as its installation source.
@@ -24,31 +22,31 @@ There are multiple ways of installing an image mode system, among them:
 . Use the bootc image builder tool to create either a custom installation media or a custom cloud image which embeds a bootc container image.
 
 In this chapter, we use option (1) above, and in the next chapter, we use option (2), to demonstrate two approaches for performing quick system testing of a bootc container image.
-A follow-up course will teach option (3) as the recommended way of deploying edge systems in production.
+A follow-up course will cover option (3) as the recommended way of deploying edge systems in production.
 
-Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, we have tp consider how much configurations, or how little, should actually be in a bootc container or left to be performed after installing an image mode systems.
+Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, we have to consider how much configuration, or how little, should actually be in a bootc container or left to be performed after installing an image mode system.
 
 == Day-0 and day-1 system configuration
 
 Bootc container images open the possibility for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.
 
-This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to its intended uses.
+This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready for its intended uses.
 
-Some organizations perform such day-1 configurations using system installation scripting tools, for example Anaconda kickstart and Cloud-init. 
+Some organizations perform such day-1 configurations by using system installation scripting tools, for example, Anaconda kickstart and Cloud-init. 
 Others perform such configuration using automation technologies, such as Red Hat Ansible Automation Platform.
 
 The need for performing day-1 configurations does NOT disappear with image mode systems.
 Sure, you may include a large set of configurations in a system image, but in most cases there is something which must be different between individual devices or between different edge sites.
 
-Managing a large number of images, to account for those variations, may become a challenge.
+When managing a large number of images, accounting for such variations may become a challenge.
 It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.
 
 === Secrets management and device on-boarding
 
 Another concern with including system and application configurations in a system images come from potential risk scenarios related to secrets management, such as:
 
-* A a removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.
-* A rogue device is plugged into network of an edge site, automatically discovered and installed as if it were a genuine device, and then taken off-site to access its system disk and grab the credentials stored there.
+* A removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.
+* A rogue device is plugged into the network of an edge site, automatically discovered and installed as if it were a genuine device, and then taken off-site to access its system disk and grab the credentials stored there.
 
 Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present similar risks.
 
@@ -65,12 +63,13 @@ ____
 
 You can implement effective on-boarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios. 
 
-There are alternatives technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way. Among them:
+There are alternative technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way.
+Among them:
 
 * The https://fidoalliance.org/device-onboarding-overview/[FIDO Device Onboarding^] (FDO) standard.
 * The https://www.redhat.com/en/about/press-releases/red-hat-introduces-red-hat-edge-manager-overseeing-fleets-devices[Red Hat Edge Manager product^], based on the https://github.com/flightctl/flightctl[flightctl^] open source project.
 
-These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or hundreds of servers, and dealing with lower network bandwidth or higher latency than in typical data centers and office buildings.
+These technologies also consider the challenges of dealing with hundreds or thousands of edge devices, as opposed to dozens or hundreds of servers, and dealing with lower network bandwidth or higher latency than in typical data centers and office buildings.
 
 === Secrets in bootc container images
 
@@ -90,7 +89,7 @@ Some other secrets may require careful assessments of the risks, for example cre
 WARNING: In this course, we will provide secrets using kickstart files, for simplicity.
 Be aware it may not be a secure alternative for your real-world scenarios.
 
-Also consider the different secrets you may require at bootc image build time, versus the secrets you require at runtime, on actual edge devices, and during system or integration testing.
+Also consider the different secrets you may require at bootc image build time, as opposed to the secrets you require at runtime, on actual edge devices, and during system or integration testing.
 
 == Anaconda and bootc
 
@@ -116,33 +115,33 @@ It does not need to be a complete kickstart script for unattended installation, 
 You could provide a minimal kickstart file which just selects a bootc container image and use interactive screens to partition disks and set a root password.
 
 Kickstart scripts can also embed custom scripts which they run before starting installation (in a `%pre` block) and after completing the installation, but before rebooting the system (in a `%post` block).
-These capabilities will be handy to perform system testing of bootc container images without requiring custom installation media nor an OCI container registry server.
+These capabilities will be handy to perform system testing of bootc container images without requiring custom installation media or an OCI container registry server.
 
 == Local VMs on RHEL
 
 The native local hypervisor on RHEL systems is a stack composed of three parts:
 
 KVM::
-A kernel module which provides hardware-assisted virtualization of CPUs, memory, and system busses.
+A kernel module that provides hardware-assisted virtualization of CPUs, memory, and system busses.
 
 QEMU::
-A software emulator which provides all other virtual hardware required to create an actual VM, for example video, disk, and network devices.
-QEMU is also capable of emulating a complete system, for example to emulate an ARM CPU on an Intel system.
+A software emulator that provides all other virtual hardware required to create a complete VM, for example video, disk, and network devices.
+QEMU is also capable of emulating a complete system, for example, to emulate an ARM CPU on an Intel system.
 
 Libvirt::
-A management layer which orchestrates KVM, QEMU, and other Linux kernel features to ease creation and management of local VMs.
+A management layer that orchestrates KVM, QEMU, and other Linux kernel features to ease creation and management of local VMs.
 
 A number of tools from RHEL, for example the Cockpit web management interface, and the `virt-install` command, use libvirt to mange local VMs based on KVM and QEMU.
 
-You do NOT requite a RHEL system, nor a Linux system with libvirt, to perform system testing of bootc container images.
+You do NOT require a RHEL system, nor a Linux system with libvirt, to perform system testing of bootc container images.
 You can use the native hypervisor of your Windows or MacOS laptop, but this course does not provide instructions for doing it.
 
 === Libvirt features for developers
 
-Libvirt is the single host management layer at the foundation of many of enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
+Libvirt is the single host management layer at the foundation of many enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
 It provides many advanced capabilities at its API level, which require dealing with XML configuration files.
 
-For system testing of bootc container images, we are more interested on libvirt features designed to support a developer's inner loop, such as:
+For system testing of bootc container images, we are more interested in libvirt features designed to support a developer's inner loop, such as:
 
 Session interface::
 Enables managing local VMs in _rootless_ mode.
@@ -150,10 +149,10 @@ Yes, you can run VMs in Linux without `sudo`.
 
 User mode networking::
 Avoids the need for elevated privileges to configure host networking, such as virtual NICs and bridge devices.
-It is the same technology which enables network connections to rootless containers with Podman.
+It is the same technology that enables network connections to rootless containers with Podman.
 
 Direct kernel loading::
-Bypass the boot loader in a disk image or device, and loads a Linux kernel and initial ram disk directly from a local or remote directory, or from installation media.
+Bypasses the boot loader in a disk image or device, and loads a Linux kernel and initial RAM disk directly from a local or remote directory, or from installation media.
 
 Virtio devices backed by host directories::
 Enables sharing files with a VM without creation of disk images, and without requiring elevated privileges for managing loopback devices.
@@ -167,7 +166,7 @@ A similar process is normally used to provision RHEL systems using network boot,
 
 It is also somewhat common that RHEL administrators use the `xorriso` tool suite, especially the `mkksiso` command, to produce a custom RHEL installation media which already embeds a custom kickstart script and third-party package repositories, so they do not need to enter Grub's interactive screens.
 
-But, using the features mentioned in the previous session, we can implement a simpler workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:
+But, using the features mentioned in the previous session, you can implement a simpler workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:
 
 * A virtio device provides the kickstart script and bootc container image.
 * Direct kernel loading provides kernel commands that make Anaconda use the kickstart script.
@@ -176,7 +175,7 @@ But, using the features mentioned in the previous session, we can implement a si
 You can also give the kernel additional options which enable a serial, text console, so you do not need a graphical desktop to create a VM and follow its boot screens.
 This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting, if something goes wrong.
 
-These options are not yet available from graphical front-ends to libvirt, but they are available from the `virt-install` command, which we use in the next activity.
+These options are not yet available from graphical front-ends to libvirt, but they are available from the `virt-install` command, which you will use in the next activity.
 
 After you create your test VM, you can manage it using any libvirt front-end, for example the `virsh` command or Cockpit.
 
@@ -185,18 +184,19 @@ After you create your test VM, you can manage it using any libvirt front-end, fo
 Recent releases of Podman Desktop include the ability of creating test VMs from bootc container images.
 But wait, Podman Desktop is a tool to manage containers, not VMs!
 
-In fact, developers using Podman, or any other container engine on Windows and MacOS, are running a Linux VM.
-When most people refer to "containers", they are actually referring to "Linux containers" which require running on a Linux system, interacting with a Linux kernel and other Linux operating system services.
+In fact, developers using Podman, or any other container engine on Windows or MacOS, are running a Linux VM.
+When most people refer to "containers", they are actually referring to "Linux containers", which require running on a Linux system, interacting with a Linux kernel and other Linux operating system services.
 
 So most container engines already provide a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
 That thin VM management layer usually interfaces with the native hypervisor on Windows, MacOS, and Linux systems, so that developers are insulated from VM management and only care about containers.
 
 The Podman Machine project, which provides the VM management layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
-Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offer a simple and portable abstraction for developers who need to perform system testing of their bootc container images.
+Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offers a simple and portable abstraction for developers who need to perform system testing of their bootc container images.
 
-NOTE: in this course, we are not using Podman Desktop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this alternative.
+NOTE: In this course, we are not using Podman Desktop because of challenges with providing remote graphical desktops to the classroom environment.
+However we encourage learners to explore this alternative.
 
 == What's next
 
-The next activity uses the standard RHEL installation media to create a libvirt VM which boots from the contents of a bootc container image.
+The next activity uses the standard RHEL installation media to create a libvirt VM that boots from the contents of a bootc container image.
 This is one way you can perform comprehensive tests of bootc container images, before you publish it for use in production systems.

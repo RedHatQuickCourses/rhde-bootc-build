@@ -5,26 +5,24 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Troubleshoot and fix a bootc container image which works in a container engine but fails in a local VM.
-
-WARNING: Pending review
+Troubleshoot and fix a bootc container image that works in a container engine but fails in a local VM.
 
 == Before you Begin
 
 You need a _development machine_ running RHEL, to which you have access using an unprivileged user account.
 
-These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If you are using the course classroom, log in on the `workstation` VM as the user `student` with password `student`.
 If not, please adapt the instructions to your test environment.
 
 Make sure you verified your test environment by following the xref:ch1-intro:s3-prereqs-lab.adoc[first lab] of this course.
 
 == Instructions
 
-You will create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
-This time, you will find that the system does NOT works as expected.
-You will then find the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.
+You will a create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
+This time, you will find that the system does NOT work as expected.
+You will then identify the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
@@ -39,7 +37,7 @@ Cloning into 'rhde-bootc-samples'...
 ...
 --
 +
-.. If needed, login to your private registry.
+.. If needed, log in to your private registry.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -56,7 +54,7 @@ $ *podman image list | grep webapp-bootc*
 localhost/webapp-bootc                            latest      3e89e69fc894  18 hours ago  1.56 GB
 --
 
-.. Verify that you have access to libvirt though its session interface.
+.. Verify that you have access to libvirt through its session interface.
 If you do not, please perform the preparation tasks from the xref:ch1-intro:s3-prereqs-lab.adoc[first lab].
 +
 [source,subs="verbatim,quotes"]
@@ -84,7 +82,7 @@ blobs  index.json  oci-layout
 
 2. Create a test VM from the `webapp-bootc` container image.
 
-.. Copy a the bootc container image to to your OCI directory.
+.. Copy the bootc container image to your OCI directory.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -119,7 +117,7 @@ Escape character is ^] (Ctrl + ])
 
 .. When your test VM finish installing, detach from its VM console by pressing kbd:[Ctrl+\]].
 
-3. Verify that your test VM is NOT working as expect, and troubleshoot it.
+3. Verify that your test VM is NOT working as expected, and troubleshoot it.
 
 .. Try to access your single-page web application.
 Instead of the expected mock message, you should get the standard welcome page from RHEL.
@@ -135,7 +133,7 @@ $ *curl 127.0.0.1:8080*
 ...
 --
 +
-Remember that this container image did work fine when run from Podman, in a xref:ch2-build:s2-podman-lab.adoc[previous lab].
+Remember that this container image worked fine when run from Podman, in a xref:ch2-build:s2-podman-lab.adoc[previous lab].
 Now find what is wrong.
 
 .. Start a SSH session to your test VM.
@@ -257,9 +255,9 @@ Connected to domain 'test-bootc'
 Escape character is ^] (Ctrl + ])
 --
 
-.. When your new test VM finish installing, detach from its VM console by pressing kbd:[Ctrl+\]].
+.. When your new test VM finishes installing, detach from its VM console by pressing kbd:[Ctrl+\]].
 
-5. Verify that access your improved single-page web application now works.
+5. Verify that access to your improved single-page web application now works.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -267,7 +265,7 @@ $ *curl 127.0.0.1:8080*
 This would be the HTML and JavaScript code of your IMPROVED single-page web application.
 --
 
-6. *Optional:* you do not need to create a brand new test VM every time you build a new bootc container image.
+6. *Optional:* You do not need to create a brand new test VM every time you build a new bootc container image.
 You can upgrade an existing VM, taking advantage of the virtio device that was configured by the `virt-install` command.
 
 .. Enter your `webapp-fixed` directory, change the mock file for its single-page web application, and rebuild your bootc container image.
@@ -317,7 +315,7 @@ $ *sudo systemctl reboot*
 Connection to 127.0.0.1 closed.
 --
 
-.. Wait a few moments and check that your webapp already responds with the updated mock message.
+.. Wait a few moments and check that your web application already responds with the updated mock message.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -360,4 +358,4 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 
 == What's next
 
-The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and virtual machines on the data center.
+The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and VMs on the data center.

@@ -3,8 +3,6 @@
 Goal::
 Test and validate system images for edge device images using local VMs.
 
-WARNING: Pending review
-
 == Introduction
 
 This chapter explains how to install a bootc container image in a virtual system, so you can test behaviors and settings that are not possible to verify with Podman or any other container engine.
