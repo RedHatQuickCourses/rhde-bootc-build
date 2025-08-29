@@ -12,9 +12,9 @@ Prepare for air-gapped building of bootc container images and disconnected deplo
 You need a _development machine_ running Red Hat Enterprise Liunux (RHEL), to which you have unrestricted sudo rights, and access to RHEL package repositories.
 That machine must have plenty of disk space to store multiple container images and multiple virtual machine (VM) images.
 
-These instructions were tested on RHEL 10.0 but should work with minimal or no change on newer and older RHEL releases, since 9.6.
+These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.
 
-If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
+If you are using the course classroom, log in on the `workstation` VM as the user `student` with password `student`.
 If not, please adapt the instructions to your test environment.
 
 == Instructions

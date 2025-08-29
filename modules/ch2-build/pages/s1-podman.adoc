@@ -11,7 +11,7 @@ WARNING: Pending review
 
 == Provisioning and updating image mode systems
 
-The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends up with specialized tools from the bootc world.
+The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends with specialized tools from the bootc world.
 
 image::s1-podman-fig-1.svg[title="Workflow for installing and updating image mode systems"]
 
@@ -31,12 +31,12 @@ In summary, the process is:
 
 .. Alternatively, use the bootc utility, from an image mode system, to copy a new bootc container image from removable storage and make it the new system image.
 
-This course, which is the first in a series of three, focus on steps 1-4 above, up to the point you upload a bootc container image to a container image registry.
+This course, which is the first in a series of three, focuses on steps 1-4 above, up to the point you upload a bootc container image to a container image registry.
 These are steps a developer would perform to create and test a bootc container image, as part of their _inner loop_.
 
 image::s1-podman-fig-2.svg[title="Scope of this course"]
 
-The remaining steps are detailed in follow-up courses, and corresponds to steps an IT or OT professional would perform on actual edge devices, as part of an _outer loop_.
+The remaining steps are detailed in follow-up courses, and correspond to steps an IT or OT professional would perform on actual edge devices, as part of an _outer loop_.
 
 == What is bootc
 
@@ -46,39 +46,39 @@ It is included as part of all bootc container images, and it is usually run as a
 Developers and system administrators do NOT have to interact directly with the bootc utility to build bootc container images and provision image mode systems.
 They only have to interact with the bootc utility to upgrade image mode systems.
 
-The bootc utility is provided by a base bootc container image, and the process of building derived bootc container images looks just the same as the process for building derived application container images. 
+The bootc utility is provided by a base bootc container image, and the process of building derived bootc container images looks the same as the process for building derived application container images. 
 
-=== Bootc containers versus application containers
+=== Bootc containers vs. application containers
 
-If you remember from the previous chapter, bootc container images includes a number of components not usually included in application container images, among them:
+As covered in the previous chapter, bootc container images includes a number of components not usually included in application container images, among them:
 
 * A Linux kernel and loadable modules
-* An initial ram disk (initrd) and a boot loader (grub)
-* The System Daemon (Systemd) and a number of privileged Systemd unit to manage hardware, networking, and system services
+* An initial RAM disk (initrd) and a boot loader (grub)
+* The System Daemon (Systemd) and a number of privileged Systemd units to manage hardware, networking, and system services
 * The D-Bus system messaging middleware
 * The bootc utility
 
-Typical OCI container images are designed to provide a single application, and include only the required user space components required to support that application, such a programming language runtime and required dependency libraries.
+Typical OCI container images are designed to provide a single application, and include only the required user space components required to support that application, such as programming language runtimes and required dependency libraries.
 Bootc container images, on the other hand, are designed to provide a complete system, including its kernel mode components and possibly multiple applications, system services, and network services.
 
 But, other than the fact that bootc container images are a lot bigger, they are standard OCI container images.
 Nothing prevents you from running a bootc container using a standard container engine.
-Just beware that the results might not be what you expect, because a container engine CANNOT run the kernel, system services, and other components from a bootc container image.
+Just be aware that the results might not be what you expect, because a container engine CANNOT run the kernel, system services, and other components from a bootc container image.
 Container engines would run only the user space components of a bootc container image, as they would for a regular application container.
 
-So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a containerfile for a bootc container images is the use of a bootc container image as its base image, in its `FROM` directive, instead of a regular application container image, such as an Universal Base Image (UBI).
+So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a containerfile for a bootc container image is the use of a bootc container image as its base image, in its `FROM` directive, instead of a regular application container image, such as an Universal Base Image (UBI).
 
 === Filesystem layout of an image mode system
 
-As you craft a containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a very specific way:
+As you craft a containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a specific way:
 
 * The `/` directory, and almost all its subdirectories, like `/usr` and `/opt`, are read-only.
 This gives image mode systems their _immutable_ characteristic.
-* The `/etc` directory is read-write, so that system administrators are able the configurations of an image mode system at day-2.
-The truth is, you cannot always pre-configure everything in a system image.
+* The `/etc` directory is read-write, so that system administrators are able to alter the configurations of an image mode system at day-2.
+The truth is, you cannot always preconfigure everything in a system image.
 * The `/var` directory is also read-write, so that applications can store user data, logs, and other data.
 
-NOTE: Describing an image mode system as "immutable", tough popular, is imprecise.
+NOTE: Describing an image mode system as "immutable", though popular, is imprecise.
 After all, parts of an image mode system MUST be mutable, else there would be no way of performing day-2 configuration changes nor storing application data and logs.
 
 Some standard writable directories, such as `/home` and `/tmp`, that would exist in package mode systems, become symbolic links to directories under `/var` in image mode systems.
@@ -106,19 +106,19 @@ There are other subtle differences in runtime behavior between an image mode sys
 These differences are, for the most part, not a reason to claim incompatibility between image mode and any specific application, but a reason to configure applications and systems in a different way, which you could also apply to package mode systems.
 
 Most times, compatibility issues arise from applications that have hard-coded assumptions around system configuration.
-If it happens, it may be necessary to change the application to replace those hard-coded assumption with configurable settings, or with a different assumption that matches typical configurations of an image mode system.
+If it happens, it may be necessary to change the application to replace those hard-coded assumptions with configurable settings, or with a different assumption that matches typical configurations of an image mode system.
 
 == Building bootc containers in disconnected mode
 
 It is a common security policy, especially at large corporations, that no software artifacts can be downloaded directly from the Internet.
-They must be previously vetted by corporate TI to prevent compromises by artifacts infected with malware or from supply chain attacks.
+They must be previously vetted by corporate IT to prevent compromises by artifacts infected with malware or from supply chain attacks.
 
 As you build bootc container images, you usually install additional RPM packages from RHEL and third-party vendors.
 If you cannot download those packages directly from Red Hat and their respective vendors, you must provide a mirror YUM or DNF repository containing them.
 
 You must also provide, as part of your containerfile, YUM repository configurations that point to your mirrors.
 
-By the same reason, you must provide a container registry with mirrors the bootc base container image and write your containerfile to refer to that private registry instead of to `redhat.registry.io`
+For the same reason, you must provide a container registry with mirrors the bootc base container image and write your containerfile to refer to that private registry instead of to `redhat.registry.io`
 
 Notice that you would be required to do the same to build regular application container images in a disconnected environment.
 These are NOT changes required by bootc alone.
