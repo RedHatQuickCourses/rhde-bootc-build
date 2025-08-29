@@ -5,12 +5,10 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Assess if a compute device or application is likely to be a suitable case for Red Hat Device Edge or if it is more likely to be a case for Traditional RHEL (with package mode).
+Assess whether a compute device or application is likely to be a suitable case for Red Hat Device Edge, with image mode, or if it is more likely to be a case for traditional RHEL, with package mode.
 
-WARNING: Pending Review
-
-NOTE: Make your notes of what you believe are the right answers for each question.
-This is a static web page so the check boxes are not clickable.
+NOTE: Make notes regarding what you believe are the right answers for each question.
+This is a static web page, so the checkboxes are not clickable.
 
 //TODO experiment with converting that to a Gemini Canvas app, for more interactivity.
 
@@ -35,7 +33,7 @@ https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/workstat
 You CAN use image mode to provision graphical office workstations, most likely they require RHEL subscriptions instead of Red Hat Device Edge subscriptions._
 ====
 
-2. A kiosk machine in a large department store, that enables customers to query the price and other information of a product, such as nutrients and potential allergens of food products, or warranty terms and technical specifications of electronics, using a bar code reader and a touch screen.
+2. A kiosk machine in a large department store, that enables customers to query the price and other information about a product, such as nutrients and potential allergens for food products, or warranty terms and technical specifications for electronics, using a barcode reader and a touch screen.
 +
 .❑ Traditional RHEL (with package mode)
 [%collapsible]

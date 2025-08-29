@@ -5,30 +5,29 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Prepare for air-gaped building of bootc container images and disconnected deployment of edge devices.
-
-WARNING: Pending review
+Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.
 
 == Before you Begin
 
-You need a _development machine_ running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories.
-That machine must have plenty of disk space to store multiple container images and multiple Virtual Machine (VM) images.
+You need a _development machine_ running Red Hat Enterprise Liunux (RHEL), to which you have unrestricted sudo rights, and access to RHEL package repositories.
+That machine must have plenty of disk space to store multiple container images and multiple virtual machine (VM) images.
 
-These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.
+These instructions were tested on RHEL 10.0 but should work with minimal or no change on newer and older RHEL releases, since 9.6.
 
 If you are using the course classroom, you will log in on the `workstation` VM as the user `student` with password `student`.
 If not, please adapt the instructions to your test environment.
 
 == Instructions
 
-You will verify that you have access to mirrors of Red Hat Enterprise Linux (RHEL) package repositories and bootc container images from RHEL. 
+You will verify that you have access to mirrors of RHEL package repositories and bootc container images from RHEL. 
 You will also configure your _development machine_ with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.
 
 As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.
 
 1. Verify that your _development machine_ has access to the RHEL package repositories from a DNF mirror.
 
-.. List the configured package repositories, they should match the standard RHEL package repositories.
+.. List the configured package repositories.
+They should match the standard RHEL package repositories.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -37,7 +36,8 @@ rhel-10.0-for-x86_64-appstream-rpms                                             
 rhel-10.0-for-x86_64-baseos-rpms                                                                          Red Hat Enterprise Linux 10.0 BaseOS (dvd)
 --
 
-.. Verify that your RHEL package repositories do NOT point to the Red Hat customer portal, instead they point to a machine inside your virtual labs environment.
+.. Verify that your RHEL package repositories do NOT point to the Red Hat customer portal.
+Instead they should point to a machine inside your virtual labs environment.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -88,7 +88,7 @@ Login Succeeded!
 --
 
 .. List all images available on the private registry.
-The list should include some application container images and some bootc container images, for different release of RHEL.
+The list should include some application container images and some bootc container images, for different releases of RHEL.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -102,9 +102,10 @@ registry.lab.example.com:5000/rhel9-eus/rhel-9.6-bootc-image-builder
 registry.lab.example.com:5000/ubi10/ubi                               
 registry.lab.example.com:5000/ubi9/ubi 
 --
-IMPORTANT: The `podman search` command, and its similar commands form other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
-Container registry servers do NOT have to return the results in any strict order, can truncate the results as they wish, and do NOT have to return any indication that the results were truncated.
-It works here only because there is a very small number of container images stored in the private registry.
+IMPORTANT: The `podman search` command, and similar commands from other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
+Container registry servers do NOT have to return the results in any strict order.
+They can truncate the results, and do NOT have to return any indication that the results were truncated.
+The `podman search` command works here only because there is a small number of container images stored in the private registry.
 
 .. Inspect the RHEL 10 base bootc image to verify it is indeed a bootc container image.
 Look for the `containers.bootc` key.
@@ -149,7 +150,7 @@ $ *skopeo inspect --format '{{ json .Labels }}' docker://registry.lab.example.co
 --
 <1> The label could take any value, but by convention it should be set to "1" or empty.
 
-.. Alternatively, you can check for the `containers.bootc` key directly, without using JSON nor the `jq` command.
+.. Alternatively, you can check for the `containers.bootc` key directly, without using JSON or the `jq` command.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -197,7 +198,7 @@ $ *podman run --rm --name ubi registry.lab.example.com:5000/ubi10/ubi bash -c "r
 package kernel is not installed
 --
 
-5. Install the RHEL virtualization tools
+5. Install the RHEL virtualization tools.
 
 .. Install the Libvirt tools and enable the Libvirt socket.
 +

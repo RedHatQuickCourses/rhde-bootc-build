@@ -1,15 +1,13 @@
 = Building System Images for Red Hat Device Edge with Image Mode for RHEL
 :navtitle: Home
 
-WARNING: Pending review
-
 == Goal
 
-This course teaches how to create Red Hat Device Edge system images, which are suitable to provision edge devices and kiosk computers, using image mode for RHEL, and how to publish those images on an OCI container registry.
+This course teaches how to create Red Hat Device Edge system images, which are suitable to provision edge devices and kiosk computers, using image mode for Red Hat Enterprise Liunux (RHEL), and how to publish those images on an Open Container Initiative (OCI) container registry.
 
 It is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge, which will consist of three courses:
 
-. *Building Red Hat Device Edge System Images with Image Mode for RHEL* (this course)
+. *Building System Images for Red Hat Device Edge with Image Mode for RHEL* (this course)
 
 . Provisioning Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
@@ -23,7 +21,7 @@ On completing this course, you should be able to:
 
 * Understand the usage of image mode for RHEL on Red Hat Device Edge systems.
 * Build system images for edge devices using image mode for RHEL.
-* Test and validate system images for edge devices using local VMs.
+* Test and validate system images for edge devices using local virtual machines (VM)s.
 * Publish system images for edge devices in an OCI container registry.
 
 == Audience
@@ -41,16 +39,16 @@ Red Hat and Partner roles that support customers of Red Hat Device Edge, such as
 
 == Prerequisites
 
-This course assumes that you have the following prior experience:
+This course assumes that you have the following experience:
 
 * Familiarity with RHEL system administration, to the level of RHCA (Red Hat Certified System Administrator) or equivalent knowledge.
-* Familiarity with Linux container tools, such as Podman, and technologies compatible with Open Container Initiative (OCI) specifications, such as container registries.
+* Familiarity with Linux container tools, such as Podman, and technologies compatible with OCI specifications, such as container registries.
 * Familiarity with web server administration, such as Apache Web Server or NGinx, is useful but not required.
 * Familiarity with database server administration, such as MariaDB or PostgreSQL, is useful but not required.
 
 == Classroom Environment
 
-You can perform all activities in this course using the virtual classroom lab from *HOL019: Image mode with Red Hat Device Edge Quick Course Series*, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required by future related courses.
+You can perform all activities in this course using the virtual classroom lab from *HOL019: Image Mode with Red Hat Device Edge Quick Course Series*, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required for future related courses.
 
 Use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):
 
@@ -74,12 +72,12 @@ If you can provision your own RHEL servers or VMs, it should be possible to conf
 
 == About Red Hat Online Learning (ROLE) and Red Hat Learning Subscription
 
-The Red Hat Online Learning (ROLE) web site provides https://www.redhat.com/en/services/training-and-certification[Red Hat Training and Certification^] course materials and their virtual classrooms labs.
+The Red Hat Online Learning (ROLE) website provides https://www.redhat.com/en/services/training-and-certification[Red Hat Training and Certification^] course materials and their virtual classrooms labs.
 You must be enrolled in a Red Hat Training course or subscription to have access to ROLE.
 
 NOTE: The image mode with Red Hat Device Edge quick courses use ROLE for its virtual classroom labs only, and hosts courses materials outside of ROLE, as GitHub pages.
 
-A basic https://www.redhat.com/en/services/training/learning-subscription[Red Hat Learning Subscription^] offers access to a number Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.
+A basic https://www.redhat.com/en/services/training/learning-subscription[Red Hat Learning Subscription^] offers access to a number of Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.
 
 == Other Sources of Information About Red Hat Device Edge and Image Mode for RHEL
 
