@@ -86,7 +86,7 @@
     <a class="nav-link" href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a>
+    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration from Containers</a>
   </li>
 </ul>
   </li>
@@ -188,35 +188,23 @@
 </dd>
 </dl>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
-<p>Now that you know now to build a bootc container image from a containerfile, and you also know that most things you would do in a containerfile for application containers also apply to containerfiles for bootc containers, it&#8217;s time to consider what you could do in containerfiles for bootc images that you would NOT usually for application containers.</p>
+<p>Now that you know how to build a bootc container image from a containerfile, and you also know that most things you would do in a containerfile for application containers also apply to containerfiles for bootc containers, it&#8217;s time to consider what you could do in containerfiles for bootc images that you would NOT usually do for application containers.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_approaches_for_appliances_versus_enforcing_separation_of_concerns"><a class="anchor" href="#_approaches_for_appliances_versus_enforcing_separation_of_concerns"></a>Approaches for appliances versus enforcing separation of concerns</h2>
+<h2 id="_approaches_for_appliances_vs_enforcing_separation_of_concerns"><a class="anchor" href="#_approaches_for_appliances_vs_enforcing_separation_of_concerns"></a>Approaches for appliances vs. enforcing separation of concerns</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Previous examples followed an appliance approach: application code, configurations, and initial data are embedded in a bootc container image.</p>
 </div>
 <div class="paragraph">
-<p>This may be a good approach for edge devices which serve a single purpose, like a point of sale (POS) terminal.
+<p>This may be a good approach for edge devices that serve a single purpose, like a point of sale (POS) terminal.
 It also simplifies day-2 configuration of image mode systems.</p>
 </div>
 <div class="paragraph">
-<p>Some organizations prefer to enforce a strict separation of concerns, where an infrastructure team manages the lifecycle of operating systems while a different teams manage the lifecycle of applications.</p>
+<p>Some organizations prefer to enforce a strict separation of concerns, where an infrastructure team manages the lifecycle of operating systems while a different team manages the lifecycle of applications.</p>
 </div>
 <div class="paragraph">
 <p>A way of implementing this approach is to keep applications outside of bootc container images, in their own application container images, and optionally link those applications to bootc images using <a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/using_image_mode_for_rhel_to_build_deploy_and_manage_operating_systems/building-and-managing-logically-bound-images" target="_blank" rel="noopener">bounded containers</a>.</p>
@@ -247,20 +235,20 @@ If your containerfile performs actions that make no changes to files, such as se
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Do NOT try to enable the IPC mechanism during your containerfile building for example by mounting a UNIX socket file!
+Do NOT try to enable the IPC mechanism during your containerfile building, for example by mounting a UNIX socket file!
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>If you need such commands, you must find how their services actually store configuration data and find a way of affecting that configuration store directly, without using IPC and without to affect the build host system.</p>
+<p>If you need such commands, you must determine how their services actually store configuration data and find a way of affecting that configuration store directly, without using IPC and without affecting the build host system.</p>
 </div>
 <div class="paragraph">
 <p>For example, the <code>firewall-cmd</code> command communicates with the Firewall daemon (Firewalld) to change the active kernel netfilter tables directly, and it would not work in a containerfile.
-But there is the alternative <code>firewall-offline-cmd</code> command which only stores configuration changes that are retrieved by Firewalld at boot time.</p>
+But there is the alternative <code>firewall-offline-cmd</code> command, which only stores configuration changes that are retrieved by Firewalld at boot time.</p>
 </div>
 <div class="paragraph">
-<p>Some commands affect data outside files, for example installing a Grub bootloader in the primary disk partition table.
+<p>Some commands affect data outside files, for example, installing a Grub bootloader in the primary disk partition table.
 Instead of running such commands on your containerfile, you create bootc configuration files and let the bootc utility apply those settings.</p>
 </div>
 <div class="paragraph">
@@ -268,7 +256,7 @@ Instead of running such commands on your containerfile, you create bootc configu
 For example, the <code>/usr/lib/bootc/kargs.d</code> directory provides kernel arguments which bootc adds to the kernel command line of its system Grub menu.</p>
 </div>
 <div class="paragraph">
-<p>You may find, in a containerfile for a bootc container image, some commands and files which you would not find in a containerfile for an application, but which are just standard Linux configuration files.</p>
+<p>You may find, in a containerfile for a bootc container image, some commands and files that you would not find in a containerfile for an application, but that are just standard Linux configuration files.</p>
 </div>
 <div class="paragraph">
 <p>For example, files in the <code>/usr/lib/sysctl.d</code> directory configure kernel parameters, mimicking the <code>/proc</code> tree structure.</p>
@@ -293,19 +281,19 @@ They enable you to provide self-contained, small configuration files which set o
 These small files are called <em>drop files</em>.</p>
 </div>
 <div class="paragraph">
-<p>Not only you have fewer changes, which are easier to track in a version control system, but you can perform version updates and frequently keep using your configuration files form earlier versions unchanged.
+<p>Not only do you have fewer changes, which are easier to track in a version control system, but you can perform version updates and frequently keep using your configuration files from earlier versions unchanged.
 It also enables reusing the same files among different systems, for example: some systems get drop files A, B, and C, while other systems get drop files A, C, and D.</p>
 </div>
 <div class="paragraph">
-<p>The <code>/usr/lib/sysctl.d</code> directory is an example of a directory which contains drop files.
-On the other hand, our single page web application example made changes to a legacy, monolithic configuration file <code>/etc/httpd/conf/httpd.conf</code>, but the Apache Web Server supports drop files in the <code>/etc/httpd/conf.d</code> directory, which we could have used.</p>
+<p>The <code>/usr/lib/sysctl.d</code> directory is an example of a directory that contains drop files.
+On the other hand, the single-page web application example made changes to a legacy, monolithic configuration file <code>/etc/httpd/conf/httpd.conf</code>, but the Apache Web Server supports drop files in the <code>/etc/httpd/conf.d</code> directory, which you could have used.</p>
 </div>
 <div class="paragraph">
-<p>Many of your issues will happen because you&#8217;re using legacy configurations, which were not updated to align with current recommendations and features of modern versions of Linux system and its network or system services.</p>
+<p>Many of the issues you are likely to encounter will occur because you are using legacy configurations, which were not updated to align with current recommendations and features of modern versions of Linux systems and their network or system services.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_immutable_vs_configurable_system_settings"><a class="anchor" href="#_immutable_vs_configurable_system_settings"></a>Immutable vs configurable system settings</h3>
+<h3 id="_immutable_vs_configurable_system_settings"><a class="anchor" href="#_immutable_vs_configurable_system_settings"></a>Immutable vs. configurable system settings</h3>
 <div class="paragraph">
 <p>Modern Linux services include two system directories to their configuration search path, one in <code>/etc</code>, and the other in <code>/usr/lib</code>.
 Changes to either of them result in the same outcome, but remember the first is a writable directory in image mode systems, while the second is read-only.</p>
@@ -321,7 +309,7 @@ If you need, just remove the local changes made in '/etc'.</p>
 <div class="sect2">
 <h3 id="_selinux_and_bootc"><a class="anchor" href="#_selinux_and_bootc"></a>SElinux and bootc</h3>
 <div class="paragraph">
-<p>Bootc takes care of most things that must run at either installation or update time, for example relabeling files for the correct SELinux context label.
+<p>Bootc takes care of most things that must run at either installation or update time, for example, relabeling files for the correct SELinux context label.
 Just remember to provide the required SELinux policies as part of your bootc container image.</p>
 </div>
 <div class="paragraph">
@@ -335,8 +323,8 @@ But an image mode system, once installed from a bootc container image, enforces 
 <div class="sect2">
 <h3 id="_one_time_systemd_units"><a class="anchor" href="#_one_time_systemd_units"></a>One time Systemd units</h3>
 <div class="paragraph">
-<p>Sometimes you need to add custom code which you intend to run only once, during installation, or at every boot.
-This is a standard Systemd feature, so you just add Systemd unit files to you bootc container image, and of course also add the scripts or binaries those units reference.</p>
+<p>Sometimes you need to add custom code that you intend to run only once, during installation, or at every boot.
+This is a standard Systemd feature, so you just add Systemd unit files to your bootc container image, and, of course, also add the scripts or binaries those units reference.</p>
 </div>
 </div>
 </div>
@@ -345,12 +333,12 @@ This is a standard Systemd feature, so you just add Systemd unit files to you bo
 <h2 id="_the_need_for_system_testing"><a class="anchor" href="#_the_need_for_system_testing"></a>The need for system testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After you build a containerfile which includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
-But you CANNOT verify that these settings are actually in effect, nor that they produce the intended outcomes.</p>
+<p>After you build a containerfile that includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
+But you CANNOT verify that these settings are actually in effect, or that they produce the intended outcomes.</p>
 </div>
 <div class="paragraph">
 <p>Remember that container engines run application containers with their current host kernel and system settings.
-The kernel, system services, and settings inside a bootc container image are simply ignored when run from a container engine.</p>
+The kernel, system services, and settings inside a bootc container image are ignored when run from a container engine.</p>
 </div>
 </div>
 </div>
@@ -358,13 +346,14 @@ The kernel, system services, and settings inside a bootc container image are sim
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The next activity builds a bootc container image which varied system settings, demonstrates that these settings are stored in the image but not active in a container. The next chapter shows how to perform system testing of bootc container images by installing them in a local VM.</p>
+<p>The next activity builds a bootc container image with varied system settings and demonstrates that these settings are stored in the image but not active in a container.
+The next chapter shows how to perform system testing of bootc container images by installing them in a local VM.</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="s2-podman-lab.html">Lab: Build and Test Bootc Containers</a></span>
-  <span class="next"><a href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a></span>
+  <span class="next"><a href="s4-containerfiles-lab.html">Lab: System Configuration from Containers</a></span>
 </nav>
 </article>
   </div>

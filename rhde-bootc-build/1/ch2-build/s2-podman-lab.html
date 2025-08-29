@@ -86,7 +86,7 @@
     <a class="nav-link" href="s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration From Containers</a>
+    <a class="nav-link" href="s4-containerfiles-lab.html">Lab: System Configuration from Containers</a>
   </li>
 </ul>
   </li>
@@ -188,18 +188,6 @@
 </dd>
 </dl>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -209,10 +197,10 @@ Pending review
 <p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
 </div>
 <div class="paragraph">
-<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
 </div>
 <div class="paragraph">
-<p>If you are using the course classroom, you will log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
 If not, please adapt the instructions to your test environment.</p>
 </div>
 <div class="paragraph">
@@ -230,7 +218,7 @@ You will also compare the bootc container image for your application with a regu
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Prepare to start this activity by cloning the sample code repository and logging in the private registry.</p>
+<p>Prepare to start this activity by cloning the sample code repository and logging in to the private registry.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -245,7 +233,7 @@ $ <strong>cd rhde-bootc-samples</strong></code></pre>
 </div>
 </li>
 <li>
-<p>If needed, login to your private registry.</p>
+<p>If needed, log in to your private registry.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
@@ -270,7 +258,7 @@ Login Succeeded!</code></pre>
 </li>
 <li>
 <p>Review the containerfile.
-It installs the <code>httpd</code> package and enables the <code>httpd</code> service, them adds HTML files that mock a singe-page web application.</p>
+It installs the <code>httpd</code> package and enables the <code>httpd</code> service, then adds HTML files that mock a single-page web application.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/rhel10/rhel-bootc:10.0
@@ -281,7 +269,7 @@ ADD html /var/www/html</code></pre>
 </div>
 <div class="paragraph">
 <p>Notice that the container file does NOT define any of the usual container image metadata, such as <code>ENV</code>, <code>USER</code>, or <code>VOLUME</code>.
-It also does not define neither an <code>ENTRYPOINT</code> nor a <code>CMD</code>.</p>
+It also does not define either an <code>ENTRYPOINT</code> or a <code>CMD</code>.</p>
 </div>
 </li>
 </ol>
@@ -418,7 +406,7 @@ ENTRYPOINT ["/lib/systemd/systemd"]</code></pre>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
-<p>It runs more processes than the application really requires.
+<p>It runs more processes than the application requires.
 It should start the Apache Web Server as its <code>ENTRYPOINT</code>, instead of the System daemon.</p>
 </li>
 <li>
@@ -479,7 +467,7 @@ exit</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice that the <code>ps</code> command is not available. Most most application containers do NOT include common troubleshooting commands and system services, so their container images are leaner.</p>
+<p>Notice that the <code>ps</code> command is not available. Most application containers do NOT include common troubleshooting commands and system services, so their container images are leaner.</p>
 </div>
 <div class="paragraph">
 <p>Also notice, from the <code>pstree</code> output, that only the System daemon and Apache Web server are running.
@@ -535,8 +523,8 @@ RUN chmod -R a+rX /webapp &amp;&amp; \
 </td>
 <td class="content">
 That improved bootc container image has a serious issue, that you will NOT be able to see by simple testing using Podman.
-If you can spot what the issue is, <strong>do NOT fix</strong> it yet.
-We will see, later in this course, how to test the bootc container image in a way that makes that issue clear.
+If you can identify what the issue is, <strong>do NOT fix</strong> it yet.
+You will see, later in this course, how to test the bootc container image in a way that makes that issue clear.
 </td>
 </tr>
 </table>
