@@ -187,18 +187,6 @@
 </dd>
 </dl>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -211,10 +199,10 @@ Pending review
 <p>You also need a <em>test machine</em> running RHEL, to which you have unrestricted root access.</p>
 </div>
 <div class="paragraph">
-<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
 </div>
 <div class="paragraph">
-<p>If you are using the course classroom, you will log in on the <code>workstation</code> VM, as your <em>development machine</em>, using the user <code>student</code> with password <code>student</code>.
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM, as your <em>development machine</em>, using the user <code>student</code> with password <code>student</code>.
 You will log in with the same user on the <code>servera</code> VM, as your <em>test machine</em>.</p>
 </div>
 <div class="paragraph">
@@ -247,7 +235,7 @@ Cloning into 'rhde-bootc-samples'...
 </div>
 </li>
 <li>
-<p>If needed, login to your private registry.</p>
+<p>If needed, log in to your private registry.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
@@ -257,7 +245,7 @@ Login Succeeded!</code></pre>
 </li>
 <li>
 <p>Verify that you have a bootc container image named <code>httpd-system</code> in your local container storage.
-If you do not, please perform the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> which builds that image.</p>
+If you do not, please perform the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a>, which builds that image.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman image list | grep httpd-system</strong>
@@ -313,7 +301,7 @@ In the ROLE classroom, the <code>registry</code> hostname is an alias (that is, 
 </div>
 </li>
 <li>
-<p>Copy the <code>bootc-install.sh</code> script, so you do not have to type a long Podman command to run the boot utility from your bootc container image, later in this lab.</p>
+<p>Copy the <code>bootc-install.sh</code> script, so you do not have to type a long Podman command to run the boot utility from your bootc container image later in this lab.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>scp rhde-bootc-samples/bootc-install/bootc-install.sh servera:~</strong>
@@ -374,7 +362,7 @@ System is not deployed via bootc.</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Most times, you would run the <code>bootc</code> command from a bootc container image instead of directly from a system installed using package mode.
+In most circunstances, you would run the <code>bootc</code> command from a bootc container image instead of directly from a system installed using package mode.
 </td>
 </tr>
 </table>
@@ -402,7 +390,7 @@ nameserver 172.25.250.220</code></pre>
 </li>
 <li>
 <p>Notice that, from the commands above, it is not clear if the network configuration is static or if it was provided by DHCP.
-You can use the Network Manage CLI to get that information and more.</p>
+You can use the Network Manager CLI to get that information and more.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>nmcli device status</strong>
@@ -422,7 +410,7 @@ ipv4.method:                            manual</code></pre>
 </li>
 <li>
 <p>Make a note that the network configuration is manual, and the primary network interface is the <code>ens3</code> device.
-Also make a not if and its IP address, default gateway, and DNS server address.</p>
+Also make a note of its IP address, default gateway, and DNS server address.</p>
 </li>
 </ol>
 </div>
@@ -432,7 +420,7 @@ Also make a not if and its IP address, default gateway, and DNS server address.<
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Install the public CA certificate of your private container registry, so you do NOT need to disable TLS validation when acessing its container images.</p>
+<p>Install the public CA certificate of your private container registry, so you do NOT need to disable TLS validation when accessing its container images.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo cp domain.crt /etc/pki/ca-trust/source/anchors/</strong>
@@ -442,7 +430,7 @@ $ <strong>sudo update-ca-trust extract</strong></code></pre>
 </li>
 <li>
 <p>Log in on your private registry, but from the <code>root</code> user.
-Remember that previous registry login were done on your <em>developer machine</em> from your unprivileged user.</p>
+Remember that previous registry logins were done on your <em>developer machine</em> from your unprivileged user.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo podman login -u student -p redhat registry.lab.example.com:5000</strong>
@@ -475,7 +463,7 @@ Notice the following:</p>
 <p>The privileged container also mounts the SSH key you copied from your <em>development machine</em>.</p>
 </li>
 <li>
-<p>The <code>--skip-fetch</code> option is required, else the <code>bootc install</code> command would try access the private registry, but would fail because it has no TLS certificate nor credentials.</p>
+<p>The <code>--skip-fetch</code> option is required, or else the <code>bootc install</code> command would try to access the private registry, but would fail because it has no TLS certificate or credentials.</p>
 </li>
 <li>
 <p>The <code>--acknowledge-destructive</code> option skips a wait time before starting the installation.</p>
@@ -484,7 +472,7 @@ Notice the following:</p>
 <p>The <code>--replace alongside</code> option preserve the old contents of the existing system root, which could be useful for troubleshooting.</p>
 </li>
 <li>
-<p>The <code>--kargs</code> option provide static network configuration.</p>
+<p>The <code>--kargs</code> option provides static network configuration.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">#!/bin/bash
@@ -570,7 +558,7 @@ If you wish, you can open the console of the <code>serverb</code> VM on ROLE and
 </div>
 </li>
 <li>
-<p>If you perceive you did a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:</p>
+<p>If you perceive you made a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:</p>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -578,7 +566,7 @@ If you wish, you can open the console of the <code>serverb</code> VM on ROLE and
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-if all went well so far, you can skip this entire step.
+If all went well so far, you can skip this step.
 </td>
 </tr>
 </table>
@@ -610,7 +598,7 @@ If all goes well, using either <code>servera</code> or <code>serverb</code> VMs 
 </div>
 </li>
 <li>
-<p>On your <em>developer machine</em>, verify that your <em>test machine</em> runs the <code>httpd-system</code> bootc container image and open a nmew SSH session to your <em>test machine</em></p>
+<p>On your <em>developer machine</em>, verify that your <em>test machine</em> runs the <code>httpd-system</code> bootc container image and open a new SSH session to your <em>test machine</em></p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -645,12 +633,12 @@ Misc tests of bootc images and firewalld</code></pre>
 <li>
 <p>On your <em>test machine</em>, verify that it has all system settings from its bootc container image applied and active.</p>
 <div class="paragraph">
-<p>If you do not remember about those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you build that image and verified that its settings were not applied with Podman.</p>
+<p>If you do not remember those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you built that image and verified that its settings were not applied with Podman.</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Verify that it now reports as having being deployed using bootc.</p>
+<p>Verify that it now reports as having been deployed using bootc.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs"># <strong>bootc status</strong>
@@ -714,7 +702,7 @@ bootc-install.sh  domain.crt  edge-key.pub</code></pre>
 </div>
 </li>
 <li>
-<p>On your <em>development machine</em>, promote you bootc container image as vetted for use by actual edge devices.</p>
+<p>On your <em>development machine</em>, promote your bootc container image as vetted for use by actual edge devices.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -731,7 +719,7 @@ Writing manifest to image destination</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Notice that the <code>skopeo copy</code> command above did NOT actually copied any layers, because all of them they already exist on the container registry, from the previous copy operation.</p>
+<p>Notice that the <code>skopeo copy</code> command above did NOT actually copy any layers, because they already exist on the container registry, from the previous copy operation.</p>
 </div>
 </li>
 <li>
@@ -755,7 +743,7 @@ Writing manifest to image destination</code></pre>
 </td>
 <td class="content">
 A CI/CD system would probably use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
-This activity uses both styles to demonstrate that it makes no different on the final result.
+This activity uses both styles to demonstrate that it makes no difference to the final result.
 </td>
 </tr>
 </table>
@@ -805,7 +793,7 @@ There is ongoing work on the Podman community and OCI standards to create a way 
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This was the final lab in this course, but the next course of this learning approach shows how to use the <strong>bootc image builder</strong> utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.</p>
+<p>This is the final lab in this course, but the next course if this learning approach covers how to use the <strong>bootc image builder</strong> utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.</p>
 </div>
 </div>
 </div>
