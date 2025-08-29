@@ -188,18 +188,6 @@
 </dd>
 </dl>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -207,10 +195,10 @@ Pending review
 <div class="sectionbody">
 <div class="paragraph">
 <p>Previous chapters demonstrate the need to perform system testing of bootc container images.
-You just cannot validate that all system settings in a bootc container image are applied and work as intended using a container engine such as Podman.</p>
+You cannot, however, validate that all system settings in a bootc container image are applied and work as intended by using a container engine such as Podman.</p>
 </div>
 <div class="paragraph">
-<p>To perform system testing, you must install an image mode system, and them boot the system.
+<p>To perform system testing, you must install an image mode system, and then reboot the system.
 There are multiple ways of installing an image mode system, among them:</p>
 </div>
 <div class="olist arabic">
@@ -228,10 +216,10 @@ There are multiple ways of installing an image mode system, among them:</p>
 </div>
 <div class="paragraph">
 <p>In this chapter, we use option (1) above, and in the next chapter, we use option (2), to demonstrate two approaches for performing quick system testing of a bootc container image.
-A follow-up course will teach option (3) as the recommended way of deploying edge systems in production.</p>
+A follow-up course will cover option (3) as the recommended way of deploying edge systems in production.</p>
 </div>
 <div class="paragraph">
-<p>Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, we have tp consider how much configurations, or how little, should actually be in a bootc container or left to be performed after installing an image mode systems.</p>
+<p>Before we teach the specifics of how to craft and run a kickstart file that uses a bootc container image, we have to consider how much configuration, or how little, should actually be in a bootc container or left to be performed after installing an image mode system.</p>
 </div>
 </div>
 </div>
@@ -242,10 +230,10 @@ A follow-up course will teach option (3) as the recommended way of deploying edg
 <p>Bootc container images open the possibility for including, in a system image, many configuration settings that would typically be performed at day-2 in a package mode system or, as some would say, at day-1, right after performing installation.</p>
 </div>
 <div class="paragraph">
-<p>This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready to its intended uses.</p>
+<p>This means not only a faster time to install an image mode system, compared to a package mode system, but also a faster time to configure it and be ready for its intended uses.</p>
 </div>
 <div class="paragraph">
-<p>Some organizations perform such day-1 configurations using system installation scripting tools, for example Anaconda kickstart and Cloud-init.
+<p>Some organizations perform such day-1 configurations by using system installation scripting tools, for example, Anaconda kickstart and Cloud-init.
 Others perform such configuration using automation technologies, such as Red Hat Ansible Automation Platform.</p>
 </div>
 <div class="paragraph">
@@ -253,7 +241,7 @@ Others perform such configuration using automation technologies, such as Red Hat
 Sure, you may include a large set of configurations in a system image, but in most cases there is something which must be different between individual devices or between different edge sites.</p>
 </div>
 <div class="paragraph">
-<p>Managing a large number of images, to account for those variations, may become a challenge.
+<p>When managing a large number of images, accounting for such variations may become a challenge.
 It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.</p>
 </div>
 <div class="sect2">
@@ -264,10 +252,10 @@ It may be easier to produce a golden system image, which is shared by a large nu
 <div class="ulist">
 <ul>
 <li>
-<p>A a removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.</p>
+<p>A removable media, used to provision edge devices, was stolen or lost, and it includes credentials to access line-of-business (LOB) databases or to perform payments.</p>
 </li>
 <li>
-<p>A rogue device is plugged into network of an edge site, automatically discovered and installed as if it were a genuine device, and then taken off-site to access its system disk and grab the credentials stored there.</p>
+<p>A rogue device is plugged into the network of an edge site, automatically discovered and installed as if it were a genuine device, and then taken off-site to access its system disk and grab the credentials stored there.</p>
 </li>
 </ul>
 </div>
@@ -296,7 +284,8 @@ As stated by the <a href="https://owasp.org/Top10/A07_2021-Identification_and_Au
 <p>You can implement effective on-boarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
 </div>
 <div class="paragraph">
-<p>There are alternatives technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way. Among them:</p>
+<p>There are alternative technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way.
+Among them:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -309,7 +298,7 @@ As stated by the <a href="https://owasp.org/Top10/A07_2021-Identification_and_Au
 </ul>
 </div>
 <div class="paragraph">
-<p>These technologies also consider the challenges of dealing with with hundreds or thousands of edge devices, as opposed to dozen or hundreds of servers, and dealing with lower network bandwidth or higher latency than in typical data centers and office buildings.</p>
+<p>These technologies also consider the challenges of dealing with hundreds or thousands of edge devices, as opposed to dozens or hundreds of servers, and dealing with lower network bandwidth or higher latency than in typical data centers and office buildings.</p>
 </div>
 </div>
 <div class="sect2">
@@ -351,7 +340,7 @@ Be aware it may not be a secure alternative for your real-world scenarios.
 </table>
 </div>
 <div class="paragraph">
-<p>Also consider the different secrets you may require at bootc image build time, versus the secrets you require at runtime, on actual edge devices, and during system or integration testing.</p>
+<p>Also consider the different secrets you may require at bootc image build time, as opposed to the secrets you require at runtime, on actual edge devices, and during system or integration testing.</p>
 </div>
 </div>
 </div>
@@ -394,7 +383,7 @@ You could provide a minimal kickstart file which just selects a bootc container 
 </div>
 <div class="paragraph">
 <p>Kickstart scripts can also embed custom scripts which they run before starting installation (in a <code>%pre</code> block) and after completing the installation, but before rebooting the system (in a <code>%post</code> block).
-These capabilities will be handy to perform system testing of bootc container images without requiring custom installation media nor an OCI container registry server.</p>
+These capabilities will be handy to perform system testing of bootc container images without requiring custom installation media or an OCI container registry server.</p>
 </div>
 </div>
 </div>
@@ -408,16 +397,16 @@ These capabilities will be handy to perform system testing of bootc container im
 <dl>
 <dt class="hdlist1">KVM</dt>
 <dd>
-<p>A kernel module which provides hardware-assisted virtualization of CPUs, memory, and system busses.</p>
+<p>A kernel module that provides hardware-assisted virtualization of CPUs, memory, and system busses.</p>
 </dd>
 <dt class="hdlist1">QEMU</dt>
 <dd>
-<p>A software emulator which provides all other virtual hardware required to create an actual VM, for example video, disk, and network devices.
-QEMU is also capable of emulating a complete system, for example to emulate an ARM CPU on an Intel system.</p>
+<p>A software emulator that provides all other virtual hardware required to create a complete VM, for example video, disk, and network devices.
+QEMU is also capable of emulating a complete system, for example, to emulate an ARM CPU on an Intel system.</p>
 </dd>
 <dt class="hdlist1">Libvirt</dt>
 <dd>
-<p>A management layer which orchestrates KVM, QEMU, and other Linux kernel features to ease creation and management of local VMs.</p>
+<p>A management layer that orchestrates KVM, QEMU, and other Linux kernel features to ease creation and management of local VMs.</p>
 </dd>
 </dl>
 </div>
@@ -425,17 +414,17 @@ QEMU is also capable of emulating a complete system, for example to emulate an A
 <p>A number of tools from RHEL, for example the Cockpit web management interface, and the <code>virt-install</code> command, use libvirt to mange local VMs based on KVM and QEMU.</p>
 </div>
 <div class="paragraph">
-<p>You do NOT requite a RHEL system, nor a Linux system with libvirt, to perform system testing of bootc container images.
+<p>You do NOT require a RHEL system, nor a Linux system with libvirt, to perform system testing of bootc container images.
 You can use the native hypervisor of your Windows or MacOS laptop, but this course does not provide instructions for doing it.</p>
 </div>
 <div class="sect2">
 <h3 id="_libvirt_features_for_developers"><a class="anchor" href="#_libvirt_features_for_developers"></a>Libvirt features for developers</h3>
 <div class="paragraph">
-<p>Libvirt is the single host management layer at the foundation of many of enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
+<p>Libvirt is the single host management layer at the foundation of many enterprise virtualization tools, such as OpenShift Virtualization and Red Hat OpenStack.
 It provides many advanced capabilities at its API level, which require dealing with XML configuration files.</p>
 </div>
 <div class="paragraph">
-<p>For system testing of bootc container images, we are more interested on libvirt features designed to support a developer&#8217;s inner loop, such as:</p>
+<p>For system testing of bootc container images, we are more interested in libvirt features designed to support a developer&#8217;s inner loop, such as:</p>
 </div>
 <div class="dlist">
 <dl>
@@ -447,11 +436,11 @@ Yes, you can run VMs in Linux without <code>sudo</code>.</p>
 <dt class="hdlist1">User mode networking</dt>
 <dd>
 <p>Avoids the need for elevated privileges to configure host networking, such as virtual NICs and bridge devices.
-It is the same technology which enables network connections to rootless containers with Podman.</p>
+It is the same technology that enables network connections to rootless containers with Podman.</p>
 </dd>
 <dt class="hdlist1">Direct kernel loading</dt>
 <dd>
-<p>Bypass the boot loader in a disk image or device, and loads a Linux kernel and initial ram disk directly from a local or remote directory, or from installation media.</p>
+<p>Bypasses the boot loader in a disk image or device, and loads a Linux kernel and initial RAM disk directly from a local or remote directory, or from installation media.</p>
 </dd>
 <dt class="hdlist1">Virtio devices backed by host directories</dt>
 <dd>
@@ -473,7 +462,7 @@ A similar process is normally used to provision RHEL systems using network boot,
 <p>It is also somewhat common that RHEL administrators use the <code>xorriso</code> tool suite, especially the <code>mkksiso</code> command, to produce a custom RHEL installation media which already embeds a custom kickstart script and third-party package repositories, so they do not need to enter Grub&#8217;s interactive screens.</p>
 </div>
 <div class="paragraph">
-<p>But, using the features mentioned in the previous session, we can implement a simpler workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:</p>
+<p>But, using the features mentioned in the previous session, you can implement a simpler workflow, which uses a kickstart script in a local directory, and a bootc container image also in a local directory:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -493,7 +482,7 @@ A similar process is normally used to provision RHEL systems using network boot,
 This way, you can create test VMs over an SSH connection or as part of a CI/CD pipeline and save its boot messages in a text file for troubleshooting, if something goes wrong.</p>
 </div>
 <div class="paragraph">
-<p>These options are not yet available from graphical front-ends to libvirt, but they are available from the <code>virt-install</code> command, which we use in the next activity.</p>
+<p>These options are not yet available from graphical front-ends to libvirt, but they are available from the <code>virt-install</code> command, which you will use in the next activity.</p>
 </div>
 <div class="paragraph">
 <p>After you create your test VM, you can manage it using any libvirt front-end, for example the <code>virsh</code> command or Cockpit.</p>
@@ -509,8 +498,8 @@ This way, you can create test VMs over an SSH connection or as part of a CI/CD p
 But wait, Podman Desktop is a tool to manage containers, not VMs!</p>
 </div>
 <div class="paragraph">
-<p>In fact, developers using Podman, or any other container engine on Windows and MacOS, are running a Linux VM.
-When most people refer to "containers", they are actually referring to "Linux containers" which require running on a Linux system, interacting with a Linux kernel and other Linux operating system services.</p>
+<p>In fact, developers using Podman, or any other container engine on Windows or MacOS, are running a Linux VM.
+When most people refer to "containers", they are actually referring to "Linux containers", which require running on a Linux system, interacting with a Linux kernel and other Linux operating system services.</p>
 </div>
 <div class="paragraph">
 <p>So most container engines already provide a thin VM management layer, which is single-purpose: to manage the Linux VM they need to run Linux containers.
@@ -518,7 +507,7 @@ That thin VM management layer usually interfaces with the native hypervisor on W
 </div>
 <div class="paragraph">
 <p>The Podman Machine project, which provides the VM management layer of Podman and Podman Desktop, also enables creating VMs from a bootc container image.
-Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offer a simple and portable abstraction for developers who need to perform system testing of their bootc container images.</p>
+Thanks to that capability, recent releases of Podman Desktop provide a bootc extension which offers a simple and portable abstraction for developers who need to perform system testing of their bootc container images.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -527,7 +516,8 @@ Thanks to that capability, recent releases of Podman Desktop provide a bootc ext
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-in this course, we are not using Podman Desktop because of challenges with providing remote graphical desktops to the classroom environment, but we encourage learners to explore this alternative.
+In this course, we are not using Podman Desktop because of challenges with providing remote graphical desktops to the classroom environment.
+However we encourage learners to explore this alternative.
 </td>
 </tr>
 </table>
@@ -538,7 +528,7 @@ in this course, we are not using Podman Desktop because of challenges with provi
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The next activity uses the standard RHEL installation media to create a libvirt VM which boots from the contents of a bootc container image.
+<p>The next activity uses the standard RHEL installation media to create a libvirt VM that boots from the contents of a bootc container image.
 This is one way you can perform comprehensive tests of bootc container images, before you publish it for use in production systems.</p>
 </div>
 </div>

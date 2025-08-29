@@ -184,21 +184,9 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Troubleshoot and fix a bootc container image which works in a container engine but fails in a local VM.</p>
+<p>Troubleshoot and fix a bootc container image that works in a container engine but fails in a local VM.</p>
 </dd>
 </dl>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -209,10 +197,10 @@ Pending review
 <p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
 </div>
 <div class="paragraph">
-<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
 </div>
 <div class="paragraph">
-<p>If you are using the course classroom, you will log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
 If not, please adapt the instructions to your test environment.</p>
 </div>
 <div class="paragraph">
@@ -224,9 +212,9 @@ If not, please adapt the instructions to your test environment.</p>
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
-This time, you will find that the system does NOT works as expected.
-You will then find the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
+<p>You will a create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
+This time, you will find that the system does NOT work as expected.
+You will then identify the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -247,7 +235,7 @@ Cloning into 'rhde-bootc-samples'...
 </div>
 </li>
 <li>
-<p>If needed, login to your private registry.</p>
+<p>If needed, log in to your private registry.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
@@ -266,7 +254,7 @@ localhost/webapp-bootc                            latest      3e89e69fc894  18 h
 </div>
 </li>
 <li>
-<p>Verify that you have access to libvirt though its session interface.
+<p>Verify that you have access to libvirt through its session interface.
 If you do not, please perform the preparation tasks from the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a>.</p>
 <div class="listingblock">
 <div class="content">
@@ -310,7 +298,7 @@ blobs  index.json  oci-layout</code></pre>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Copy a the bootc container image to to your OCI directory.</p>
+<p>Copy the bootc container image to your OCI directory.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy containers-storage:localhost/webapp-bootc oci:temp-bootc/oci:webapp-bootc</strong></code></pre>
@@ -353,7 +341,7 @@ Escape character is ^] (Ctrl + ])</code></pre>
 </div>
 </li>
 <li>
-<p>Verify that your test VM is NOT working as expect, and troubleshoot it.</p>
+<p>Verify that your test VM is NOT working as expected, and troubleshoot it.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -371,7 +359,7 @@ Instead of the expected mock message, you should get the standard welcome page f
 </div>
 </div>
 <div class="paragraph">
-<p>Remember that this container image did work fine when run from Podman, in a <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a>.
+<p>Remember that this container image worked fine when run from Podman, in a <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a>.
 Now find what is wrong.</p>
 </div>
 </li>
@@ -516,13 +504,13 @@ Escape character is ^] (Ctrl + ])</code></pre>
 </div>
 </li>
 <li>
-<p>When your new test VM finish installing, detach from its VM console by pressing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>]</kbd></span>.</p>
+<p>When your new test VM finishes installing, detach from its VM console by pressing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>]</kbd></span>.</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p>Verify that access your improved single-page web application now works.</p>
+<p>Verify that access to your improved single-page web application now works.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
@@ -531,7 +519,7 @@ This would be the HTML and JavaScript code of your IMPROVED single-page web appl
 </div>
 </li>
 <li>
-<p><strong>Optional:</strong> you do not need to create a brand new test VM every time you build a new bootc container image.
+<p><strong>Optional:</strong> You do not need to create a brand new test VM every time you build a new bootc container image.
 You can upgrade an existing VM, taking advantage of the virtio device that was configured by the <code>virt-install</code> command.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -586,7 +574,7 @@ Connection to 127.0.0.1 closed.</code></pre>
 </div>
 </li>
 <li>
-<p>Wait a few moments and check that your webapp already responds with the updated mock message.</p>
+<p>Wait a few moments and check that your web application already responds with the updated mock message.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
@@ -651,7 +639,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and virtual machines on the data center.</p>
+<p>The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and VMs on the data center.</p>
 </div>
 </div>
 </div>

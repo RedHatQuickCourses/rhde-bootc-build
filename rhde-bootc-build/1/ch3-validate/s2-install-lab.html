@@ -184,21 +184,9 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Deploy a bootc container image, from the local containers storage, in a local VM.</p>
+<p>Deploy a bootc container image, from the local containers storage, in a local virtual machine (VM).</p>
 </dd>
 </dl>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -209,10 +197,10 @@ Pending review
 <p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
 </div>
 <div class="paragraph">
-<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
 </div>
 <div class="paragraph">
-<p>If you are using the course classroom, you will log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
 If not, please adapt the instructions to your test environment.</p>
 </div>
 <div class="paragraph">
@@ -225,7 +213,7 @@ If not, please adapt the instructions to your test environment.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You will use the standard RHEL installation media, with a custom kickstart script, to install RHEL in a local VM from a bootc container image.
-Thanks to the direct kernel loading feature of libvirt, and also to virtio devices backed by user directories, you do NOT require PXE boot, HTTP servers, nor custom installation media.</p>
+Thanks to the direct kernel loading feature of libvirt, and also to virtio devices backed by user directories, you do NOT require PXE boot, HTTP servers, or custom installation media.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -256,7 +244,7 @@ Login Succeeded!</code></pre>
 </li>
 <li>
 <p>Verify that you have a bootc container image named <code>localhost/httpd-bootc</code> in your local container storage.
-If you do not, please perform the <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a> which builds that image.</p>
+If you do not, please perform the <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a>, which builds that image.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman image list | grep httpd-bootc</strong>
@@ -265,7 +253,7 @@ localhost/httpd-bootc                            latest      dc263eabb8d7  18 ho
 </div>
 </li>
 <li>
-<p>Verify that you have access to libvirt though its session interface.
+<p>Verify that you have access to libvirt through its session interface.
 If you do not, please perform the preparation tasks from the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a>.</p>
 <div class="listingblock">
 <div class="content">
@@ -345,7 +333,7 @@ $ <strong>cd temp-test-vm</strong></code></pre>
 <p>A <code>%post</code> script which creates an initial user, with a known password and SSH key.</p>
 </li>
 <li>
-<p>Also in the <code>%post</code> script, it sets an initial hostname, which helps you identify your test VM and recognize it didn&#8217;t went into any day-2 configuration or on-boarding process yet.</p>
+<p>Also in the <code>%post</code> script, it sets an initial hostname, which helps you identify your test VM and recognize it didn&#8217;t go into any day-2 configuration or on-boarding process yet.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">%pre --erroronfail
@@ -418,7 +406,7 @@ It is also designed to require no access to a remote container registry, by usin
 <p>Injection of a custom kickstart file, so RHEL installation runs unattended.</p>
 </li>
 <li>
-<p>A virtiofs device (the <code>--memorybacking</code> and <code>--filesystem</code> options) to enable access to a installation source without remote network servers but from local host files.</p>
+<p>A virtiofs device (the <code>--memorybacking</code> and <code>--filesystem</code> options) to enable access to an installation source without remote network servers but from local host files.</p>
 </li>
 <li>
 <p>A serial console, so boot messages display in the current terminal, which could be an SSH session.</p>
@@ -451,13 +439,13 @@ virt-install \
 </div>
 </li>
 <li>
-<p>Create a local virtual machine (VM) from your bootc container images, using the provided scripts.</p>
+<p>Create a local VM from your bootc container images, using the provided scripts.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
 <p>Run the installation script.</p>
 <div class="paragraph">
-<p>You could use it from a machine you do not have root access, as long as someone already installed Libvirt and its tooling.</p>
+<p>You could use it from a machine for which you do not have root access, as long as someone already installed Libvirt and its tooling.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -468,7 +456,7 @@ virt-install \
 <li>
 <p>Observe your test VM boot screen and RHEL Anaconda messages, as it boots, installs RHEL, and reboots into the newly installed system.</p>
 <div class="paragraph">
-<p>The message which states <code>Deployment staring</code> indicates when Anaconda is done preparing the system and starts reading your bootc container image:</p>
+<p>The message, which states <code>Deployment starting</code>, indicates when Anaconda is done preparing the system and starts reading your bootc container image:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -624,11 +612,11 @@ Connection to 127.0.0.1 closed.</code></pre>
 </div>
 </li>
 <li>
-<p>Verify that your <em>development machine</em> can access the singe-page web app running in the test VM.</p>
+<p>Verify that your <em>development machine</em> can access the single-page web application running in the test VM.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Verify that you get, through the libvirt port-forward tunnel, the contents of your singe-page web app.</p>
+<p>Verify that you get, through the libvirt port-forward tunnel, the contents of your single-page web application.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
@@ -638,7 +626,7 @@ This would be the HTML and JavaScript code of your single-page web application.<
 </li>
 <li>
 <p>If all went well, stop and destroy your test VM to conserve resources.
-If you want to keep it, you must edit your scripts to change the name of the VM you will create on the next activity.</p>
+If you want to keep it, you must edit your scripts to change the name of the VM you will create in the next activity.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>virsh destroy bootc-test</strong>
@@ -655,7 +643,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You could reuse the same test VM, and use the <code>bootc</code> command to switch it to another container image from a remote container registry, but for now let&#8217;s ensure that we get a brand new test VM every time, without any state left over from previous tests.
+You could reuse the same test VM, and use the <code>bootc</code> command to switch it to another container image from a remote container registry, but, for now, let&#8217;s ensure that we get a brand new test VM every time, without any state left over from previous tests.
 </td>
 </tr>
 </table>
@@ -672,7 +660,7 @@ You could reuse the same test VM, and use the <code>bootc</code> command to swit
 <h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s Next</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The next activity walks through troubleshooting a bootc container image which fails to run correctly in a VM and fix the issue by updating its containerfile and building a new bootc image.</p>
+<p>The next activity walks through troubleshooting a bootc container image that fails to run correctly in a VM and fixing the issue by updating its containerfile and building a new bootc image.</p>
 </div>
 </div>
 </div>
