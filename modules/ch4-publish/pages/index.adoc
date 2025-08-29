@@ -3,8 +3,6 @@
 Goal::
 Publish system images for edge devices in an OCI container registry.
 
-WARNING: Pending review
-
 == Introduction
 
 This chapter explains how to publish bootc container images in remote container registries and the use of tagging strategies to support their deployment on either actual edge devices or as part of a CI/CD workflow.
