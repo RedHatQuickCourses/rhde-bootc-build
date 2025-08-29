@@ -10,6 +10,9 @@
 . Wait for the lab creation process to complete.
 . When the lab is created, refer to the **SSH Private Key & Instructions** on the page to access your lab.
 
+IMPORTANT: Use the correct link to access the classroom, according to your relationship with Red Hat and, in the case of partners, you must enroll on HOL019 too.
+Review the course home page for the correct links.
+
 [[ROLE-Portal-Links]]
 === ROLE Portal Links
 - RedHat associates: https://role.rhu.redhat.com/rol-rhu/app/[https://role.rhu.redhat.com/rol-rhu/app/,window=_blank]

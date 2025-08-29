@@ -15,15 +15,15 @@ It is the first in a series of quick courses about using image mode for RHEL wit
 
 . Updating and Repurposing Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)
 
-IMPORTANT: Red Hat employees must enroll using its LMS entry [ADD LINK], and Red Hat Partners must enroll using its Partner Portal entry [ADD LINK].
+IMPORTANT: Red Hat employees must enroll using its https://training-lms.redhat.com/sso/saml/auth/rhlpint?RelayState=deeplinkoffering%3D84937026[Red Hat Univerisity] entry, and Red Hat Partners must enroll using its https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering%3D84937349[Red Hat Partner Connect] entry.
 
 == Objectives
 
 On completing this course, you should be able to:
 
 * Understand the usage of image mode for RHEL on Red Hat Device Edge systems.
-* Build system images for edge device using image mode for RHEL.
-* Test and validate system images for edge device images using local VMs.
+* Build system images for edge devices using image mode for RHEL.
+* Test and validate system images for edge devices using local VMs.
 * Publish system images for edge devices in an OCI container registry.
 
 == Audience
@@ -54,9 +54,9 @@ You can perform all activities in this course using the virtual classroom lab fr
 
 Use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):
 
-* HOL019 for Red Hat employees [ADD LINK].
-* HOL019 for Red Hat partners [ADD LINK]
-* HOL019 for Red Hat customers [ADD LINK] with a *Red Hat Learning Subscription*.
+* https://role.rhu.redhat.com/rol-rhu/app/courses/hol019-10.0/[HOL019 for Red Hat employees^].
+* HOL019 for Red Hat partners [SOON!]
+* https://rol.redhat.com/rol/app/courses/hol019-10.0/[HOL019 for Red Hat customers^] with a *Red Hat Learning Subscription*.
 
 WARNING: The classroom environment will be made available at course release time.
 
