@@ -54,7 +54,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL.</a>
+    <a class="nav-link" href="ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="ch1-intro/s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
@@ -173,27 +173,11 @@
 </aside>
 <article class="doc">
 <h1 class="page">Building System Images for Red Hat Device Edge with Image Mode for RHEL</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_goal"><a class="anchor" href="#_goal"></a>Goal</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This course teaches how to create Red Hat Device Edge system images, which are suitable to provision edge devices and kiosk computers, using image mode for RHEL, and how to publish those images on an OCI container registry.</p>
+<p>This course teaches how to create Red Hat Device Edge system images, which are suitable to provision edge devices and kiosk computers, using image mode for Red Hat Enterprise Liunux (RHEL), and how to publish those images on an Open Container Initiative (OCI) container registry.</p>
 </div>
 <div class="paragraph">
 <p>It is the first in a series of quick courses about using image mode for RHEL with Red Hat Device Edge, which will consist of three courses:</p>
@@ -201,7 +185,7 @@ Pending review
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Building Red Hat Device Edge System Images with Image Mode for RHEL</strong> (this course)</p>
+<p><strong>Building System Images for Red Hat Device Edge with Image Mode for RHEL</strong> (this course)</p>
 </li>
 <li>
 <p>Provisioning Red Hat Device Edge Systems with Image Mode for RHEL (not created yet)</p>
@@ -240,7 +224,7 @@ Red Hat employees must enroll using its <a href="https://training-lms.redhat.com
 <p>Build system images for edge devices using image mode for RHEL.</p>
 </li>
 <li>
-<p>Test and validate system images for edge devices using local VMs.</p>
+<p>Test and validate system images for edge devices using local virtual machines (VM)s.</p>
 </li>
 <li>
 <p>Publish system images for edge devices in an OCI container registry.</p>
@@ -283,7 +267,7 @@ Red Hat employees must enroll using its <a href="https://training-lms.redhat.com
 <h2 id="_prerequisites"><a class="anchor" href="#_prerequisites"></a>Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This course assumes that you have the following prior experience:</p>
+<p>This course assumes that you have the following experience:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -291,7 +275,7 @@ Red Hat employees must enroll using its <a href="https://training-lms.redhat.com
 <p>Familiarity with RHEL system administration, to the level of RHCA (Red Hat Certified System Administrator) or equivalent knowledge.</p>
 </li>
 <li>
-<p>Familiarity with Linux container tools, such as Podman, and technologies compatible with Open Container Initiative (OCI) specifications, such as container registries.</p>
+<p>Familiarity with Linux container tools, such as Podman, and technologies compatible with OCI specifications, such as container registries.</p>
 </li>
 <li>
 <p>Familiarity with web server administration, such as Apache Web Server or NGinx, is useful but not required.</p>
@@ -307,7 +291,7 @@ Red Hat employees must enroll using its <a href="https://training-lms.redhat.com
 <h2 id="_classroom_environment"><a class="anchor" href="#_classroom_environment"></a>Classroom Environment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can perform all activities in this course using the virtual classroom lab from <strong>HOL019: Image mode with Red Hat Device Edge Quick Course Series</strong>, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required by future related courses.</p>
+<p>You can perform all activities in this course using the virtual classroom lab from <strong>HOL019: Image Mode with Red Hat Device Edge Quick Course Series</strong>, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required for future related courses.</p>
 </div>
 <div class="paragraph">
 <p>Use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):</p>
@@ -360,7 +344,7 @@ If you plan to use the same classroom lab for multiple Red Hat Device Edge quick
 <h2 id="_about_red_hat_online_learning_role_and_red_hat_learning_subscription"><a class="anchor" href="#_about_red_hat_online_learning_role_and_red_hat_learning_subscription"></a>About Red Hat Online Learning (ROLE) and Red Hat Learning Subscription</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Red Hat Online Learning (ROLE) web site provides <a href="https://www.redhat.com/en/services/training-and-certification" target="_blank" rel="noopener">Red Hat Training and Certification</a> course materials and their virtual classrooms labs.
+<p>The Red Hat Online Learning (ROLE) website provides <a href="https://www.redhat.com/en/services/training-and-certification" target="_blank" rel="noopener">Red Hat Training and Certification</a> course materials and their virtual classrooms labs.
 You must be enrolled in a Red Hat Training course or subscription to have access to ROLE.</p>
 </div>
 <div class="admonitionblock note">
@@ -376,7 +360,7 @@ The image mode with Red Hat Device Edge quick courses use ROLE for its virtual c
 </table>
 </div>
 <div class="paragraph">
-<p>A basic <a href="https://www.redhat.com/en/services/training/learning-subscription" target="_blank" rel="noopener">Red Hat Learning Subscription</a> offers access to a number Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.</p>
+<p>A basic <a href="https://www.redhat.com/en/services/training/learning-subscription" target="_blank" rel="noopener">Red Hat Learning Subscription</a> offers access to a number of Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.</p>
 </div>
 </div>
 </div>

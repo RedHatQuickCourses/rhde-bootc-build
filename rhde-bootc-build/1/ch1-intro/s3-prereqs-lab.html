@@ -55,7 +55,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL.</a>
+    <a class="nav-link" href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
@@ -164,7 +164,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
-    <li><a href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL.</a></li>
+    <li><a href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a></li>
     <li><a href="s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a></li>
   </ul>
 </nav>
@@ -184,21 +184,9 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Prepare for air-gaped building of bootc container images and disconnected deployment of edge devices.</p>
+<p>Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.</p>
 </dd>
 </dl>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Pending review
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -206,11 +194,11 @@ Pending review
 <h2 id="_before_you_begin"><a class="anchor" href="#_before_you_begin"></a>Before you Begin</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You need a <em>development machine</em> running RHEL, to which you have unrestricted sudo rights and also access to RHEL package repositories.
-That machine must have plenty of disk space to store multiple container images and multiple Virtual Machine (VM) images.</p>
+<p>You need a <em>development machine</em> running Red Hat Enterprise Liunux (RHEL), to which you have unrestricted sudo rights, and access to RHEL package repositories.
+That machine must have plenty of disk space to store multiple container images and multiple virtual machine (VM) images.</p>
 </div>
 <div class="paragraph">
-<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on and newer and older RHEL releases, since 9.6.</p>
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no change on newer and older RHEL releases, since 9.6.</p>
 </div>
 <div class="paragraph">
 <p>If you are using the course classroom, you will log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
@@ -222,7 +210,7 @@ If not, please adapt the instructions to your test environment.</p>
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will verify that you have access to mirrors of Red Hat Enterprise Linux (RHEL) package repositories and bootc container images from RHEL.
+<p>You will verify that you have access to mirrors of RHEL package repositories and bootc container images from RHEL.
 You will also configure your <em>development machine</em> with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.</p>
 </div>
 <div class="paragraph">
@@ -235,7 +223,8 @@ You will also configure your <em>development machine</em> with RHEL virtualizati
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>List the configured package repositories, they should match the standard RHEL package repositories.</p>
+<p>List the configured package repositories.
+They should match the standard RHEL package repositories.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>dnf repolist</strong>
@@ -245,7 +234,8 @@ rhel-10.0-for-x86_64-baseos-rpms                                                
 </div>
 </li>
 <li>
-<p>Verify that your RHEL package repositories do NOT point to the Red Hat customer portal, instead they point to a machine inside your virtual labs environment.</p>
+<p>Verify that your RHEL package repositories do NOT point to the Red Hat customer portal.
+Instead they should point to a machine inside your virtual labs environment.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>dnf repoinfo rhel-10.0-for-x86_64-baseos-rpms | grep baseurl</strong>
@@ -306,7 +296,7 @@ Login Succeeded!</code></pre>
 </li>
 <li>
 <p>List all images available on the private registry.
-The list should include some application container images and some bootc container images, for different release of RHEL.</p>
+The list should include some application container images and some bootc container images, for different releases of RHEL.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman search registry.lab.example.com:5000/</strong>
@@ -327,9 +317,10 @@ registry.lab.example.com:5000/ubi9/ubi</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-The <code>podman search</code> command, and its similar commands form other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
-Container registry servers do NOT have to return the results in any strict order, can truncate the results as they wish, and do NOT have to return any indication that the results were truncated.
-It works here only because there is a very small number of container images stored in the private registry.
+The <code>podman search</code> command, and similar commands from other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
+Container registry servers do NOT have to return the results in any strict order.
+They can truncate the results, and do NOT have to return any indication that the results were truncated.
+The <code>podman search</code> command works here only because there is a small number of container images stored in the private registry.
 </td>
 </tr>
 </table>
@@ -389,7 +380,7 @@ map[architecture:x86_64 build-date:2025-07-31T04:03:30 com.redhat.component:rhel
 </div>
 </li>
 <li>
-<p>Alternatively, you can check for the <code>containers.bootc</code> key directly, without using JSON nor the <code>jq</code> command.</p>
+<p>Alternatively, you can check for the <code>containers.bootc</code> key directly, without using JSON or the <code>jq</code> command.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ index .Labels "containers.bootc" }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc</strong>
@@ -468,7 +459,7 @@ package kernel is not installed</code></pre>
 </div>
 </li>
 <li>
-<p>Install the RHEL virtualization tools</p>
+<p>Install the RHEL virtualization tools.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
