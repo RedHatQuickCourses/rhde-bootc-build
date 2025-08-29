@@ -1,4 +1,4 @@
-= Building System Images for Red Hat Device Edge With Image Mode for RHEL
+= Building System Images for Red Hat Device Edge with Image Mode for RHEL
 :navtitle: Home
 
 WARNING: Pending review
