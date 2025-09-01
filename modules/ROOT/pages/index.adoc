@@ -49,19 +49,21 @@ This course assumes that you have the following experience:
 
 == Classroom environment
 
-You can perform all activities in this course using the virtual classroom lab from *HOL019: Image Mode with Red Hat Device Edge Quick Course Series*, which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required for future related courses.
+You can perform all activities in this course using the virtual classroom lab from *HOL019: Image Mode with Red Hat Device Edge Quick Course Series*, in the Red Hat Online Learning Environment (ROLE), which is shared by all quick courses about image mode with Red Hat Device Edge and will be updated as required for future related courses.
+
+IMPORTANT: The image mode with Red Hat Device Edge quick courses use ROLE for their virtual classroom labs only, and hosts courses materials outside of ROLE, as GitHub pages.
 
 === For Red Hat associates and partners
 
-If you are a Red Hat associate or partner, use the following links to enroll in the virtual classroom lab:
+If you are a Red Hat associate or partner, you must first enroll in the virtual classroom lab, by using one of the following links:
 
-* https://training-lms.redhat.com/sso/saml/auth/rhlpint?RelayState=deeplinkoffering=84932767[HOL019 for Red Hat associates^]
-* https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering=84932768[HOL019 for Red Hat partners^]
+* https://training-lms.redhat.com/sso/saml/auth/rhlpint?RelayState=deeplinkoffering=84932767[HOL019 for Red Hat associates^] on Red Hat University
+* https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering=84932768[HOL019 for Red Hat partners^] on Red Hat Partner Connect
 
-After you enrolled once on HOL019, you can use the following links to access the virtual classroom lab on Red Hat Online Learning (ROLE):
+After you enrolled to HOL019 once, you can use the following links for subsequent accesses to the virtual classroom lab directly on the Red Hat Online Learning (ROLE):
 
-* https://role.rhu.redhat.com/rol-rhu/app/courses/hol019-10.0/[HOL019 for Red Hat associates^]
-* https://rol.redhat.com/rol/app/courses/hol019-10.0/[HOL019 for Red Hat partners^]
+* https://role.rhu.redhat.com/rol-rhu/app/courses/hol019-10.0/[HOL019 for Red Hat associates^] on ROLE
+* https://rol.redhat.com/rol/app/courses/hol019-10.0/[HOL019 for Red Hat partners^] on ROLE
 
 === For Red Hat customers
 
@@ -87,8 +89,6 @@ If you can provision your own RHEL servers or VMs, it should be possible to conf
 
 The Red Hat Online Learning (ROLE) website provides https://www.redhat.com/en/services/training-and-certification[Red Hat Training and Certification^] course materials and their virtual classrooms labs.
 You must be enrolled in a Red Hat Training course or subscription to have access to ROLE as a Red Hat customer.
-
-NOTE: The image mode with Red Hat Device Edge quick courses use ROLE for its virtual classroom labs only, and hosts courses materials outside of ROLE, as GitHub pages.
 
 A basic https://www.redhat.com/en/services/training/learning-subscription[Red Hat Learning Subscription^] offers access to a number of Red Hat Training courses and virtual classroom lab time. Higher subscription tiers offer additional benefits such as Red Hat Certification Exam vouchers.
 
