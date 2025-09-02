@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lab: Publish a Bootc Container in a Private Container Registry :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <link rel="prev" href="s1-registry.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/rhde-bootc-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rhde-bootc-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch2-build/index.html">Build Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s1-podman.html">Build Bootc Containers With Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s2-podman-lab.html">Lab: Build and Test Bootc Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s4-containerfiles-lab.html">Lab: System Configuration from Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch3-validate/index.html">Test Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Publish Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building System Images for Red Hat Device Edge with Image Mode for RHEL</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../samples/1/index.html">samples</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../samples/1/index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
+    <li><a href="index.html">Publish Bootc Container Images for Edge Devices</a></li>
+    <li><a href="s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Lab: Publish a Bootc Container in a Private Container Registry</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Objective</dt>
+<dd>
+<p>Publish a system image in an OCI container registry and use it to perform system testing of edge devices.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_before_you_begin"><a class="anchor" href="#_before_you_begin"></a>Before you Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
+</div>
+<div class="paragraph">
+<p>You also need a <em>test machine</em> running RHEL, to which you have unrestricted root access.</p>
+</div>
+<div class="paragraph">
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
+</div>
+<div class="paragraph">
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM, as your <em>development machine</em>, using the user <code>student</code> with password <code>student</code>.
+You will log in with the same user on the <code>servera</code> VM, as your <em>test machine</em>.</p>
+</div>
+<div class="paragraph">
+<p>Make sure you verified your test environment by following the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a> of this course.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reinstall an existing system from that container image, as an alternative approach to perform system testing.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>On your <em>development machine</em>, prepare to start this activity by checking that you have the outcomes from previous activities.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
+Stay on your home directory to start this lab.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
+$ <strong>git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git</strong>
+Cloning into 'rhde-bootc-samples'...
+...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>If needed, log in to your private registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
+Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that you have a bootc container image named <code>httpd-system</code> in your local container storage.
+If you do not, please perform the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a>, which builds that image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman image list | grep httpd-system</strong>
+localhost/httpd-system                            latest      8b0253366051  18 hours ago  1.56 GB</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Copy all artifacts you will need to reinstall your <em>test machine</em> later in this lab.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Copy your bootc container image to the private registry and set a fixed tag which resembles a build number, so it remains unique as you perform new builds of the same image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/httpd-system:v1.0-1234</strong>
+...
+Writing manifest to image destination</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy a SSH public key that you will use it to access your <em>test machine</em> after reboot.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>scp temp-test-vm/edge-key.pub servera:~</strong>
+edge-key.pub</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy the public CA certificate of your private container registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>scp utility:/opt/registry/certs/domain.crt servera:~</strong>
+domain.crt</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the ROLE classroom, the <code>registry</code> hostname is an alias (that is, a DNS <code>CNAME</code>) for the <code>utility</code> VM.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Copy the <code>bootc-install.sh</code> script, so you do not have to type a long Podman command to run the boot utility from your bootc container image later in this lab.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>scp rhde-bootc-samples/bootc-install/bootc-install.sh servera:~</strong>
+bootc-install.sh</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Prepare your <em>test machine</em> to be reinstalled from a bootc container image.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Open an SSH session to your <em>test machine</em>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh servera</strong></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Alternatively, you can open a web terminal directly on the <code>servera</code> machine, using the ROLE web interface.
+Notice that the web terminal will stop working after you reinstall your <em>test machine</em>.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>As a convenience, install the bootc utility.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo dnf install bootc</strong>
+...
+Complete!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that your <em>test machine</em> was created in the traditional way, using package mode for RHEL.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>bootc status</strong>
+System is not deployed via bootc.</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In most circunstances, you would run the <code>bootc</code> command from a bootc container image instead of directly from a system installed using package mode.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Review the network configuration of your <em>test machine</em>, so that you can replicate it as you reinstall the system.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ip -br addr show</strong>
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens3             UP             172.25.250.10/24 fe80::5054:ff:fe00:fa0b/64
+ens4             UP
+$ <strong>route</strong>
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         classroom.lab.e 0.0.0.0         UG    100    0        0 ens3
+172.25.250.0    0.0.0.0         255.255.255.0   U     100    0        0 ens3
+$ <strong>cat /etc/resolv.conf</strong>
+# Generated by NetworkManager
+search lab.example.com example.com
+nameserver 172.25.250.220</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Notice that, from the commands above, it is not clear if the network configuration is static or if it was provided by DHCP.
+You can use the Network Manager CLI to get that information and more.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>nmcli device status</strong>
+DEVICE  TYPE      STATE                                  CONNECTION
+ens3    ethernet  connected                              cloud-init ens3
+ens4    ethernet  connecting (getting IP configuration)  Wired connection 1
+lo      loopback  connected (externally)                 lo
+$ <strong>nmcli connection show</strong>
+NAME                UUID                                  TYPE      DEVICE
+cloud-init ens3     fab1e257-61a6-3526-abf9-8c50c83a28c7  ethernet  ens3
+Wired connection 1  6ee7c93a-43e8-3afe-bfc8-f6a32916459b  ethernet  ens4
+lo                  6b429f96-be91-4a94-aed8-6b5b754f5c69  loopback  lo
+$ <strong>nmcli -f ipv4.method connection show 'cloud-init ens3'</strong>
+ipv4.method:                            manual</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Make a note that the network configuration is manual, and the primary network interface is the <code>ens3</code> device.
+Also make a note of its IP address, default gateway, and DNS server address.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Re-install your <em>test machine</em> from a bootc container image.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Install the public CA certificate of your private container registry, so you do NOT need to disable TLS validation when accessing its container images.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo cp domain.crt /etc/pki/ca-trust/source/anchors/</strong>
+$ <strong>sudo update-ca-trust extract</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Log in on your private registry, but from the <code>root</code> user.
+Remember that previous registry logins were done on your <em>developer machine</em> from your unprivileged user.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo podman login -u student -p redhat registry.lab.example.com:5000</strong>
+Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Download the bootc container image to your <em>test machine</em>, again using the <code>root</code> user.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo podman pull registry.lab.example.com:5000/httpd-system:v1.0-1234</strong>
+...
+Writing manifest to image destination</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Review the <code>bootc-install.sh</code> script.
+Notice the following:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>The script runs the <code>bootc install</code> command in a privileged container.</p>
+</li>
+<li>
+<p>The privileged container mounts the host root filesystem, its device tree, and container storage.</p>
+</li>
+<li>
+<p>The privileged container also mounts the SSH key you copied from your <em>development machine</em>.</p>
+</li>
+<li>
+<p>The <code>--skip-fetch</code> option is required, or else the <code>bootc install</code> command would try to access the private registry, but would fail because it has no TLS certificate or credentials.</p>
+</li>
+<li>
+<p>The <code>--acknowledge-destructive</code> option skips a wait time before starting the installation.</p>
+</li>
+<li>
+<p>The <code>--replace alongside</code> option preserve the old contents of the existing system root, which could be useful for troubleshooting.</p>
+</li>
+<li>
+<p>The <code>--kargs</code> option provides static network configuration.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">#!/bin/bash
+
+podman run \
+--rm --privileged \
+--pid=host \
+-v /:/target \
+-v /dev:/dev \
+-v /var/lib/containers:/var/lib/containers \
+-v /home/student/edge-key.pub:/bootc_authorized_ssh_keys/root \
+--security-opt label=type:unconfined_t \
+registry.lab.example.com:5000/httpd-system:v1.0-1234 \
+bootc install to-filesystem --skip-fetch-check --acknowledge-destructive --replace alongside \
+--root-ssh-authorized-keys /bootc_authorized_ssh_keys/root \
+--karg ip=172.25.250.10::172.25.250.0:255.255.255.0:bootc:ens3:off:172.25.250.220 \
+/target</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Run the <code>bootc-install.sh</code> script.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo bash bootc-install.sh</strong>
+Installing image: docker://registry.lab.example.com:5000/httpd-system:v1.0-1234
+Digest: sha256:6cc1713667782f7d55fd8f3f5308c79063c57bcf6419c659a7c55ebdf72f3262
+Initializing ostree layout
+layers already present: 0; layers needed: 72 (838.5 MB)
+Deploying container image...done (15 seconds)
+Injected: etc/tmpfiles.d/bootc-root-ssh.conf
+Running bootupctl to install bootloader
+&gt; bootupctl backend install --write-uuid --update-firmware --auto --device /dev/sda /target
+Installed: grub.cfg
+Installation complete!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the system is now setup to boot from a bootc container image, that is, from an ostree deployment on its root disk.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>bootc status</strong>
+System is not deployed via bootc.
+$ <strong>sudo ls /ostree/deploy/</strong>
+default
+$ <strong>sudo cat /boot/loader/entries/ostree-1.conf</strong>
+title Red Hat Enterprise Linux 10.0 (Coughlan) (ostree:0)
+version 1
+options root=UUID=15507695-22bb-4c65-94e6-a438e095983f rw mitigations=nosmt ip=172.25.250.11::172.25.250.0:255.255.255.0:bootc:ens3:off:172.25.250.220 ostree=/ostree/boot.1/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0
+linux /boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64
+initrd /boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/initramfs-6.12.0-55.24.1.el10_0.x86_64.img
+aboot /ostree/deploy/default/deploy/13ba5cc346cb26e9147d3ddd54c88a4cc5947a31f7c1762b14389b6ddd4d1648.0/usr/lib/ostree-boot/aboot.img
+abootcfg /ostree/deploy/default/deploy/13ba5cc346cb26e9147d3ddd54c88a4cc5947a31f7c1762b14389b6ddd4d1648.0/usr/lib/ostree-boot/aboot.cfg</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Reboot your <em>test machine</em>.
+You will lose your SSH connection to it.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>systemctl reboot --now</strong></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you wish, you can open the console of the <code>serverb</code> VM on ROLE and follow its shutdown and reboot messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If you perceive you made a mistake, there are a few approaches you can use to try it again, using the provided virtual labs environment:</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If all went well so far, you can skip this step.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>BEFORE you reboot your <em>test machine</em>, you can run the <code>bootc install</code> command, adding the <code>--stateroot tryagain</code> option, where <code>tryagain</code> is any name you wish to assign to your new bootc system installation, other than <code>default</code>.</p>
+</li>
+<li>
+<p>If you only perceive a mistake AFTER reboot, you can retry using the <code>serverb</code> VM as your <em>test machine</em>.
+Just remember to replace the IP address of the <code>servera</code> VM (172.25.250.10) with the IP address of the <code>serverb</code> VM (172.25.250.11) on your <code>bootc-install.sh</code> script.</p>
+<div class="paragraph">
+<p>If you do so, remember to replace, in the remaining steps of this lab, the <code>servera</code> hostname name with the <code>serverb</code> hostname.</p>
+</div>
+</li>
+<li>
+<p>If you want to try again, but after having already rebooted both <code>servera</code> and <code>serverb</code> VMs, you must delete and re-create your ROLE classroom, and then perform the previous labs that prepare your <em>development machine</em> and build the <code>httpd-system</code> bootc container images.</p>
+</li>
+<li>
+<p>You could also try creating a libvirt VM, installing RHEL on it, and running the <code>bootc install</code> on the local VM.
+A local VM would have the advantage of relying on dynamic IP configuration, thus NOT requiring a correct <code>--kargs</code> option for the <code>bootc install</code> command.</p>
+<div class="paragraph">
+<p>But you would have to wait the time to install RHEL on your local VM, which takes considerably longer with package mode than with image mode.
+If all goes well, using either <code>servera</code> or <code>serverb</code> VMs is considerably faster.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>On your <em>developer machine</em>, verify that your <em>test machine</em> runs the <code>httpd-system</code> bootc container image and open a new SSH session to your <em>test machine</em></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Verify that your <em>test machine</em> now runs a web server containing your mock of a single-page web application.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl servera</strong>
+Misc tests of bootc images and firewalld</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Delete the entry for your <em>test machine</em> from your SSH known hosts file.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sed -i '/servera/d' ~/.ssh/known_hosts</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Connect to your <em>test machine</em> using the SSH key you created for system testing of bootc container images.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i temp-test-vm/edge-key root@servera</strong>
+[root@servera ~]#</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>On your <em>test machine</em>, verify that it has all system settings from its bootc container image applied and active.</p>
+<div class="paragraph">
+<p>If you do not remember those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you built that image and verified that its settings were not applied with Podman.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Verify that it now reports as having been deployed using bootc.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>bootc status</strong>
+● Booted image: registry.lab.example.com:5000/httpd-system:v1.0-1234
+        Digest: sha256:6cc1713667782f7d55fd8f3f5308c79063c57bcf6419c659a7c55ebdf72f3262
+       Version: 10.0 (2025-08-15 22:40:10.520003217 UTC)</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that its kernel command line now includes the <code>mitigations=nosmt</code> argument.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>sudo cat /proc/cmdline</strong>
+BOOT_IMAGE=(hd0,gpt3)/boot/ostree/default-c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/vmlinuz-6.12.0-55.24.1.el10_0.x86_64 root=UUID=15507695-22bb-4c65-94e6-a438e095983f rw mitigations=nosmt ip=172.25.250.11::172.25.250.0:255.255.255.0:bootc:ens3:off:172.25.250.220 ostree=/ostree/boot.1/default/c425d23140692670aea4c6145b73e361feef3e59bcdf2a6d78010bda5b747bc8/0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that IP forwarding and the sysreq key are disabled.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>sysctl net.ipv4.ip_forward</strong>
+net.ipv4.ip_forward = 0
+# <strong>sysctl kernel.sysrq</strong>
+kernel.sysrq = 0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the Systemd service units for the Firewall Daemon and the Apache Web Server are active.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>systemctl is-active httpd</strong>
+active
+# <strong>systemctl is-active firewalld</strong>
+active</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the HTTPD service is allowed in the firewall settings.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>sudo firewall-cmd --list-services</strong>
+cockpit dhcpv6-client http ssh</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the old contents of your <em>test machine</em> are still available in the <code>/sysroot</code> directory.
+For example, verify the files for the <code>student</code> user are there.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"># <strong>ls /sysroot/home/student/</strong>
+bootc-install.sh  domain.crt  edge-key.pub</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>On your <em>development machine</em>, promote your bootc container image as vetted for use by actual edge devices.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Set a floating tag for the major.minor version number of your image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy containers-storage:localhost/httpd-system docker://registry.lab.example.com:5000/httpd-system:v1.0</strong>
+...
+Copying blob 210b201289a0 skipped: already exists
+Copying blob ad312c5c40cc skipped: already exists
+...
+Copying config 8f58cf789c done   |
+Writing manifest to image destination</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that the <code>skopeo copy</code> command above did NOT actually copy any layers, because they already exist on the container registry, from the previous copy operation.</p>
+</div>
+</li>
+<li>
+<p>Also tag the same image as <code>latest</code> in the container registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy docker://registry.lab.example.com:5000/httpd-system:v1.0-1234 docker://registry.lab.example.com:5000/httpd-system:latest</strong>
+...
+Copying blob 4b7b4242bfaa skipped: already exists
+Copying blob c7b030c219e8 skipped: already exists
+...
+Copying config 8f58cf789c done   |
+Writing manifest to image destination</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A CI/CD system would probably use the second style of copy, from remote to remote, to set all floating tags, instead of making multiple copies from local to remote, as you did in the previous step.
+This activity uses both styles to demonstrate that it makes no difference to the final result.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Verify that the three tags (one fixed, two floating) are listed in your bootc container image repository, and that the three tags possess the same digest, so they actually are alternate tags for exactly the same image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ json .RepoTags }}' docker://registry.lab.example.com:5000/httpd-system | jq</strong>
+[
+  "latest",
+  "v1.0",
+  "v1.0-1234"
+]
+$ <strong>skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:v1.0-1234</strong>
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ <strong>skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:v1.0</strong>
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
+$ <strong>skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:5000/httpd-system:latest</strong>
+sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Your digests will be different from the output above, because containerfile builds are NOT reproducible.
+If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
+There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is the final lab in this course, but the next course if this learning approach covers how to use the <strong>bootc image builder</strong> utility to create customized installation medias for edge devices and also how to create customized boot disk images for clouds and hypervisors.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

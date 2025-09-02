@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lab: Troubleshoot Bootc Containers and Their Containerfiles :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <link rel="prev" href="s2-install-lab.html">
+    <link rel="next" href="../ch4-publish/index.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/rhde-bootc-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rhde-bootc-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch1-intro/index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch1-intro/s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch2-build/index.html">Build Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s1-podman.html">Build Bootc Containers With Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s2-podman-lab.html">Lab: Build and Test Bootc Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s4-containerfiles-lab.html">Lab: System Configuration from Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Test Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch4-publish/index.html">Publish Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building System Images for Red Hat Device Edge with Image Mode for RHEL</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../samples/1/index.html">samples</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../samples/1/index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
+    <li><a href="index.html">Test Bootc Container Images for Edge Devices</a></li>
+    <li><a href="s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Lab: Troubleshoot Bootc Containers and Their Containerfiles</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Objective</dt>
+<dd>
+<p>Troubleshoot and fix a bootc container image that works in a container engine but fails in a local VM.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_before_you_begin"><a class="anchor" href="#_before_you_begin"></a>Before you Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You need a <em>development machine</em> running RHEL, to which you have access using an unprivileged user account.</p>
+</div>
+<div class="paragraph">
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
+</div>
+<div class="paragraph">
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+If not, please adapt the instructions to your test environment.</p>
+</div>
+<div class="paragraph">
+<p>Make sure you verified your test environment by following the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a> of this course.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will a create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
+This time, you will find that the system does NOT work as expected.
+You will then identify the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Prepare to start this activity by checking that you have the outcomes from previous activities.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
+Stay on your home directory to start this lab.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
+$ <strong>git clone https://github.com/RedHatQuickCourses/rhde-bootc-samples.git</strong>
+Cloning into 'rhde-bootc-samples'...
+...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>If needed, log in to your private registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
+Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that you have a bootc container image named <code>localhost/webapp-bootc</code> in your local container storage.
+If you do not, please perform a <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a> which builds that image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman image list | grep webapp-bootc</strong>
+localhost/webapp-bootc                            latest      3e89e69fc894  18 hours ago  1.56 GB</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that you have access to libvirt through its session interface.
+If you do not, please perform the preparation tasks from the <a href="../ch1-intro/s3-prereqs-lab.html" class="xref page">first lab</a>.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>virsh list --all</strong>
+ Id   Name   State
+--------------------</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is fine if you have some local VMs on your system, as long as there isn&#8217;t a VM named <code>bootc-test</code>.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Verify that you have, on your home directory, a temporary directory with scripts and SSH keys for creating test VMs, and another temporary directory with an OCI container image directory.
+If you do not, please review the <a href="#ch3-validate:s2-install-bootc">previous lab</a> which creates those directories.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls temp-test-vm</strong>
+edge-key  edge-key.pub  inst.ks  virt-install.sh
+$ <strong>ls temp-bootc</strong>
+oci
+$ <strong>ls temp-bootc/oci</strong>
+blobs  index.json  oci-layout</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Create a test VM from the <code>webapp-bootc</code> container image.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Copy the bootc container image to your OCI directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo copy containers-storage:localhost/webapp-bootc oci:temp-bootc/oci:webapp-bootc</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Change the kickstart script on your scripts directory to refer to that bootc container image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd temp-test-vm</strong>
+$ <strong>sed -i '1,$ s/httpd-bootc/webapp-bootc/g' inst.ks</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a test VM, using the kickstart script you just changed.</p>
+<div class="paragraph">
+<p>Make sure it reports using the <code>webapp-bootc</code> container image as its installation source.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>bash virt-install.sh</strong>
+...
+Installing the software
+Deployment starting: /mnt/host-var-srv/oci:webapp-bootc
+...
+Domain creation completed.
+Restarting guest.
+Running text console command: virsh --connect qemu:///session console test-bootc
+Connected to domain 'test-bootc'
+Escape character is ^] (Ctrl + ])</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>When your test VM finish installing, detach from its VM console by pressing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>]</kbd></span>.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Verify that your test VM is NOT working as expected, and troubleshoot it.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Try to access your single-page web application.
+Instead of the expected mock message, you should get the standard welcome page from RHEL.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"&gt;
+        &lt;head&gt;
+                &lt;title&gt;Test Page for the HTTP Server on Red Hat Enterprise Linux&lt;/title&gt;--
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Remember that this container image worked fine when run from Podman, in a <a href="../ch2-build/s2-podman-lab.html" class="xref page">previous lab</a>.
+Now find what is wrong.</p>
+</div>
+</li>
+<li>
+<p>Start a SSH session to your test VM.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i edge-key -p 8022 core@127.0.0.1</strong>
+[core@bootc-test ~]$</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify the access logs and error logs of the Apache Web Server.
+It claims that search permissions are missing in the path to the <code>index.html</code> file of the single-page web application.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo tail /var/log/httpd/access_log</strong>
+172.25.250.254 - - [12/Aug/2025:19:28:09 +0000] "GET / HTTP/1.1" 403 5909 "-" "curl/8.9.1"
+$ <strong>sudo tail /var/log/httpd/error_log</strong>
+[Tue Aug 12 19:25:34.493767 2025] [suexec:notice] [pid 993:tid 993] AH01232: suEXEC mechanism enabled (wrapper: /usr/sbin/suexec)
+[Tue Aug 12 19:25:34.564560 2025] [lbmethod_heartbeat:notice] [pid 993:tid 993] AH02282: No slotmem from mod_heartmonitor
+[Tue Aug 12 19:25:34.566752 2025] [systemd:notice] [pid 993:tid 993] SELinux policy enabled; httpd running as context system_u:system_r:httpd_t:s0
+[Tue Aug 12 19:25:34.584879 2025] [mpm_event:notice] [pid 993:tid 993] AH00489: Apache/2.4.63 (Red Hat Enterprise Linux) configured -- resuming normal operations
+[Tue Aug 12 19:25:34.585013 2025] [core:notice] [pid 993:tid 993] AH00094: Command line: '/usr/sbin/httpd -D FOREGROUND'
+[Tue Aug 12 19:28:09.247438 2025] [core:error] [pid 1060:tid 1103] (13)Permission denied: [client 172.25.250.254:35038] AH00035: access to /index.html denied (filesystem path '/webapp/html/index.html') because search permissions are missing on a component of the path</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that these files have the necessary read and execute (search) permissions.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls -la /webapp</strong>
+total 12
+drwxr-xr-x.  3 root root   43 Jan  1  1970 .
+drwxr-xr-x. 16 root root 4096 Jan  1  1970 ..
+drwxr-xr-x.  2 root root   49 Jan  1  1970 html
+$ <strong>ls -l /webapp/html</strong>
+total 4
+-rw-r--r--. 1 root root 88 Jan  1  1970 index.html</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>What else could deny permission to access files and directories?
+Maybe it is SELinux.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo journalctl | grep avc:</strong>
+...
+Aug 12 19:54:43 bootc-test kernel: audit: type=1400 audit(1755028483.053:4): avc:  denied  { getattr } for  pid=1058 comm="httpd" path="/webapp/html/index.html" dev="overlay" ino=11826 scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:default_t:s0 tclass=file permissive=0
+...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Indeed, the single-page web application files have a <code>default_t</code> context label, instead of the <code>httpd_sys_content_t</code> label required by the targeted SELinux policy in RHEL.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ls -laZ /webapp/html/</strong>
+total 12
+drwxr-xr-x. 2 root root system_u:object_r:default_t:s0 49 Jan  1  1970 .
+drwxr-xr-x. 3 root root system_u:object_r:default_t:s0 43 Jan  1  1970 ..
+-rw-r--r--. 1 root root system_u:object_r:default_t:s0 88 Jan  1  1970 index.html</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Exit and delete your test VM.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>exit</strong>
+logout
+Connection to 127.0.0.1 closed.
+$ <strong>virsh destroy bootc-test</strong>
+Domain 'bootc-test' destroyed
+$ <strong>virsh undefine bootc-test --remove-all-storage</strong>
+Domain 'bootc-test' has been undefined
+Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Build a new bootc container image with the required fixes</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The sample code repository already provides a containerfile with all fixes.</p>
+<div class="paragraph">
+<p>For your reference, the fix is just adding a <code>semanage</code> command to update the policy and specify a context label for the <code>/webapp</code> directory tree.
+The bootc utility labels all files, according to the policy inside the bootc container image, at installation time.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/rhel10/rhel-bootc:10.0
+ADD yum.repos.d /etc/yum.repos.d
+ADD html /webapp/html
+RUN dnf install -y httpd &amp;&amp; systemctl enable httpd &amp;&amp; dnf clean all
+RUN chmod -R a+rX /webapp &amp;&amp; \
+  semanage fcontext -a -t httpd_sys_content_t "/webapp(/.*)?" &amp;&amp; \
+  sed -i '1,$ s?/var/www/?/webapp/?' /etc/httpd/conf/httpd.conf</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Build the bootc container image with fixes.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd ../rhde-bootc-samples</strong>
+$ <strong>cd webapp-fixed</strong>
+$ <strong>podman build -t webapp-fixed .</strong>
+...
+Successfully tagged localhost/webapp-fixed:latest</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>If you wish, test the new bootc container image with Podman, but the instructions here proceed straight to installing it in a new test VM.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
+$ <strong>skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed</strong>
+...
+Writing manifest to image destination
+$ <strong>cd temp-test-vm</strong>
+$ <strong>sed -i '1,$ s/webapp-bootc/webapp-fixed/g' inst.ks</strong>
+$ <strong>bash virt-install.sh</strong>
+...
+Installing the software
+Deployment starting: /mnt/host-var-srv/oci:webapp-fixed
+...
+Domain creation completed.
+Restarting guest.
+Running text console command: virsh --connect qemu:///session console test-bootc
+Connected to domain 'test-bootc'
+Escape character is ^] (Ctrl + ])</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>When your new test VM finishes installing, detach from its VM console by pressing <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>]</kbd></span>.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Verify that access to your improved single-page web application now works.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
+This would be the HTML and JavaScript code of your IMPROVED single-page web application.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Optional:</strong> You do not need to create a brand new test VM every time you build a new bootc container image.
+You can upgrade an existing VM, taking advantage of the virtio device that was configured by the <code>virt-install</code> command.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Enter your <code>webapp-fixed</code> directory, change the mock file for its single-page web application, and rebuild your bootc container image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd ../rhde-bootc-samples/webapp-fixed</strong>
+$ <strong>echo "New version of the single-page web application." &gt; html/index.html</strong>
+$ <strong>podman build -t webapp-fixed .</strong>
+...
+Successfully tagged localhost/webapp-fixed:latest</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy the modified image to your temporary OCI directory.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>cd</strong>
+$ <strong>skopeo copy containers-storage:localhost/webapp-fixed oci:temp-bootc/oci:webapp-fixed</strong>
+...
+Writing manifest to image destination</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Open an SSH session to your running test VM to stage your updated bootc container image, then reboot your test VM.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i edge-key -p 8022 core@127.0.0.1</strong>
+$ <strong>sudo bootc status</strong>
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+       Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+$ <strong>sudo bootc upgrade</strong>
+...
+Queued for next boot: ostree-unverified-image:oci:/mnt/host-var-srv/oci:webapp-fixed
+...
+$ <strong>sudo bootc status</strong>
+  Staged image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
+       Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
+
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+       Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+$ <strong>sudo systemctl reboot</strong>
+...
+Connection to 127.0.0.1 closed.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Wait a few moments and check that your web application already responds with the updated mock message.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>curl 127.0.0.1:8080</strong>
+New version of the single-page web application.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start a new SSH session to your test VM and verify that the new image is now the booted image, and the old image is now the rollback image.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh -i edge-key -p 8022 core@127.0.0.1</strong>
+$ <strong>sudo bootc status</strong>
+● Booted image: oci:/mnt/host-var-srv/oci:webapp-fixed
+        Digest: sha256:90498d75699281064500dbf81678bd3a30614f1f4dd6b2305a70fdb16fc8a343
+       Version: 10.0 (2025-08-12 23:39:32.550112537 UTC)
+
+  Rollback image: oci:/mnt/host-var-srv/oci:webapp-fixed
+          Digest: sha256:4b277dad91fbc128a1baea2de0ef5202f84d060be5acfbf4b8b3119f0a1f3497
+         Version: 10.0 (2025-08-12 23:27:12.574774696 UTC)
+$ <strong>exit</strong>
+logout
+Connection to 127.0.0.1 closed.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Instead of the <code>bootc upgrade</code> command, which stages a new version of the same container image, you could use the <code>bootc switch</code> to stage a different container image, and keep reusing the same test VM to test different system images, in addition to newer builds of the same system image.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Beware that these operations do NOT reset the state of the <code>/etc</code> and <code>/var</code> directories, which might interfere with your testing of different bootc container images.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Delete your test VM to conserve resources.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>virsh destroy bootc-test</strong>
+Domain 'bootc-test' destroyed
+$ <strong>virsh undefine bootc-test --remove-all-storage</strong>
+Domain 'bootc-test' has been undefined
+Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed.</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The next chapter demonstrates how to publish bootc container images on OCI container registries, so they can be used to provision physical systems, cloud instances, and VMs on the data center.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a></span>
+  <span class="next"><a href="../ch4-publish/index.html">Publish Bootc Container Images for Edge Devices</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

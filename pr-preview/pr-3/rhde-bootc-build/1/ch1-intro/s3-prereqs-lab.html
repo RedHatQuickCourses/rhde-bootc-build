@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lab: Prepare to Build and Deploy Bootc Container Images :: Building System Images for Red Hat Device Edge with Image Mode for RHEL</title>
+    <link rel="prev" href="s2-edge-devices-quiz.html">
+    <link rel="next" href="../ch2-build/index.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/rhde-bootc-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="rhde-bootc-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../LABENV/index.html">Lab Environment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s1-rhde-and-image-mode.html">Provision and Manage Edge Devices with RHEL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch2-build/index.html">Build Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s1-podman.html">Build Bootc Containers With Podman</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s2-podman-lab.html">Lab: Build and Test Bootc Containers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s3-containerfiles.html">Strategies for Building Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch2-build/s4-containerfiles-lab.html">Lab: System Configuration from Containers</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch3-validate/index.html">Test Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s1-bootc-anaconda.html">Test Bootc Container Images with Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s2-install-lab.html">Lab: Test Bootc Containers With Anaconda</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch3-validate/s3-troubleshoot-lab.html">Lab: Troubleshoot Bootc Containers and Their Containerfiles</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../ch4-publish/index.html">Publish Bootc Container Images for Edge Devices</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s1-registry.html">Strategies for Publishing and Distributing Bootc Container Images</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ch4-publish/s2-bootc-install-lab.html">Lab: Publish a Bootc Container in a Private Container Registry</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building System Images for Red Hat Device Edge with Image Mode for RHEL</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+    <li class="component">
+      <a class="title" href="../../../samples/1/index.html">samples</a>
+      <ul class="versions">
+        <li class="version is-latest">
+          <a href="../../../samples/1/index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building System Images for Red Hat Device Edge with Image Mode for RHEL</a></li>
+    <li><a href="index.html">Introduction to Red Hat Device Edge and Image Mode for RHEL</a></li>
+    <li><a href="s3-prereqs-lab.html">Lab: Prepare to Build and Deploy Bootc Container Images</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Lab: Prepare to Build and Deploy Bootc Container Images</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Estimated reading time: <strong>6 minutes</strong>.</em></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Objective</dt>
+<dd>
+<p>Prepare for air-gapped building of bootc container images and disconnected deployment of edge devices.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_before_you_begin"><a class="anchor" href="#_before_you_begin"></a>Before you Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You need a <em>development machine</em> running Red Hat Enterprise Liunux (RHEL), to which you have unrestricted sudo rights, and access to RHEL package repositories.
+That machine must have plenty of disk space to store multiple container images and multiple virtual machine (VM) images.</p>
+</div>
+<div class="paragraph">
+<p>These instructions were tested on RHEL 10.0 but should work with minimal or no changes on newer and older RHEL releases, since 9.6.</p>
+</div>
+<div class="paragraph">
+<p>If you are using the course classroom, log in on the <code>workstation</code> VM as the user <code>student</code> with password <code>student</code>.
+If not, please adapt the instructions to your test environment.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will verify that you have access to mirrors of RHEL package repositories and bootc container images from RHEL.
+You will also configure your <em>development machine</em> with RHEL virtualization tools, based on libvirt, to perform system testing of your bootc container images.</p>
+</div>
+<div class="paragraph">
+<p>As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Verify that your <em>development machine</em> has access to the RHEL package repositories from a DNF mirror.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>List the configured package repositories.
+They should match the standard RHEL package repositories.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>dnf repolist</strong>
+rhel-10.0-for-x86_64-appstream-rpms                                                                       Red Hat Enterprise Linux 10.0 AppStream (dvd)
+rhel-10.0-for-x86_64-baseos-rpms                                                                          Red Hat Enterprise Linux 10.0 BaseOS (dvd)</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that your RHEL package repositories do NOT point to the Red Hat customer portal.
+Instead they should point to a machine inside your virtual labs environment.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>dnf repoinfo rhel-10.0-for-x86_64-baseos-rpms | grep baseurl</strong>
+Last metadata expiration check: 0:01:12 ago on Thu Aug  7 12:48:44 2025.
+Repo-baseurl       : http://content.example.com/rhel10.0/x86_64/dvd/BaseOS</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that the <code>bootc</code> package is available, but do NOT install it.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>dnf info bootc</strong>
+Last metadata expiration check: 0:44:11 ago on Thu Aug  7 12:48:44 2025.
+Available Packages
+Name         : bootc
+Version      : 1.1.6
+Release      : 2.el10_0
+Architecture : x86_64
+Size         : 2.7 M
+Source       : bootc-1.1.6-2.el10_0.src.rpm
+Repository   : rhel-10.0-for-x86_64-appstream-rpms
+Summary      : Bootable container system
+URL          : https://github.com/containers/bootc
+License      : Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
+Description  : Bootable container system</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Install the container tools on your <em>development machine</em>.</p>
+<div class="paragraph">
+<p>You already have Podman installed, but during this course you will use additional convenience tools, such as Skopeo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo dnf install skopeo buildah</strong>
+...
+Complete!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that your <em>development machine</em> has access to bootc base images from a private registry.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The private registry requires authentication, even for images that would be public on the Red Hat registries.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman login -u student -p redhat registry.lab.example.com:5000</strong>
+Login Succeeded!</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>List all images available on the private registry.
+The list should include some application container images and some bootc container images, for different releases of RHEL.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman search registry.lab.example.com:5000/</strong>
+NAME                                                                  DESCRIPTION
+registry.lab.example.com:5000/openshift4/microshift-bootc-rhel9
+registry.lab.example.com:5000/rhel10/bootc-image-builder
+registry.lab.example.com:5000/rhel10/rhel-bootc
+registry.lab.example.com:5000/rhel9-eus/rhel-9.6-bootc
+registry.lab.example.com:5000/rhel9-eus/rhel-9.6-bootc-image-builder
+registry.lab.example.com:5000/ubi10/ubi
+registry.lab.example.com:5000/ubi9/ubi</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>podman search</code> command, and similar commands from other tools such as Docker, are not reliable to list container images in a production container registry nor to verify the availability of an image by its name and tag.
+Container registry servers do NOT have to return the results in any strict order.
+They can truncate the results, and do NOT have to return any indication that the results were truncated.
+The <code>podman search</code> command works here only because there is a small number of container images stored in the private registry.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Inspect the RHEL 10 base bootc image to verify it is indeed a bootc container image.
+Look for the <code>containers.bootc</code> key.</p>
+<div class="paragraph">
+<p>Instead of displaying all information about a container, which could spawn multiple pages of your terminal, use the <code>--format</code> option to list only the labels,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ .Labels }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc</strong>
+map[architecture:x86_64 build-date:2025-07-31T04:03:30 com.redhat.component:rhel-bootc-component containers.bootc:1 description:RHEL bootc container distribution-scope:public io.buildah.version:1.40.1 io.k8s.description:RHEL bootc container name:rhel10/rhel-bootc org.opencontainers.image.source:https://gitlab.com/redhat/rhel/bifrost/rhel-bootc.git ostree.bootable:1 ostree.commit:8f3b22bd5d278d525440baa3ae7709fa89d575d7f6799f82913c805f2d7b8b1e ostree.final-diffid:sha256:12787d84fa137cd5649a9005efe98ec9d05ea46245fdc50aecb7dd007f2035b1 redhat.compose-id: redhat.id:rhel redhat.version-id:10.0 release:10.0 url:https://www.redhat.com vcs-ref:2ff3f1d1ffe1b320f7a54ef32c4fd19551736eba vcs-type:git vendor:Red Hat, Inc. version:10.0]</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>You can output the information in JSON format and format it for legibility, which makes it easier to visually find a specific key.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ json .Labels }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc | jq</strong>
+{
+  "architecture": "x86_64",
+  "build-date": "2025-07-31T04:03:30",
+  "com.redhat.component": "rhel-bootc-component",
+  "containers.bootc": "1",<i class="conum" data-value="1"></i><b>(1)</b>
+  "description": "RHEL bootc container",
+  "distribution-scope": "public",
+  "io.buildah.version": "1.40.1",
+  "io.k8s.description": "RHEL bootc container",
+  "name": "rhel10/rhel-bootc",
+  "org.opencontainers.image.source": "https://gitlab.com/redhat/rhel/bifrost/rhel-bootc.git",
+  "ostree.bootable": "1",
+  "ostree.commit": "8f3b22bd5d278d525440baa3ae7709fa89d575d7f6799f82913c805f2d7b8b1e",
+  "ostree.final-diffid": "sha256:12787d84fa137cd5649a9005efe98ec9d05ea46245fdc50aecb7dd007f2035b1",
+  "redhat.compose-id": "",
+  "redhat.id": "rhel",
+  "redhat.version-id": "10.0",
+  "release": "10.0",
+  "url": "https://www.redhat.com",
+  "vcs-ref": "2ff3f1d1ffe1b320f7a54ef32c4fd19551736eba",
+  "vcs-type": "git",
+  "vendor": "Red Hat, Inc.",
+  "version": "10.0"
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The label could take any value, but by convention it should be set to "1" or empty.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Alternatively, you can check for the <code>containers.bootc</code> key directly, without using JSON or the <code>jq</code> command.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ index .Labels "containers.bootc" }}' docker://registry.lab.example.com:5000/rhel10/rhel-bootc</strong>
+1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that an application container image, for example a UBI base image, does NOT have a <code>containers.bootc</code> label.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>skopeo inspect --format '{{ index .Labels "containers.bootc" }}' docker://registry.lab.example.com:5000/ubi10/ubi</strong>
+
+$</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Because the output of the last command is empty, you may want to retrieve and format all labels, just to be sure.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Explore the contents of a bootc container image and an application container image and notice important packages that are present or not.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Bootc container images include the <em>bootable container system</em> utility, that is, the <code>bootc</code> package and the command with the same name.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman run --rm --name bootc registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q bootc"</strong>
+...
+bootc-1.1.6-2.el10_0.x86_64
+$ <strong>podman run --rm --name ubi registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q bootc"</strong>
+..
+package bootc is not installed</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Be patient, bootc container images are considerably larger than regular application containers, so they take longer to download.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Bootc container images include a Linux kernel.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman run --rm --name bootc registry.lab.example.com:5000/rhel10/rhel-bootc bash -c "rpm -q kernel"</strong>
+...
+kernel-6.12.0-55.24.1.el10_0.x86_64
+$ <strong>podman run --rm --name ubi registry.lab.example.com:5000/ubi10/ubi bash -c "rpm -q kernel"</strong>
+..
+package kernel is not installed</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Install the RHEL virtualization tools.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Install the Libvirt tools and enable the Libvirt socket.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sudo dnf install qemu-kvm libvirt virt-install virt-viewer</strong>
+...
+Complete!
+$ <strong>sudo systemctl enable virtqemud.socket --now</strong>
+Created symlink /etc/systemd/system/multi-user.target.wants/virtqemud.socket → /usr/lib/systemd/system/virtqemud.socket.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check that your unprivileged user can connect to Libvirt&#8217;s session interface.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>virsh uri</strong>
+qemu:///session
+$ <strong>virsh nodeinfo</strong>
+CPU model:           x86_64
+...</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_whats_next"><a class="anchor" href="#_whats_next"></a>What&#8217;s next</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The next chapter demonstrates how to craft a containerfile and use it to build a bootc container image.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="s2-edge-devices-quiz.html">Quiz: Use Cases for Edge Devices and Red Hat Device Edge</a></span>
+  <span class="next"><a href="../ch2-build/index.html">Build Bootc Container Images for Edge Devices</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
