@@ -46,5 +46,5 @@ It could use compute device which is rugged for factory floor conditions and pro
 
 A: Red Hat Device Edge (with image mode).
 Correct: As a single-purpose appliance, this is better suited to be deployed and managed as an image mode system.
-Be aware that, to be entitled using Red Hat Device Edge Subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
+Be aware that, to be entitled using Red Hat Device Edge subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
 Some of those devices do offer GPUs and other kinds of hardware accelerators suitable for this kind of applications.
