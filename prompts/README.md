@@ -1,4 +1,4 @@
-# How to create interactive Quizes with Google Gemini
+# How to Create Interactive Quizes with Google Gemini
 
 This `prompts` folder is outside of the Antora doc tree (the `modules` folder) on purpose. There's no need to the `antora*yaml`, `package.json`, nor GitHub actions. After you generate your interactive quiz with Gemini, it's just a static HTML file which you commit as part of your Antora documentation site, as an attachment file.
 
