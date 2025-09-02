@@ -36,10 +36,10 @@ We keep this folder so you can reproduce, or re-generate, the interactive quizze
 
 * Test again that the quiz works well from your live Antora documentation site (or its preview in a PR).
 
-* If you include an estimated reading time, sum the times of the .adoc file and the questions.md file. This does NOT take into account the time to click on answers and click "Next" to move to the next question, not the time to think about a question and its answers, but it is the best estimage we can do for now.
+* If you include an estimated reading time, sum the times of the section.adoc file and the questions.md file. This does NOT take into account the time to click on answers and click "Next" to move to the next question, not the time to think about a question and its answers, but it is the best estimate we can do for now.
 
-* If you had to add some tweaks to the prompt, or continue the conversation to tweak the generated JavaScript code, record all your prompts and messages (not answers, only your input to Gemini) in this `prompts` directory, and save it on your quick course project in GitHub.
+* If you had to add some tweaks to the prompt, or continue the conversation to tweak the generated JavaScript code, record all your prompts and messages (not answers, only your inputs to Gemini) in this `prompts` directory, and save it on your quick course project in GitHub.
 
 * Review the Red Hat Brand portal https://www.redhat.com/en/about/brand/standards if you need to tweak the output to better align with the Red Hat brand.
 
-* Do not be afraid of starting a new Gemini chat and discart the previous attempt. It creates small variations of layout for each run. Maybe a longer prompt could bring more consistency, but I'm happy with the results so far.
+* Do not be afraid of starting a new Gemini chat and discard a previous attempt. It creates small variations of layout for each run. Maybe a longer prompt could bring more consistency, but I'm happy with the results so far.
