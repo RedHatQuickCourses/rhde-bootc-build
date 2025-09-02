@@ -31,6 +31,12 @@
             line-height: 1.6;
         }
 
+        #question-counter {
+            color: #383838;
+            margin-bottom: 1em;
+            font-weight: 700;
+        }
+
         #question-container {
             margin-bottom: 1.5em;
         }
@@ -152,6 +158,7 @@
   <body>
     <div id="quiz-container">
       <div id="quiz-intro"></div>
+      <div id="question-counter"></div>
       <div id="question-container">
         <p id="question-text"></p>
         <div id="answers-container"></div>
@@ -267,6 +274,7 @@ Some of those devices do offer GPUs and other kinds of hardware accelerators sui
             let currentQuestionIndex = 0;
 
             const introEl = document.getElementById('quiz-intro');
+            const questionCounterEl = document.getElementById('question-counter');
             const questionTextEl = document.getElementById('question-text');
             const answersContainerEl = document.getElementById('answers-container');
             const nextBtn = document.getElementById('next-btn');
@@ -277,6 +285,7 @@ Some of those devices do offer GPUs and other kinds of hardware accelerators sui
 
             function displayQuestion(index) {
                 const question = questions[index];
+                questionCounterEl.textContent = `Question ${index + 1} of ${questions.length}`;
                 questionTextEl.textContent = question.question;
                 answersContainerEl.innerHTML = '';
 
