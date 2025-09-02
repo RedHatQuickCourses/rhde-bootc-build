@@ -1,3 +1,5 @@
+# Initial prompt
+
 Create a JavaScript application that displays an interactive quiz, one question and all its answers at a time, from the provided questions and answers file.
 
 Display each answer with a checkbox, which when clicked displays the explanation for why the answer is either correct or incorrect.
@@ -25,3 +27,7 @@ Do not include any title for the quiz, because it will be used as an iframe in a
 For each question, include buttons to move to the Next and Previous questions. After the last question, include a button to restart the quiz. The Next question buttons should use color interaction-blue-50 (#0066cc), the Previous question button should use color gray-70 (#383838), and the button to Restart the quiz should use color red-50 (#ee0000).
 
 Use the "Red Hat Display" font famility for all text in the JavaScript application. Do not put any background color nor border around the JavaScript application, so it fits nicely as part of a larger web page.
+
+# Follow-up prompt
+
+The JavaScript application looks nice and works as expected. Change it so there is a line of text, between the introduction text and the question text, which indicates the sequential number of the current questions and the total number of questions, for example: "Question 2 of 4". Color that text as gray-70 (#383838).
