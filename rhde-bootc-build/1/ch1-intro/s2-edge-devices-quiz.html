@@ -178,7 +178,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Estimated reading time: <strong>6 minutes</strong>.</em></p>
+<p><em>Estimated reading time: <strong>5 minutes</strong>.</em></p>
 </div>
 <div class="dlist">
 <dl>
@@ -188,136 +188,12 @@
 </dd>
 </dl>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Make notes regarding what you believe are the right answers for each question.
-This is a static web page, so the checkboxes are not clickable.
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_questions"><a class="anchor" href="#_questions"></a>Questions</h2>
+<h2 id="_interactive_quiz"><a class="anchor" href="#_interactive_quiz"></a>Interactive Quiz</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>For each of the following scenarios, which approach to deploying RHEL systems would be most adequate?
-There could be more than one right answer.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A manager&#8217;s workstation in a retail store, to run text processors, spreadsheets, email clients, and also access multiple corporate systems.</p>
-<details>
-<summary class="title">❑ Traditional RHEL (with package mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: This is a general-purpose workstation which likely runs a popular desktop operating system, such as Windows and MacOS.
-<a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/workstations">RHEL for Workstations</a>, <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/red-hat-enterprise-linux-for-developers">RHEL for Developers</a>, and the community supported <a href="https://fedoraproject.org">Fedora Linux</a> are also good choices for this kind of user workstation.</strong></p>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">❑ Red Hat Device Edge (with image mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✘ <em>Incorrect: Red Hat Device Edge is designed for special-purpose devices instead of general purpose workstations.
-You CAN use image mode to provision graphical office workstations, most likely they require RHEL subscriptions instead of Red Hat Device Edge subscriptions.</em></p>
-</div>
-</div>
-</details>
-</li>
-<li>
-<p>A kiosk machine in a large department store, that enables customers to query the price and other information about a product, such as nutrients and potential allergens for food products, or warranty terms and technical specifications for electronics, using a barcode reader and a touch screen.</p>
-<details>
-<summary class="title">❑ Traditional RHEL (with package mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✘ <em>Incorrect: Though kiosk machines have been frequently configured from standard desktop operating systems, they become high-maintenance and even potential sources of embarrassment if customers can get access to other applications on the device.
-A lower maintenance approach, such as the one from image mode systems, fits this scenario better.</em></p>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">❑ Red Hat Device Edge (with image mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: This is an appliance-like device, which should be just turned on and be available to customers in different parts of the store, requiring minimal maintenance.</strong></p>
-</div>
-</div>
-</details>
-</li>
-<li>
-<p>A database server, which stores inventory levels and regional prices of goods in a large retail store, among other data required by multiple client devices for different business processes that happen in the store itself.</p>
-<details>
-<summary class="title">❑ Traditional RHEL (with package mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: This is likely a server-class machine locked in a server room, and possibly a member of a high-availability (HA) cluster with other similar machines in the store.
-Even if not HA it is likely managed by corporate IT like any other departmental server in branch offices.</strong></p>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">❑ Red Hat Device Edge (with image mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✘ <em>Incorrect: This server machine is probably too powerful for the Red Hat Device Edge subscription, but a small and single-purpose database server could be deployed and managed as an edge device.
-You CAN provision and configure a large server using image mode for RHEL, but using a RHEL subscription instead of a Red Hat Device Edge subscription.</em></p>
-</div>
-</div>
-</details>
-</li>
-<li>
-<p>A controller for security access devices, such as card readers, face recognition cameras, fingerprint readers, and electronic locks in access doors, which connects either to the corporate identity management and human resources databases or to a local replica of that database on the building or campus.</p>
-<details>
-<summary class="title">❑ Traditional RHEL (with package mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✘ <em>Incorrect: These computers are likely close to the security access devices, many of them are deployed in different parts of the building or campus, and they should be resistant to tampering, which makes them better suited for image mode deployments than to traditional package mode deployments.</em></p>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">❑ Red Hat Device Edge (with image mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: In addition to the considerations in the previous answer, these computers are likely rugged for outdoor conditions, and must be quickly replaceable in case of hardware failures.
-Besides, they are likely provided as appliances by the security equipment vendor, instead of managed by corporate IT as other LOB servers.</strong></p>
-</div>
-</div>
-</details>
-</li>
-<li>
-<p>An image recognition application, which monitors goods at different stages of an assembly line and flags defective ones, reducing the need for human inspection of samples from each batch of goods.</p>
-<details>
-<summary class="title">❑ Traditional RHEL (with package mode)</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: Depending on the hardware requirements of its image recognition application, this might require entitlements from a Traditional RHEL subscription, but be deployed and managed using image mode technologies.
-It could use compute device which is rugged for factory floor conditions and provides compute capacity similar to a data center server, as opposed to a leaner edge device, and may not meet the criteria for Red Hat Device Edge subscriptions.</strong></p>
-</div>
-</div>
-</details>
-<details>
-<summary class="title">❑ Red Hat Device Edge (with image mode).</summary>
-<div class="content">
-<div class="paragraph">
-<p>✔ <strong>Correct: As a single-purpose appliance, this is better suited to be deployed and managed as an image mode system.
-Be aware that, to be entitled using Red Hat Device Edge Subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
-Some of those devices do offer GPUs and other kinds of hardware accelerators suitable for this kind of applications.</strong></p>
-</div>
-</div>
-</details>
-</li>
-</ol>
-</div>
+<iframe type="text/javascript" src='_attachments/s2-quiz.html' style="width: 768px; height: 532px" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" frameborder="0"></iframe>
 </div>
 </div>
 <div class="sect1">
