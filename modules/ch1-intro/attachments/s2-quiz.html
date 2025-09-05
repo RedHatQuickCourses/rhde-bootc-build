@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      /* --- Basic Styles --- */
+        :root {
+            --correct-color: #63993d;
+            --incorrect-color: #f0561d;
+            --intro-color: #ee0000;
+            --next-btn-color: #0066cc;
+            --prev-btn-color: #383838;
+            --restart-btn-color: #ee0000;
+            --text-color: #111;
+        }
+
+        body {
+            font-family: 'Red Hat Display', sans-serif;
+            color: var(--text-color);
+            margin: 1.5em;
+        }
+
+        /* --- Quiz Components --- */
+        #quiz-intro {
+            color: var(--intro-color);
+            margin-bottom: 2em;
+            line-height: 1.6;
+        }
+
+        #question-counter {
+            color: #383838;
+            margin-bottom: 1em;
+            font-weight: 700;
+        }
+
+        #question-container {
+            margin-bottom: 1.5em;
+        }
+
+        #question-text {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 1em;
+        }
+
+        .answer-item {
+            margin-bottom: 1em;
+        }
+
+        .answer-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.75em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        .answer-label:hover {
+            border-color: #999;
+        }
+
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #555;
+            border-radius: 4px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .explanation {
+            display: none;
+            padding: 0.75em;
+            margin-top: 0.5em;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        
+        .explanation a {
+            color: inherit;
+            text-decoration: underline;
+        }
+
+        /* --- State Styling --- */
+        .answer-item.answered.correct .answer-label,
+        .answer-item.answered.correct .explanation {
+            background-color: #f0f8ec;
+            border-color: var(--correct-color);
+            color: var(--correct-color);
+        }
+
+        .answer-item.answered.incorrect .answer-label,
+        .answer-item.answered.incorrect .explanation {
+            background-color: #fff0e9;
+            border-color: var(--incorrect-color);
+            color: var(--incorrect-color);
+        }
+
+        .answer-item.answered.correct .custom-checkbox {
+            border-color: var(--correct-color);
+            background-color: var(--correct-color);
+            color: white;
+        }
+
+        .answer-item.answered.incorrect .custom-checkbox {
+            border-color: var(--incorrect-color);
+            background-color: var(--incorrect-color);
+            color: white;
+        }
+
+        /* --- Navigation --- */
+        #navigation-container {
+            margin-top: 2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-button {
+            border: none;
+            padding: 0.8em 1.5em;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            transition: opacity 0.3s;
+        }
+
+        .nav-button:hover {
+            opacity: 0.85;
+        }
+
+        #prev-btn {
+            background-color: var(--prev-btn-color);
+        }
+
+        #next-btn {
+            background-color: var(--next-btn-color);
+        }
+
+        #restart-btn {
+            background-color: var(--restart-btn-color);
+        }
+    </style>
+  </head>
+  <body>
+    <div id="quiz-container">
+      <div id="quiz-intro"></div>
+      <div id="question-counter"></div>
+      <div id="question-container">
+        <p id="question-text"></p>
+        <div id="answers-container"></div>
+      </div>
+      <div id="navigation-container">
+        <button id="prev-btn" class="nav-button" style="display: none;">Previous</button>
+        <button id="next-btn" class="nav-button" style="display: none;">Next</button>
+        <button id="restart-btn" class="nav-button" style="display: none;">Restart Quiz</button>
+      </div>
+    </div>
+    <script>
+      const quizDataText = `For each of the following scenarios, which approach to deploying RHEL systems would be most adequate?
+There could be more than one right answer.
+
+---
+Q1: A manager's workstation in a retail store, to run text processors, spreadsheets, email clients, and also access multiple corporate systems.
+
+A: Traditional RHEL (with package mode)
+Correct: This is a general-purpose workstation which likely runs a popular desktop operating system, such as Windows and MacOS.
+<a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/workstations" target="_blank">RHEL for Workstations</a>, <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/red-hat-enterprise-linux-for-developers" target="_blank">RHEL for Developers</a>, and the community supported <a href="https://fedoraproject.org" target="_blank">Fedora Linux</a> are also good choices for this kind of user workstation.
+
+A: Red Hat Device Edge (with image mode)
+Incorrect: Red Hat Device Edge is designed for special-purpose devices instead of general purpose workstations.
+You CAN use image mode to provision graphical office workstations, most likely they require RHEL subscriptions instead of Red Hat Device Edge subscriptions.
+---
+Q2: A kiosk machine in a large department store, that enables customers to query the price and other information about a product, such as nutrients and potential allergens for food products, or warranty terms and technical specifications for electronics, using a barcode reader and a touch screen.
+
+A: Traditional RHEL (with package mode)
+Incorrect: Though kiosk machines have been frequently configured from standard desktop operating systems, they become high-maintenance and even potential sources of embarrassment if customers can get access to other applications on the device.
+A lower maintenance approach, such as the one from image mode systems, fits this scenario better.
+
+A: Red Hat Device Edge (with image mode)
+Correct: This is an appliance-like device, which should be just turned on and be available to customers in different parts of the store, requiring minimal maintenance.
+---
+Q3: A database server, which stores inventory levels and regional prices of goods in a large retail store, among other data required by multiple client devices for different business processes that happen in the store itself.
+
+A: Traditional RHEL (with package mode)
+Correct: This is likely a server-class machine locked in a server room, and possibly a member of a high-availability (HA) cluster with other similar machines in the store.
+Even if not HA it is likely managed by corporate IT like any other departmental server in branch offices.
+
+A: Red Hat Device Edge (with image mode)
+Incorrect: This server machine is probably too powerful for the Red Hat Device Edge subscription, but a small and single-purpose database server could be deployed and managed as an edge device.
+You CAN provision and configure a large server using image mode for RHEL, but using a RHEL subscription instead of a Red Hat Device Edge subscription.
+---
+Q4: A controller for security access devices, such as card readers, face recognition cameras, fingerprint readers, and electronic locks in access doors, which connects either to the corporate identity management and human resources databases or to a local replica of that database on the building or campus.
+
+A: Traditional RHEL (with package mode)
+Incorrect: These computers are likely close to the security access devices, many of them are deployed in different parts of the building or campus, and they should be resistant to tampering, which makes them better suited for image mode deployments than to traditional package mode deployments.
+
+A: Red Hat Device Edge (with image mode)
+Correct: In addition to the considerations in the previous answer, these computers are likely rugged for outdoor conditions, and must be quickly replaceable in case of hardware failures.
+Besides, they are likely provided as appliances by the security equipment vendor, instead of managed by corporate IT as other LOB servers.
+---
+Q5: An image recognition application, which monitors goods at different stages of an assembly line and flags defective ones, reducing the need for human inspection of samples from each batch of goods.
+
+A: Traditional RHEL (with package mode)
+Correct: Depending on the hardware requirements of its image recognition application, this might require entitlements from a Traditional RHEL subscription, but be deployed and managed using image mode technologies.
+It could use compute device which is rugged for factory floor conditions and provides compute capacity similar to a data center server, as opposed to a leaner edge device, and may not meet the criteria for Red Hat Device Edge subscriptions.
+
+A: Red Hat Device Edge (with image mode).
+Correct: As a single-purpose appliance, this is better suited to be deployed and managed as an image mode system.
+Be aware that, to be entitled using Red Hat Device Edge subscriptions, its image recognition application must fit edge systems with a single CPU core and reduced memory.
+Some of those devices do offer GPUs and other kinds of hardware accelerators suitable for this kind of applications.`;
+
+        // --- PARSING LOGIC ---
+        function parseQuizData(text) {
+            const parts = text.split('---');
+            const intro = parts.shift().trim();
+            const questions = parts.filter(p => p.trim() !== '').map(part => {
+                const lines = part.trim().split('\n').filter(l => l.trim() !== '');
+                const questionLine = lines.shift();
+                const questionText = questionLine.replace(/Q\d+: /, '').trim();
+                
+                const answers = [];
+                let currentAnswer = null;
+
+                for (const line of lines) {
+                    if (line.startsWith('A:')) {
+                        if (currentAnswer) {
+                            answers.push(currentAnswer);
+                        }
+                        currentAnswer = { text: line.substring(2).trim(), isCorrect: false, explanation: '' };
+                    } else if (line.startsWith('Correct:')) {
+                        if(currentAnswer) {
+                            currentAnswer.isCorrect = true;
+                            currentAnswer.explanation = line.substring(8).trim();
+                        }
+                    } else if (line.startsWith('Incorrect:')) {
+                         if(currentAnswer) {
+                            currentAnswer.isCorrect = false;
+                            currentAnswer.explanation = line.substring(10).trim();
+                        }
+                    } else {
+                        // Handles multi-line explanations
+                        if (currentAnswer) {
+                            currentAnswer.explanation += ' ' + line.trim();
+                        }
+                    }
+                }
+                if (currentAnswer) {
+                    answers.push(currentAnswer);
+                }
+                
+                return { question: questionText, answers: answers };
+            });
+
+            return { intro, questions };
+        }
+
+        // --- QUIZ APPLICATION LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const { intro, questions } = parseQuizData(quizDataText);
+            let currentQuestionIndex = 0;
+
+            const introEl = document.getElementById('quiz-intro');
+            const questionCounterEl = document.getElementById('question-counter');
+            const questionTextEl = document.getElementById('question-text');
+            const answersContainerEl = document.getElementById('answers-container');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const restartBtn = document.getElementById('restart-btn');
+
+            introEl.innerHTML = intro;
+
+            function displayQuestion(index) {
+                const question = questions[index];
+                questionCounterEl.textContent = `Question ${index + 1} of ${questions.length}`;
+                questionTextEl.textContent = question.question;
+                answersContainerEl.innerHTML = '';
+
+                question.answers.forEach((answer, answerIndex) => {
+                    const answerItem = document.createElement('div');
+                    answerItem.className = 'answer-item';
+                    
+                    answerItem.innerHTML = `
+                        <div class="answer-label" data-index="${answerIndex}">
+                            <span class="custom-checkbox"></span>
+                            <span class="answer-text">${answer.text}</span>
+                        </div>
+                        <div class="explanation">${answer.explanation}</div>
+                    `;
+                    answersContainerEl.appendChild(answerItem);
+                });
+                
+                updateNavigation();
+            }
+            
+            function handleAnswerClick(event) {
+                const label = event.target.closest('.answer-label');
+                if (!label) return;
+
+                const answerItem = label.parentElement;
+                const explanation = answerItem.querySelector('.explanation');
+                const checkbox = label.querySelector('.custom-checkbox');
+
+                const isAnswered = answerItem.classList.contains('answered');
+
+                if (isAnswered) {
+                     answerItem.classList.remove('answered', 'correct', 'incorrect');
+                     explanation.style.display = 'none';
+                     checkbox.textContent = '';
+                } else {
+                    const answerIndex = parseInt(label.dataset.index);
+                    const answer = questions[currentQuestionIndex].answers[answerIndex];
+                    
+                    answerItem.classList.add('answered');
+                    explanation.style.display = 'block';
+
+                    if (answer.isCorrect) {
+                        answerItem.classList.add('correct');
+                        checkbox.innerHTML = '&#10003;'; // Check mark
+                    } else {
+                        answerItem.classList.add('incorrect');
+                        checkbox.innerHTML = '&#10007;'; // X mark
+                    }
+                }
+            }
+
+            function updateNavigation() {
+                prevBtn.style.display = currentQuestionIndex > 0 ? 'inline-block' : 'none';
+                
+                const isLastQuestion = currentQuestionIndex === questions.length - 1;
+                nextBtn.style.display = isLastQuestion ? 'none' : 'inline-block';
+                restartBtn.style.display = isLastQuestion ? 'inline-block' : 'none';
+
+                // Ensure proper spacing when only one button is visible
+                const navContainer = document.getElementById('navigation-container');
+                if(currentQuestionIndex === 0) {
+                    navContainer.style.justifyContent = 'flex-end';
+                } else if (isLastQuestion) {
+                     navContainer.style.justifyContent = 'space-between';
+                } else {
+                     navContainer.style.justifyContent = 'space-between';
+                }
+
+            }
+
+            // --- Event Listeners ---
+            answersContainerEl.addEventListener('click', handleAnswerClick);
+
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion(currentQuestionIndex);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    displayQuestion(currentQuestionIndex);
+                }
+            });
+
+            restartBtn.addEventListener('click', () => {
+                currentQuestionIndex = 0;
+                displayQuestion(currentQuestionIndex);
+            });
+
+            // Initial Load
+            displayQuestion(currentQuestionIndex);
+        });
+    </script>
+  </body>
+</html>
