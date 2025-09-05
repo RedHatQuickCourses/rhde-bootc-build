@@ -5,7 +5,7 @@ Q1: A manager's workstation in a retail store, to run text processors, spreadshe
 
 A: Traditional RHEL (with package mode)
 Correct: This is a general-purpose workstation which likely runs a popular desktop operating system, such as Windows and MacOS.
-<a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/workstations">RHEL for Workstations</a>, <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/red-hat-enterprise-linux-for-developers">RHEL for Developers</a>, and the community supported <a href="https://fedoraproject.org">Fedora Linux</a> are also good choices for this kind of user workstation.
+<a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/workstations" target="_blank">RHEL for Workstations</a>, <a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/red-hat-enterprise-linux-for-developers" target="_blank">RHEL for Developers</a>, and the community supported <a href="https://fedoraproject.org" target="_blank">Fedora Linux</a> are also good choices for this kind of user workstation.
 
 A: Red Hat Device Edge (with image mode)
 Incorrect: Red Hat Device Edge is designed for special-purpose devices instead of general purpose workstations.
