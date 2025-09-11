@@ -7,8 +7,6 @@ _Estimated reading time: *{time_estimate} minutes*._
 Objective::
 Build system images for edge devices using Podman
 
-WARNING: Pending review
-
 == Provisioning and updating image mode systems
 
 The workflow for provisioning and maintaining edge devices using image mode starts with common tools from the application containers world, and ends with specialized tools from the bootc world.
