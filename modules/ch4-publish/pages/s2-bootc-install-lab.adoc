@@ -46,7 +46,7 @@ Login Succeeded!
 --
 
 .. Verify that you have a bootc container image named `httpd-system` in your local container storage.
-If you do not, please perform the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab], which builds that image.
+If you do not, please perform the xref:ch2-build:s4-Containerfiles-lab.adoc[previous lab], which builds that image.
 +
 [source,subs="verbatim,quotes"]
 --
@@ -296,7 +296,7 @@ $ *ssh -i temp-test-vm/edge-key root@servera*
 
 6. On your _test machine_, verify that it has all system settings from its bootc container image applied and active.
 +
-If you do not remember those settings, refer to the xref:ch2-build:s4-containerfiles-lab.adoc[previous lab] where you built that image and verified that its settings were not applied with Podman.
+If you do not remember those settings, refer to the xref:ch2-build:s4-Containerfiles-lab.adoc[previous lab] where you built that image and verified that its settings were not applied with Podman.
 
 .. Verify that it now reports as having been deployed using bootc.
 +
@@ -404,7 +404,7 @@ $ *skopeo inspect --format '{{ .Digest }}' docker://registry.lab.example.com:500
 sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2
 --
 +
-NOTE: Your digests will be different from the output above, because containerfile builds are NOT reproducible. 
+NOTE: Your digests will be different from the output above, because Containerfile builds are NOT reproducible. 
 If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
 There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
 

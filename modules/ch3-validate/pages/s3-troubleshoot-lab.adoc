@@ -22,7 +22,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 You will a create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
 This time, you will find that the system does NOT work as expected.
-You will then identify the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.
+You will then identify the root cause of the failure, fix the Containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.
 
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
@@ -212,7 +212,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 
 4. Build a new bootc container image with the required fixes
 
-.. The sample code repository already provides a containerfile with all fixes.
+.. The sample code repository already provides a Containerfile with all fixes.
 +
 For your reference, the fix is just adding a `semanage` command to update the policy and specify a context label for the `/webapp` directory tree.
 The bootc utility labels all files, according to the policy inside the bootc container image, at installation time.

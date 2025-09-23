@@ -5,7 +5,7 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Create containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.
+Create Containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.
 
 == Before you Begin
 
@@ -20,7 +20,7 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 == Instructions
 
-You will build a containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
+You will build a Containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
 You will also compare the bootc container image for your application with a regular application image for the same application.
 
 1. Prepare to start this activity by cloning the sample code repository and logging in to the private registry.
@@ -43,7 +43,7 @@ $ *podman login -u student -p redhat registry.lab.example.com:5000*
 Login Succeeded!
 --
 
-2. Inspect the containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.
+2. Inspect the Containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.
 
 .. Enter the directory `httpd-bootc`.
 +
@@ -52,7 +52,7 @@ Login Succeeded!
 $ *cd httpd-bootc*
 --
 
-.. Review the containerfile.
+.. Review the Containerfile.
 It installs the `httpd` package and enables the `httpd` service, then adds HTML files that mock a single-page web application.
 +
 [source,subs="verbatim"]
@@ -148,14 +148,14 @@ Let's compare our bootc container with a regular application container for the s
 $ *cd ../httpd-ubi*
 --
 
-.. The containerfile uses the standard UBI image, so it must install the `systemd` package and start the Systemd daemon as its `ENTRYPOINT`.
+.. The Containerfile uses the standard UBI image, so it must install the `systemd` package and start the Systemd daemon as its `ENTRYPOINT`.
 +
 [source,subs="verbatim"]
 --
 include::1@samples:httpd-ubi:example$Containerfile[]
 --
 
-.. This containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
+.. This Containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.
 +
 It violates a few recommendations for application containers, among them:
 +
@@ -169,7 +169,7 @@ It should start the Apache Web Server as its `ENTRYPOINT`, instead of the System
 ... It listens to a privileged TCP port (80), as per the default Apache Web Server configuration.
 It should listen to an unprivileged port, to not require elevated privileges when run in a Kubernetes cluster.
 +
-NOTE: Providing a good example of a containerfile for a web application is outside the scope of this course.
+NOTE: Providing a good example of a Containerfile for a web application is outside the scope of this course.
 
 .. Build and run the application container.
 +
@@ -217,7 +217,7 @@ $ *podman rm httpd*
 httpd
 --
 
-5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your containerfile to serve the application code from `/webapp` instead of from `/var/www`.
+5. Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your Containerfile to serve the application code from `/webapp` instead of from `/var/www`.
 
 .. Change to the `webapp-bootc` directory.
 +
@@ -226,7 +226,7 @@ httpd
 $ *cd ../webapp-bootc*
 --
 
-.. Review its containerfile.
+.. Review its Containerfile.
 +
 It uses a simple `sed` command search for `/var/www` and replace it by `/webapp`, in the Apache Web Server main configuration file.
 +

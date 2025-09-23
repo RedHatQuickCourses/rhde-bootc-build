@@ -41,7 +41,7 @@ Sure, you may include a large set of configurations in a system image, but in mo
 When managing a large number of images, accounting for such variations may become a challenge.
 It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.
 
-=== Secrets management and device on-boarding
+=== Secrets management and device onboarding
 
 Another concern with including system and application configurations in a system images come from potential risk scenarios related to secrets management, such as:
 
@@ -50,9 +50,9 @@ Another concern with including system and application configurations in a system
 
 Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present similar risks.
 
-To manage such risks, many organizations employ secure and auditable _on-boarding_ processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for accessing applications and other resources in either the edge site or around the corporate network.
+To manage such risks, many organizations employ secure and auditable _onboarding_ processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for accessing applications and other resources in either the edge site or around the corporate network.
 
-Such on-boarding processes must rely on an initial set of credentials, but those credentials must be short lived, and deleted from the device right at the beginning of the process.
+Such onboarding processes must rely on an initial set of credentials, but those credentials must be short lived, and deleted from the device right at the beginning of the process.
 Anyway, the initial credentials provide access to the device itself but not to anything outside of the device.
 
 If you put such credentials in your bootc container image, you would NOT be able to remove them, and it becomes a security vulnerability.
@@ -61,9 +61,9 @@ ____
 Do not ship or deploy with any default credentials, particularly for admin users.
 ____
 
-You can implement effective on-boarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios. 
+You can implement effective onboarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios. 
 
-There are alternative technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way.
+There are alternative technologies and tools, designed to address the challenges of provisioning and onboarding edge devices at scale and in a secure way.
 Among them:
 
 * The https://fidoalliance.org/device-onboarding-overview/[FIDO Device Onboarding^] (FDO) standard.

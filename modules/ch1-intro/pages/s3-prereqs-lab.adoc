@@ -226,4 +226,4 @@ CPU model:           x86_64
 
 == What's next
 
-The next chapter demonstrates how to craft a containerfile and use it to build a bootc container image.
+The next chapter demonstrates how to craft a Containerfile and use it to build a bootc container image.

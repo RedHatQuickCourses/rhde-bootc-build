@@ -15,9 +15,9 @@ image::s1-podman-fig-1.svg[title="Workflow for installing and updating image mod
 
 In summary, the process is:
 
-. Create a containerfile, which refers to a base bootc container image, and which aggregates RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.
+. Create a Containerfile, which refers to a base bootc container image, and which aggregates RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.
 
-. Use Podman (or any other tool capable of producing OCI containers) to build a bootc container image from your containerfile.
+. Use Podman (or any other tool capable of producing OCI containers) to build a bootc container image from your Containerfile.
 
 . Upload (push) your bootc container image to an OCI container registry, from where it can be downloaded (pull) to perform installation and updates of image mode systems.
 
@@ -64,11 +64,11 @@ Nothing prevents you from running a bootc container using a standard container e
 Just be aware that the results might not be what you expect, because a container engine CANNOT run the kernel, system services, and other components from a bootc container image.
 Container engines would run only the user space components of a bootc container image, as they would for a regular application container.
 
-So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a containerfile for a bootc container image is the use of a bootc container image as its base image, in its `FROM` directive, instead of a regular application container image, such as an Universal Base Image (UBI).
+So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a Containerfile for a bootc container image is the use of a bootc container image as its base image, in its `FROM` directive, instead of a regular application container image, such as an Universal Base Image (UBI).
 
 === Filesystem layout of an image mode system
 
-As you craft a containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a specific way:
+As you craft a Containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a specific way:
 
 * The `/` directory, and almost all its subdirectories, like `/usr` and `/opt`, are read-only.
 This gives image mode systems their _immutable_ characteristic.
@@ -114,9 +114,9 @@ They must be previously vetted by corporate IT to prevent compromises by artifac
 As you build bootc container images, you usually install additional RPM packages from RHEL and third-party vendors.
 If you cannot download those packages directly from Red Hat and their respective vendors, you must provide a mirror YUM or DNF repository containing them.
 
-You must also provide, as part of your containerfile, YUM repository configurations that point to your mirrors.
+You must also provide, as part of your Containerfile, YUM repository configurations that point to your mirrors.
 
-For the same reason, you must provide a container registry with mirrors the bootc base container image and write your containerfile to refer to that private registry instead of to `redhat.registry.io`
+For the same reason, you must provide a container registry with mirrors the bootc base container image and write your Containerfile to refer to that private registry instead of to `redhat.registry.io`
 
 Notice that you would be required to do the same to build regular application container images in a disconnected environment.
 These are NOT changes required by bootc alone.

@@ -249,7 +249,7 @@ You just expect to have fewer customizations to apply at day-2, using automation
 
 == What's next
 
-Before learning about crafting containerfiles for bootc container images, you will assess your understanding of how edge sites differ from traditional corporate data centers and cloud IT.
+Before learning about crafting Containerfiles for bootc container images, you will assess your understanding of how edge sites differ from traditional corporate data centers and cloud IT.
 
 The first activity verifies that you have all necessary prerequisites to build and deploy bootc container images in a disconnected environment.
 It should provide enough information for you to replicate the activities in your own environment, if you prefer, or try a simpler deployment, not disconnected.

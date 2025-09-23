@@ -5,9 +5,9 @@
 _Estimated reading time: *{time_estimate} minutes*._
 
 Objective::
-Present common issues and recommendations for building bootc container images using containerfiles.
+Present common issues and recommendations for building bootc container images using Containerfiles.
 
-Now that you know how to build a bootc container image from a containerfile, and you also know that most things you would do in a containerfile for application containers also apply to containerfiles for bootc containers, it's time to consider what you could do in containerfiles for bootc images that you would NOT usually do for application containers.
+Now that you know how to build a bootc container image from a Containerfile, and you also know that most things you would do in a Containerfile for application containers also apply to Containerfiles for bootc containers, it's time to consider what you could do in Containerfiles for bootc images that you would NOT usually do for application containers.
 
 == Approaches for appliances vs. enforcing separation of concerns
 
@@ -22,34 +22,34 @@ A way of implementing this approach is to keep applications outside of bootc con
 
 Whatever your approach, image mode enables reducing the effort and time to perform day-1 and day-2 configuration of an edge device.
 
-== System settings on containerfiles
+== System settings on Containerfiles
 
 Configuration of Linux systems happens mostly through text files stored in the `/etc` directory.
 This is important for bootc containers because, when you build them, only changes to files become part of the resulting container image.
-If your containerfile performs actions that make no changes to files, such as setting a kernel parameter by writing to `/proc`, those actions have no effect on your bootc container images.
+If your Containerfile performs actions that make no changes to files, such as setting a kernel parameter by writing to `/proc`, those actions have no effect on your bootc container images.
 
-Most system configuration commands from RHEL already perform their work by changing files, for example `dnf install` and `systemctl enable`, so they can be used in containerfiles without issues.
+Most system configuration commands from RHEL already perform their work by changing files, for example `dnf install` and `systemctl enable`, so they can be used in Containerfiles without issues.
 
-A few commands actually communicate with a system service, using an interprocess communication (IPC) channel and, if used in a containerfile, they would try to affect the host performing the build, but would have no effect in the resulting container image.
+A few commands actually communicate with a system service, using an interprocess communication (IPC) channel and, if used in a Containerfile, they would try to affect the host performing the build, but would have no effect in the resulting container image.
 
-WARNING: Do NOT try to enable the IPC mechanism during your containerfile building, for example by mounting a UNIX socket file!
+WARNING: Do NOT try to enable the IPC mechanism during your Containerfile building, for example by mounting a UNIX socket file!
 
 If you need such commands, you must determine how their services actually store configuration data and find a way of affecting that configuration store directly, without using IPC and without affecting the build host system.
 
-For example, the `firewall-cmd` command communicates with the Firewall daemon (Firewalld) to change the active kernel netfilter tables directly, and it would not work in a containerfile. 
+For example, the `firewall-cmd` command communicates with the Firewall daemon (Firewalld) to change the active kernel netfilter tables directly, and it would not work in a Containerfile. 
 But there is the alternative `firewall-offline-cmd` command, which only stores configuration changes that are retrieved by Firewalld at boot time.
 
 Some commands affect data outside files, for example, installing a Grub bootloader in the primary disk partition table.
-Instead of running such commands on your containerfile, you create bootc configuration files and let the bootc utility apply those settings.
+Instead of running such commands on your Containerfile, you create bootc configuration files and let the bootc utility apply those settings.
 
 When your bootc container image is installed in an image mode system, the bootc utility takes care of altering the bootloader configuration on its root disk.
 For example, the `/usr/lib/bootc/kargs.d` directory provides kernel arguments which bootc adds to the kernel command line of its system Grub menu.
 
-You may find, in a containerfile for a bootc container image, some commands and files that you would not find in a containerfile for an application, but that are just standard Linux configuration files.
+You may find, in a Containerfile for a bootc container image, some commands and files that you would not find in a Containerfile for an application, but that are just standard Linux configuration files.
 
 For example, files in the `/usr/lib/sysctl.d` directory configure kernel parameters, mimicking the `/proc` tree structure.
 
-Think about your containerfiles as configuring a system so those settings remain persistent, and are in effect for the next time you boot a system. 
+Think about your Containerfiles as configuring a system so those settings remain persistent, and are in effect for the next time you boot a system. 
 
 === Configuration using drop files
 
@@ -77,7 +77,7 @@ Many of the issues you are likely to encounter will occur because you are using 
 Modern Linux services include two system directories to their configuration search path, one in `/etc`, and the other in `/usr/lib`.
 Changes to either of them result in the same outcome, but remember the first is a writable directory in image mode systems, while the second is read-only.
 
-The recommendation is that, whenever possible, containerfiles for bootc container images make changes to configuration files in `/usr/lib` so these changes are part of the image and it is easier to track which changes were made by a system administrator or by automation on day-2.
+The recommendation is that, whenever possible, Containerfiles for bootc container images make changes to configuration files in `/usr/lib` so these changes are part of the image and it is easier to track which changes were made by a system administrator or by automation on day-2.
 
 For most Linux services, settings in `/etc` override settings in `/usr/lib` so you are NOT locking the system into a fixed configuration, but you are preserving a pristine copy of your intended configurations.
 If you need, just remove the local changes made in '/etc'.
@@ -99,7 +99,7 @@ This is a standard Systemd feature, so you just add Systemd unit files to your b
 
 == The need for system testing
 
-After you build a containerfile that includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
+After you build a Containerfile that includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
 But you CANNOT verify that these settings are actually in effect, or that they produce the intended outcomes.
 
 Remember that container engines run application containers with their current host kernel and system settings.

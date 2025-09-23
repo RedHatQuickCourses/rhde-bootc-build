@@ -97,7 +97,7 @@ It is a standard RHEL Anaconda configuration for unattended installation, which 
 ... A virtiofs mount, in a `%pre` script, to get the contents of your bootc container image.
 ... The `ostreecontainer` command, to set a bootc container image as the installation source.
 ... A `%post` script which creates an initial user, with a known password and SSH key.
-... Also in the `%post` script, it sets an initial hostname, which helps you identify your test VM and recognize it didn't go into any day-2 configuration or on-boarding process yet.
+... Also in the `%post` script, it sets an initial hostname, which helps you identify your test VM and recognize it didn't go into any day-2 configuration or onboarding process yet.
 +
 // Could use callouts, and embed them into the example file as comments.
 +
@@ -298,4 +298,4 @@ NOTE: You could reuse the same test VM, and use the `bootc` command to switch it
 
 == What's Next
 
-The next activity walks through troubleshooting a bootc container image that fails to run correctly in a VM and fixing the issue by updating its containerfile and building a new bootc image.
+The next activity walks through troubleshooting a bootc container image that fails to run correctly in a VM and fixing the issue by updating its Containerfile and building a new bootc image.
