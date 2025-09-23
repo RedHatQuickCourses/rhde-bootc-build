@@ -245,7 +245,7 @@ Login Succeeded!</code></pre>
 </li>
 <li>
 <p>Verify that you have a bootc container image named <code>httpd-system</code> in your local container storage.
-If you do not, please perform the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a>, which builds that image.</p>
+If you do not, please perform the <a href="#ch2-build:s4-Containerfiles-lab.adoc" class="xref unresolved">previous lab</a>, which builds that image.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>podman image list | grep httpd-system</strong>
@@ -633,7 +633,7 @@ Misc tests of bootc images and firewalld</code></pre>
 <li>
 <p>On your <em>test machine</em>, verify that it has all system settings from its bootc container image applied and active.</p>
 <div class="paragraph">
-<p>If you do not remember those settings, refer to the <a href="../ch2-build/s4-containerfiles-lab.html" class="xref page">previous lab</a> where you built that image and verified that its settings were not applied with Podman.</p>
+<p>If you do not remember those settings, refer to the <a href="#ch2-build:s4-Containerfiles-lab.adoc" class="xref unresolved">previous lab</a> where you built that image and verified that its settings were not applied with Podman.</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -774,7 +774,7 @@ sha256:0a64fe29217414a0cf68ae18c41997ff737e68aec52a96e44c25fcb7403476e2</code></
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Your digests will be different from the output above, because containerfile builds are NOT reproducible.
+Your digests will be different from the output above, because Containerfile builds are NOT reproducible.
 If you build an OCI container twice, from exactly the same inputs, you get different image layers and a different image manifest.
 There is ongoing work on the Podman community and OCI standards to create a way of performing reproducible container image builds.
 </td>

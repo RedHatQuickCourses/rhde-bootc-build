@@ -214,7 +214,7 @@ If not, please adapt the instructions to your test environment.</p>
 <div class="paragraph">
 <p>You will a create local VM running RHEL, from a bootc container image that you built in a previous exercise, by following the same process you did in the previous lab.
 This time, you will find that the system does NOT work as expected.
-You will then identify the root cause of the failure, fix the containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
+You will then identify the root cause of the failure, fix the Containerfile, create another VM from the updated bootc container image, and verify that it now works as expected.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -451,7 +451,7 @@ Volume 'vda'(/home/student/.local/share/libvirt/images/bootc-test.qcow2) removed
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>The sample code repository already provides a containerfile with all fixes.</p>
+<p>The sample code repository already provides a Containerfile with all fixes.</p>
 <div class="paragraph">
 <p>For your reference, the fix is just adding a <code>semanage</code> command to update the policy and specify a context label for the <code>/webapp</code> directory tree.
 The bootc utility labels all files, according to the policy inside the bootc container image, at installation time.</p>

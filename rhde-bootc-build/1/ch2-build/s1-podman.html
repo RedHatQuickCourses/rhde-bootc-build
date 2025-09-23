@@ -208,10 +208,10 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create a containerfile, which refers to a base bootc container image, and which aggregates RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.</p>
+<p>Create a Containerfile, which refers to a base bootc container image, and which aggregates RHEL and third-party packages, configuration files, and optionally application container images in a single bootc container image.</p>
 </li>
 <li>
-<p>Use Podman (or any other tool capable of producing OCI containers) to build a bootc container image from your containerfile.</p>
+<p>Use Podman (or any other tool capable of producing OCI containers) to build a bootc container image from your Containerfile.</p>
 </li>
 <li>
 <p>Upload (push) your bootc container image to an OCI container registry, from where it can be downloaded (pull) to perform installation and updates of image mode systems.</p>
@@ -302,13 +302,13 @@ Just be aware that the results might not be what you expect, because a container
 Container engines would run only the user space components of a bootc container image, as they would for a regular application container.</p>
 </div>
 <div class="paragraph">
-<p>So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a containerfile for a bootc container image is the use of a bootc container image as its base image, in its <code>FROM</code> directive, instead of a regular application container image, such as an Universal Base Image (UBI).</p>
+<p>So bootc container images files are, at first, just container images with extra files, and the only obvious characteristic you can perceive in a Containerfile for a bootc container image is the use of a bootc container image as its base image, in its <code>FROM</code> directive, instead of a regular application container image, such as an Universal Base Image (UBI).</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_filesystem_layout_of_an_image_mode_system"><a class="anchor" href="#_filesystem_layout_of_an_image_mode_system"></a>Filesystem layout of an image mode system</h3>
 <div class="paragraph">
-<p>As you craft a containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a specific way:</p>
+<p>As you craft a Containerfile to produce a bootc container image, you must be aware that bootc sets up the file systems of an image mode system in a specific way:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -399,10 +399,10 @@ They must be previously vetted by corporate IT to prevent compromises by artifac
 If you cannot download those packages directly from Red Hat and their respective vendors, you must provide a mirror YUM or DNF repository containing them.</p>
 </div>
 <div class="paragraph">
-<p>You must also provide, as part of your containerfile, YUM repository configurations that point to your mirrors.</p>
+<p>You must also provide, as part of your Containerfile, YUM repository configurations that point to your mirrors.</p>
 </div>
 <div class="paragraph">
-<p>For the same reason, you must provide a container registry with mirrors the bootc base container image and write your containerfile to refer to that private registry instead of to <code>redhat.registry.io</code></p>
+<p>For the same reason, you must provide a container registry with mirrors the bootc base container image and write your Containerfile to refer to that private registry instead of to <code>redhat.registry.io</code></p>
 </div>
 <div class="paragraph">
 <p>Notice that you would be required to do the same to build regular application container images in a disconnected environment.

@@ -184,7 +184,7 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Create containerfiles that include system configurations and demonstrate that they CANNOT be effectively tested by using Podman.</p>
+<p>Create Containerfiles that include system configurations and demonstrate that they CANNOT be effectively tested by using Podman.</p>
 </dd>
 </dl>
 </div>
@@ -212,7 +212,7 @@ If not, please adapt the instructions to your test environment.</p>
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will review a containerfile that configures different aspects of a RHEL system, and build a bootc container image from it.
+<p>You will review a Containerfile that configures different aspects of a RHEL system, and build a bootc container image from it.
 Then you will test it as an application container, and will find no evidence that those aspects were actually configured, highlighting the need for system testing of your bootc container images.</p>
 </div>
 <div class="olist arabic">
@@ -246,7 +246,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Inspect the containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.</p>
+<p>Inspect the Containerfile, which configures Kernel settings, kernel command-line arguments, and Firewalld for a physical machine that would be installed from that bootc container image.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -258,7 +258,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Review its containerfile.</p>
+<p>Review its Containerfile.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/rhel10/rhel-bootc:10.0

@@ -184,12 +184,12 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Present common issues and recommendations for building bootc container images using containerfiles.</p>
+<p>Present common issues and recommendations for building bootc container images using Containerfiles.</p>
 </dd>
 </dl>
 </div>
 <div class="paragraph">
-<p>Now that you know how to build a bootc container image from a containerfile, and you also know that most things you would do in a containerfile for application containers also apply to containerfiles for bootc containers, it&#8217;s time to consider what you could do in containerfiles for bootc images that you would NOT usually do for application containers.</p>
+<p>Now that you know how to build a bootc container image from a Containerfile, and you also know that most things you would do in a Containerfile for application containers also apply to Containerfiles for bootc containers, it&#8217;s time to consider what you could do in Containerfiles for bootc images that you would NOT usually do for application containers.</p>
 </div>
 </div>
 </div>
@@ -215,18 +215,18 @@ It also simplifies day-2 configuration of image mode systems.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_system_settings_on_containerfiles"><a class="anchor" href="#_system_settings_on_containerfiles"></a>System settings on containerfiles</h2>
+<h2 id="_system_settings_on_containerfiles"><a class="anchor" href="#_system_settings_on_containerfiles"></a>System settings on Containerfiles</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Configuration of Linux systems happens mostly through text files stored in the <code>/etc</code> directory.
 This is important for bootc containers because, when you build them, only changes to files become part of the resulting container image.
-If your containerfile performs actions that make no changes to files, such as setting a kernel parameter by writing to <code>/proc</code>, those actions have no effect on your bootc container images.</p>
+If your Containerfile performs actions that make no changes to files, such as setting a kernel parameter by writing to <code>/proc</code>, those actions have no effect on your bootc container images.</p>
 </div>
 <div class="paragraph">
-<p>Most system configuration commands from RHEL already perform their work by changing files, for example <code>dnf install</code> and <code>systemctl enable</code>, so they can be used in containerfiles without issues.</p>
+<p>Most system configuration commands from RHEL already perform their work by changing files, for example <code>dnf install</code> and <code>systemctl enable</code>, so they can be used in Containerfiles without issues.</p>
 </div>
 <div class="paragraph">
-<p>A few commands actually communicate with a system service, using an interprocess communication (IPC) channel and, if used in a containerfile, they would try to affect the host performing the build, but would have no effect in the resulting container image.</p>
+<p>A few commands actually communicate with a system service, using an interprocess communication (IPC) channel and, if used in a Containerfile, they would try to affect the host performing the build, but would have no effect in the resulting container image.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -235,7 +235,7 @@ If your containerfile performs actions that make no changes to files, such as se
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Do NOT try to enable the IPC mechanism during your containerfile building, for example by mounting a UNIX socket file!
+Do NOT try to enable the IPC mechanism during your Containerfile building, for example by mounting a UNIX socket file!
 </td>
 </tr>
 </table>
@@ -244,25 +244,25 @@ Do NOT try to enable the IPC mechanism during your containerfile building, for e
 <p>If you need such commands, you must determine how their services actually store configuration data and find a way of affecting that configuration store directly, without using IPC and without affecting the build host system.</p>
 </div>
 <div class="paragraph">
-<p>For example, the <code>firewall-cmd</code> command communicates with the Firewall daemon (Firewalld) to change the active kernel netfilter tables directly, and it would not work in a containerfile.
+<p>For example, the <code>firewall-cmd</code> command communicates with the Firewall daemon (Firewalld) to change the active kernel netfilter tables directly, and it would not work in a Containerfile.
 But there is the alternative <code>firewall-offline-cmd</code> command, which only stores configuration changes that are retrieved by Firewalld at boot time.</p>
 </div>
 <div class="paragraph">
 <p>Some commands affect data outside files, for example, installing a Grub bootloader in the primary disk partition table.
-Instead of running such commands on your containerfile, you create bootc configuration files and let the bootc utility apply those settings.</p>
+Instead of running such commands on your Containerfile, you create bootc configuration files and let the bootc utility apply those settings.</p>
 </div>
 <div class="paragraph">
 <p>When your bootc container image is installed in an image mode system, the bootc utility takes care of altering the bootloader configuration on its root disk.
 For example, the <code>/usr/lib/bootc/kargs.d</code> directory provides kernel arguments which bootc adds to the kernel command line of its system Grub menu.</p>
 </div>
 <div class="paragraph">
-<p>You may find, in a containerfile for a bootc container image, some commands and files that you would not find in a containerfile for an application, but that are just standard Linux configuration files.</p>
+<p>You may find, in a Containerfile for a bootc container image, some commands and files that you would not find in a Containerfile for an application, but that are just standard Linux configuration files.</p>
 </div>
 <div class="paragraph">
 <p>For example, files in the <code>/usr/lib/sysctl.d</code> directory configure kernel parameters, mimicking the <code>/proc</code> tree structure.</p>
 </div>
 <div class="paragraph">
-<p>Think about your containerfiles as configuring a system so those settings remain persistent, and are in effect for the next time you boot a system.</p>
+<p>Think about your Containerfiles as configuring a system so those settings remain persistent, and are in effect for the next time you boot a system.</p>
 </div>
 <div class="sect2">
 <h3 id="_configuration_using_drop_files"><a class="anchor" href="#_configuration_using_drop_files"></a>Configuration using drop files</h3>
@@ -299,7 +299,7 @@ On the other hand, the single-page web application example made changes to a leg
 Changes to either of them result in the same outcome, but remember the first is a writable directory in image mode systems, while the second is read-only.</p>
 </div>
 <div class="paragraph">
-<p>The recommendation is that, whenever possible, containerfiles for bootc container images make changes to configuration files in <code>/usr/lib</code> so these changes are part of the image and it is easier to track which changes were made by a system administrator or by automation on day-2.</p>
+<p>The recommendation is that, whenever possible, Containerfiles for bootc container images make changes to configuration files in <code>/usr/lib</code> so these changes are part of the image and it is easier to track which changes were made by a system administrator or by automation on day-2.</p>
 </div>
 <div class="paragraph">
 <p>For most Linux services, settings in <code>/etc</code> override settings in <code>/usr/lib</code> so you are NOT locking the system into a fixed configuration, but you are preserving a pristine copy of your intended configurations.
@@ -333,7 +333,7 @@ This is a standard Systemd feature, so you just add Systemd unit files to your b
 <h2 id="_the_need_for_system_testing"><a class="anchor" href="#_the_need_for_system_testing"></a>The need for system testing</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After you build a containerfile that includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
+<p>After you build a Containerfile that includes system settings, you can verify that the correct configuration files exist in your bootc container image by running it with Podman.
 But you CANNOT verify that these settings are actually in effect, or that they produce the intended outcomes.</p>
 </div>
 <div class="paragraph">

@@ -184,7 +184,7 @@
 <dl>
 <dt class="hdlist1">Objective</dt>
 <dd>
-<p>Create containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.</p>
+<p>Create Containerfiles and build bootc container images suitable to edge systems running Red Hat Device Edge.</p>
 </dd>
 </dl>
 </div>
@@ -212,7 +212,7 @@ If not, please adapt the instructions to your test environment.</p>
 <h2 id="_instructions"><a class="anchor" href="#_instructions"></a>Instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You will build a containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
+<p>You will build a Containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
 You will also compare the bootc container image for your application with a regular application image for the same application.</p>
 </div>
 <div class="olist arabic">
@@ -245,7 +245,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Inspect the containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.</p>
+<p>Inspect the Containerfile for a single-page web application, which uses the Apache Web Server to host your HTML and JavaScript code.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -257,7 +257,7 @@ Login Succeeded!</code></pre>
 </div>
 </li>
 <li>
-<p>Review the containerfile.
+<p>Review the Containerfile.
 It installs the <code>httpd</code> package and enables the <code>httpd</code> service, then adds HTML files that mock a single-page web application.</p>
 <div class="listingblock">
 <div class="content">
@@ -387,7 +387,7 @@ Let&#8217;s compare our bootc container with a regular application container for
 </div>
 </li>
 <li>
-<p>The containerfile uses the standard UBI image, so it must install the <code>systemd</code> package and start the Systemd daemon as its <code>ENTRYPOINT</code>.</p>
+<p>The Containerfile uses the standard UBI image, so it must install the <code>systemd</code> package and start the Systemd daemon as its <code>ENTRYPOINT</code>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">FROM registry.lab.example.com:5000/ubi10/ubi:10.0
@@ -399,7 +399,7 @@ ENTRYPOINT ["/lib/systemd/systemd"]</code></pre>
 </div>
 </li>
 <li>
-<p>This containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.</p>
+<p>This Containerfile is NOT a good example of a static web application, because it was designed to be as close as possible to our bootc container image, but it would be a representative example of a "lift and shift" approach to containerize an application.</p>
 <div class="paragraph">
 <p>It violates a few recommendations for application containers, among them:</p>
 </div>
@@ -425,7 +425,7 @@ It should listen to an unprivileged port, to not require elevated privileges whe
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Providing a good example of a containerfile for a web application is outside the scope of this course.
+Providing a good example of a Containerfile for a web application is outside the scope of this course.
 </td>
 </tr>
 </table>
@@ -489,7 +489,7 @@ httpd</code></pre>
 </div>
 </li>
 <li>
-<p>Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your containerfile to serve the application code from <code>/webapp</code> instead of from <code>/var/www</code>.</p>
+<p>Because the HTML and JavaScript code of an application is NOT supposed to be managed as data, improve your Containerfile to serve the application code from <code>/webapp</code> instead of from <code>/var/www</code>.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -501,7 +501,7 @@ httpd</code></pre>
 </div>
 </li>
 <li>
-<p>Review its containerfile.</p>
+<p>Review its Containerfile.</p>
 <div class="paragraph">
 <p>It uses a simple <code>sed</code> command search for <code>/var/www</code> and replace it by <code>/webapp</code>, in the Apache Web Server main configuration file.</p>
 </div>

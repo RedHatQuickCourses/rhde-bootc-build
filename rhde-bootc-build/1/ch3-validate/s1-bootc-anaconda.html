@@ -245,7 +245,7 @@ Sure, you may include a large set of configurations in a system image, but in mo
 It may be easier to produce a golden system image, which is shared by a large number of edge devices and sites, and perform minimal day-1 configuration after (or during) installation.</p>
 </div>
 <div class="sect2">
-<h3 id="_secrets_management_and_device_on_boarding"><a class="anchor" href="#_secrets_management_and_device_on_boarding"></a>Secrets management and device on-boarding</h3>
+<h3 id="_secrets_management_and_device_onboarding"><a class="anchor" href="#_secrets_management_and_device_onboarding"></a>Secrets management and device onboarding</h3>
 <div class="paragraph">
 <p>Another concern with including system and application configurations in a system images come from potential risk scenarios related to secrets management, such as:</p>
 </div>
@@ -263,10 +263,10 @@ It may be easier to produce a golden system image, which is shared by a large nu
 <p>Notice that having such credentials, or secrets, outside of a system image, but inside custom installation media, such as within a kickstart script, present similar risks.</p>
 </div>
 <div class="paragraph">
-<p>To manage such risks, many organizations employ secure and auditable <em>on-boarding</em> processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for accessing applications and other resources in either the edge site or around the corporate network.</p>
+<p>To manage such risks, many organizations employ secure and auditable <em>onboarding</em> processes, which completes the day-1 configuration of edge devices by adding device and site specific IDs and installing secrets for accessing applications and other resources in either the edge site or around the corporate network.</p>
 </div>
 <div class="paragraph">
-<p>Such on-boarding processes must rely on an initial set of credentials, but those credentials must be short lived, and deleted from the device right at the beginning of the process.
+<p>Such onboarding processes must rely on an initial set of credentials, but those credentials must be short lived, and deleted from the device right at the beginning of the process.
 Anyway, the initial credentials provide access to the device itself but not to anything outside of the device.</p>
 </div>
 <div class="paragraph">
@@ -281,10 +281,10 @@ As stated by the <a href="https://owasp.org/Top10/A07_2021-Identification_and_Au
 </blockquote>
 </div>
 <div class="paragraph">
-<p>You can implement effective on-boarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
+<p>You can implement effective onboarding processes with traditional automation tools, and maybe you already have mature processes which you use on branch offices and other "larger" near edge sites, and it is OK attempting to scale them to far edge scenarios.</p>
 </div>
 <div class="paragraph">
-<p>There are alternative technologies and tools, designed to address the challenges of provisioning and on-boarding edge devices at scale and in a secure way.
+<p>There are alternative technologies and tools, designed to address the challenges of provisioning and onboarding edge devices at scale and in a secure way.
 Among them:</p>
 </div>
 <div class="ulist">
