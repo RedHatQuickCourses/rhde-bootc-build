@@ -283,7 +283,9 @@ Misc tests of bootc images and firewalld
 +
 [source,subs="verbatim,quotes"]
 --
-$ *sed -i '/servera/d' ~/.ssh/known_hosts*
+$ *ssh-keygen -R '[127.0.0.1]:8022'*
+# Host [127.0.0.1]:8022 found: line 11
+/home/student/.ssh/known_hosts updated.
 --
 
 .. Connect to your _test machine_ using the SSH key you created for system testing of bootc container images.
