@@ -614,7 +614,9 @@ Misc tests of bootc images and firewalld</code></pre>
 <p>Delete the entry for your <em>test machine</em> from your SSH known hosts file.</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>sed -i '/servera/d' ~/.ssh/known_hosts</strong></code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">$ <strong>ssh-keygen -R '[127.0.0.1]:8022'</strong>
+# Host [127.0.0.1]:8022 found: line 11
+/home/student/.ssh/known_hosts updated.</code></pre>
 </div>
 </div>
 </li>
