@@ -116,7 +116,7 @@ If you cannot download those packages directly from Red Hat and their respective
 
 You must also provide, as part of your Containerfile, YUM repository configurations that point to your mirrors.
 
-For the same reason, you must provide a container registry with mirrors the bootc base container image and write your Containerfile to refer to that private registry instead of to `redhat.registry.io`
+For the same reason, you must provide a container registry which mirrors the bootc base container image and write your Containerfile to refer to that private registry instead of to `redhat.registry.io`
 
 Notice that you would be required to do the same to build regular application container images in a disconnected environment.
 These are NOT changes required by bootc alone.
