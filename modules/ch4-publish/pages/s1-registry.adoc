@@ -26,7 +26,7 @@ The system ends up with a default system configuration and with default or empty
 
 So it is NOT actually a "conversion" from package mode to image mode, but a new installation using image mode, overwriting the existing package mode installation with a brand new image mode installation.
 
-A caveat about the booc utility, when used for installing image mode systems, is that it is supposed to be run from the actual bootc container image being installed, as a privileged container.
+A caveat about the bootc utility, when used for installing image mode systems, is that it is supposed to be run from the actual bootc container image being installed, as a privileged container.
 It also requires with access to the host's root file system, devices directory, and other capabilities which application containers are not usually granted.
 
 So you do not need to install bootc on a package mode system about to be reinstalled as an image mode system.
