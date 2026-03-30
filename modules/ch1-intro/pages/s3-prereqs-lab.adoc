@@ -24,6 +24,8 @@ You will also configure your _development machine_ with RHEL virtualization tool
 
 As a bonus, you will verify that bootc container images have, by convention, a label key that differentiates them from application container images.
 
+include::ch1-intro:partial$set-permissive.adoc[]
+
 1. Verify that your _development machine_ has access to the RHEL package repositories from a DNF mirror.
 
 .. List the configured package repositories.

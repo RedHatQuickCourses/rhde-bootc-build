@@ -24,6 +24,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 
 You will publish a bootc container image in a private registry, in a way that emulates the results of a CI/CD pipeline, and you will reinstall an existing system from that container image, as an alternative approach to perform system testing.
 
+include::ch1-intro:partial$set-permissive.adoc[]
+
 1. On your _development machine_, prepare to start this activity by checking that you have the outcomes from previous activities.
 
 .. If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.

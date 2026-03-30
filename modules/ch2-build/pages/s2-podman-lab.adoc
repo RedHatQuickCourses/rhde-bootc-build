@@ -23,6 +23,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 You will build a Containerfile that produces a bootc container image which includes a single-page web application, and test that container image as an application container.
 You will also compare the bootc container image for your application with a regular application image for the same application.
 
+include::ch1-intro:partial$set-permissive.adoc[]
+
 1. Prepare to start this activity by cloning the sample code repository and logging in to the private registry.
 
 .. Create a local clone of the sample code repository of this course, and make it your working directory.

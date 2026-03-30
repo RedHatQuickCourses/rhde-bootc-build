@@ -23,6 +23,8 @@ Make sure you verified your test environment by following the xref:ch1-intro:s3-
 You will use the standard RHEL installation media, with a custom kickstart script, to install RHEL in a local VM from a bootc container image.
 Thanks to the direct kernel loading feature of libvirt, and also to virtio devices backed by user directories, you do NOT require PXE boot, HTTP servers, or custom installation media.
 
+include::ch1-intro:partial$set-permissive.adoc[]
+
 1. Prepare to start this activity by checking that you have the outcomes from previous activities.
 
 .. If needed, create a local clone of the sample code repository of this course, but do NOT enter its directory.
